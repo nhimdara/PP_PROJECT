@@ -1,81 +1,94 @@
 import React from "react";
-import { 
-  BookOpen, 
-  Clock, 
-  PlayCircle, 
-  Star, 
+import {
+  BookOpen,
+  Clock,
+  PlayCircle,
+  Star,
   Users,
   TrendingUp,
   Filter,
-  Search
+  Search,
 } from "lucide-react";
-import lesson from "./../../assets/image/lessonpage.jpeg";
+import lesson from "./../assets/image/lessonpage.jpeg";
 
 const LessonsPage = () => {
   const lessons = [
     {
       id: 1,
       title: "Introduction to React",
-      description: "Master the fundamentals of React including components, props, and state management.",
+      description:
+        "Master the fundamentals of React including components, props, and state management.",
       duration: "45 min",
       level: "Beginner",
       students: 1234,
       rating: 4.8,
-      category: "Frontend"
+      category: "Frontend",
     },
     {
       id: 2,
       title: "Advanced JavaScript Concepts",
-      description: "Deep dive into closures, prototypes, async programming, and modern ES6+ features.",
+      description:
+        "Deep dive into closures, prototypes, async programming, and modern ES6+ features.",
       duration: "60 min",
       level: "Advanced",
       students: 892,
       rating: 4.9,
-      category: "JavaScript"
+      category: "JavaScript",
     },
     {
       id: 3,
       title: "UI/UX Design Principles",
-      description: "Learn the core principles of creating beautiful and user-friendly interfaces.",
+      description:
+        "Learn the core principles of creating beautiful and user-friendly interfaces.",
       duration: "50 min",
       level: "Intermediate",
       students: 2156,
       rating: 4.7,
-      category: "Design"
+      category: "Design",
     },
     {
       id: 4,
       title: "Backend Development with Node.js",
-      description: "Build scalable server-side applications using Express and MongoDB.",
+      description:
+        "Build scalable server-side applications using Express and MongoDB.",
       duration: "75 min",
       level: "Intermediate",
       students: 1567,
       rating: 4.8,
-      category: "Backend"
+      category: "Backend",
     },
     {
       id: 5,
       title: "Responsive Web Design",
-      description: "Create websites that work perfectly on all devices using modern CSS techniques.",
+      description:
+        "Create websites that work perfectly on all devices using modern CSS techniques.",
       duration: "55 min",
       level: "Beginner",
       students: 3421,
       rating: 4.9,
-      category: "CSS"
+      category: "CSS",
     },
     {
       id: 6,
       title: "State Management with Redux",
-      description: "Master complex state management patterns for large-scale applications.",
+      description:
+        "Master complex state management patterns for large-scale applications.",
       duration: "65 min",
       level: "Advanced",
       students: 743,
       rating: 4.6,
-      category: "Frontend"
-    }
+      category: "Frontend",
+    },
   ];
 
-  const categories = ["All", "Frontend", "Backend", "JavaScript", "Design", "CSS"];
+  const categories = [
+    "All",
+    "Frontend",
+    "Backend",
+    "JavaScript",
+    "Design",
+    "CSS",
+  ];
   const levels = ["All Levels", "Beginner", "Intermediate", "Advanced"];
 
   return (
@@ -111,28 +124,33 @@ const LessonsPage = () => {
                 </span>
               </h1>
               <p className="text-xl text-gray-200 max-w-2xl mb-8">
-                Discover comprehensive lessons crafted by industry experts to accelerate your learning journey
+                Discover comprehensive lessons crafted by industry experts to
+                accelerate your learning journey
               </p>
-              
-              {/* Search Bar */}
-              <div className="flex max-w-md bg-white/10 backdrop-blur-md rounded-lg p-1">
-                <input
-                  type="text"
-                  placeholder="Search lessons..."
-                  className="flex-1 bg-transparent border-none text-white placeholder-gray-300 px-4 py-3 focus:outline-none"
-                />
-                <button className="bg-white text-indigo-600 px-6 py-3 rounded-md font-semibold hover:bg-indigo-50 transition-colors flex items-center gap-2">
-                  <Search className="h-4 w-4" />
-                  Search
-                </button>
-              </div>
             </div>
+          </div>
+        </div>
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-scroll" />
           </div>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10 py-16">
+        {/* Search Bar */}
+        <div className="flex max-w-md bg-white/10 backdrop-blur-md rounded-xl p-1 border border-gray-200 mb-12">
+          <input
+            type="text"
+            placeholder="Search lessons..."
+            className="flex-1 bg-transparent border border-none text-black placeholder-gray-600 px-4 py-3 focus:outline-none"
+          />
+          <button className="bg-gray-200 text-indigo-600 px-6 py-3 rounded-md font-semibold hover:bg-indigo-50 transition-colors flex items-center gap-2">
+            <Search className="h-4 w-4" />
+            Search
+          </button>
+        </div>
         {/* Filters Section */}
         <div className="mb-12 flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap gap-3">
@@ -140,16 +158,16 @@ const LessonsPage = () => {
               <button
                 key={index}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  index === 0 
-                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' 
-                    : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                  index === 0
+                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200"
+                    : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
                 }`}
               >
                 {category}
               </button>
             ))}
           </div>
-          
+
           <div className="flex items-center gap-3">
             <Filter className="h-5 w-5 text-gray-400" />
             <select className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -157,45 +175,6 @@ const LessonsPage = () => {
                 <option key={index}>{level}</option>
               ))}
             </select>
-          </div>
-        </div>
-
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100">
-            <div className="flex items-center gap-4">
-              <div className="bg-indigo-600 rounded-xl p-3">
-                <BookOpen className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-gray-900">50+</p>
-                <p className="text-gray-600">Interactive Lessons</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-100">
-            <div className="flex items-center gap-4">
-              <div className="bg-blue-600 rounded-xl p-3">
-                <Users className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-gray-900">10K+</p>
-                <p className="text-gray-600">Active Students</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-100">
-            <div className="flex items-center gap-4">
-              <div className="bg-amber-600 rounded-xl p-3">
-                <TrendingUp className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-gray-900">95%</p>
-                <p className="text-gray-600">Success Rate</p>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -240,14 +219,18 @@ const LessonsPage = () => {
                   <PlayCircle className="h-16 w-16 text-white/90" />
                 </div>
               </div>
-              
+
               <div className="p-6">
                 <div className="flex items-center justify-between mb-3">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    lesson.level === 'Beginner' ? 'bg-green-100 text-green-700' :
-                    lesson.level === 'Intermediate' ? 'bg-yellow-100 text-yellow-700' :
-                    'bg-red-100 text-red-700'
-                  }`}>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      lesson.level === "Beginner"
+                        ? "bg-green-100 text-green-700"
+                        : lesson.level === "Intermediate"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-red-100 text-red-700"
+                    }`}
+                  >
                     {lesson.level}
                   </span>
                   <div className="flex items-center text-gray-500 text-sm">
@@ -255,11 +238,11 @@ const LessonsPage = () => {
                     <span>{lesson.students.toLocaleString()}</span>
                   </div>
                 </div>
-                
+
                 <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                   {lesson.description}
                 </p>
-                
+
                 <button className="w-full bg-gray-50 group-hover:bg-indigo-600 text-gray-700 group-hover:text-white py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2">
                   Start Learning
                   <PlayCircle className="h-4 w-4 group-hover:translate-x-1 transition-transform" />

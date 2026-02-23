@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import banner from "./../../assets/image/banner.jpg";
+import banner from "./../assets/image/banner.jpg";
 import {
   BookOpen,
   Users,
