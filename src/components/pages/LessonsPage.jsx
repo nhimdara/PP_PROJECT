@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BookOpen,
   Clock,
@@ -8,25 +8,30 @@ import {
   Filter,
   Search,
   ChevronDown,
-  ChevronRight,
-  Award,
-  Zap,
   GraduationCap,
   Calendar,
+  ListVideo,
+  Film,
+  Layers,
+  Lock,
 } from "lucide-react";
-import lessonImage from "./../assets/image/lessonpage.jpeg"; // FIX: Renamed import to avoid conflict with variable name
+import lessonImage from "./../assets/image/lessonpage.jpeg";
 import { lessons } from "./../data/Lesson";
+import VideoModal from "./video/VideoModal";
+import VideoPlaylistModal from "./video/VideoPlaylistModal";
+
+/* ─── Constants ─── */
+const FREE_VIDEO_LIMIT = 2;
 
 /* ─── Group lessons by year + semester ─── */
 const buildSemesters = (lessons) => {
   const map = {};
   lessons.forEach((l) => {
-    const key = l.semester || "Year 1 Semester 1"; // fallback if field missing
+    const key = l.semester || "Year 1 Semester 1";
     if (!map[key]) map[key] = [];
     map[key].push(l);
   });
 
-  // Ensure deterministic order: Y1S1 → Y1S2 → Y2S1 … Y4S2
   const order = [];
   for (let y = 1; y <= 4; y++) {
     for (let s = 1; s <= 2; s++) {
@@ -97,15 +102,102 @@ const SEMESTER_STYLES = [
   },
 ];
 
-/* ─── Single lesson card ─── */
-const LessonCard = ({ lesson: l, index, style }) => {
-  const [hovered, setHovered] = useState(false);
+/* ─── Video count badge ─── */
+const VideoCountBadge = ({ count }) => {
+  if (!count) return null;
+  return (
+    <div className="absolute top-4 left-16 bg-red-600 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1 shadow-md">
+      <Film className="h-3 w-3" />
+      {count} {count === 1 ? "Video" : "Videos"}
+    </div>
+  );
+};
 
-  // FIX 1: Provide default icon based on category if l.icon doesn't exist
+/* ─── Subscription Modal ─── */
+const SubscriptionModal = ({ onClose, onSubscribe }) => {
+  useEffect(() => {
+    const handleKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+      style={{ background: "rgba(0,0,0,0.75)" }}
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden"
+        style={{ animation: "fadeInUp 0.3s ease-out both" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="bg-gradient-to-br from-indigo-600 to-violet-700 px-8 pt-10 pb-8 text-white text-center relative">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
+          >
+            ✕
+          </button>
+          <div className="text-5xl mb-3">🔓</div>
+          <h2 className="text-2xl font-bold mb-1">Unlock Full Access</h2>
+          <p className="text-indigo-200 text-sm">
+            You've used your {FREE_VIDEO_LIMIT} free preview videos
+          </p>
+        </div>
+
+        {/* Body */}
+        <div className="p-8">
+          <div className="space-y-3 mb-6">
+            {[
+              { icon: "🎬", text: "Unlimited video access for all courses" },
+              { icon: "📜", text: "Course completion certificates" },
+              { icon: "💬", text: "Discussion forums & instructor Q&A" },
+              { icon: "⬇️", text: "Downloadable resources & lecture notes" },
+              { icon: "📊", text: "Progress tracking & analytics" },
+            ].map((f, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <span className="text-xl">{f.icon}</span>
+                <span className="text-gray-700 text-sm">{f.text}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-indigo-50 rounded-2xl p-4 mb-6 text-center">
+            <div className="text-3xl font-bold text-indigo-700">
+              $9.99
+              <span className="text-base font-normal text-indigo-400">/month</span>
+            </div>
+            <div className="text-xs text-indigo-500 mt-1">
+              or $79.99/year — save 33%
+            </div>
+          </div>
+
+          <button
+            onClick={onSubscribe}
+            className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold py-3.5 rounded-2xl hover:from-indigo-700 hover:to-violet-700 transition-all shadow-lg shadow-indigo-200"
+          >
+            Subscribe Now →
+          </button>
+          <p className="text-center text-xs text-gray-400 mt-3">
+            7-day free trial · Cancel anytime
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ─── Single lesson card ─── */
+const LessonCard = ({ lesson: l, index, style, isSubscribed, onSubscribeRequest }) => {
+  const [hovered, setHovered] = useState(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [showPlaylist, setShowPlaylist] = useState(false);
+
   const getIcon = () => {
     if (l.icon) return l.icon;
-
-    // Default icons based on category
     const iconMap = {
       Frontend: "💻",
       Backend: "⚙️",
@@ -114,109 +206,254 @@ const LessonCard = ({ lesson: l, index, style }) => {
       CSS: "🎯",
       Database: "🗄️",
       DevOps: "🚀",
+      Mathematics: "📐",
+      Science: "⚛️",
+      Networking: "🌐",
+      Security: "🔒",
+      AI: "🤖",
     };
-
     return iconMap[l.category] || "📚";
   };
 
-  // FIX 2: Provide default gradient if l.color doesn't exist
   const cardGradient =
     l.color || style?.gradient || "from-indigo-500 to-purple-600";
 
+  const hasVideos = l.videos && l.videos.length > 0;
+  const videoCount = hasVideos ? l.videos.length : 0;
+
+  // Backward-compat single video
+  const singleVideo = l.videoLink
+    ? {
+        title: l.videoTitle || l.title,
+        link: l.videoLink,
+        duration: l.videoDuration || 30,
+      }
+    : null;
+
+  const handlePlayVideo = () => {
+    if (videoCount > 1) {
+      setShowPlaylist(true);
+    } else if (videoCount === 1) {
+      // Check free limit for single video
+      if (!isSubscribed && 0 >= FREE_VIDEO_LIMIT) {
+        onSubscribeRequest();
+        return;
+      }
+      setSelectedVideo(l.videos[0]);
+      setIsVideoModalOpen(true);
+    } else if (singleVideo) {
+      setSelectedVideo(singleVideo);
+      setIsVideoModalOpen(true);
+    }
+  };
+
+  const handleVideoSelect = (video) => {
+    setSelectedVideo(video);
+    setIsVideoModalOpen(true);
+    setShowPlaylist(false);
+  };
+
   return (
-    <div
-      className="group bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-indigo-100 transform hover:-translate-y-2"
-      style={{ animation: `fadeInUp 0.5s ease-out ${index * 0.08}s both` }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {/* Card header */}
+    <>
       <div
-        className={`relative h-44 bg-gradient-to-br ${cardGradient} overflow-hidden`}
+        className="group bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-indigo-100 transform hover:-translate-y-2"
+        style={{ animation: `fadeInUp 0.5s ease-out ${index * 0.08}s both` }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
+        {/* Card header */}
         <div
-          className={`absolute inset-0 bg-black/20 transition-opacity duration-300 ${hovered ? "opacity-40" : "opacity-0"}`}
-        />
-
-        {/* Category badge */}
-        <div className="absolute top-4 right-4">
-          <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs font-medium border border-white/30">
-            {l.category}
-          </span>
-        </div>
-
-        {/* Icon */}
-        <div className="absolute top-4 left-4 text-4xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
-          {getIcon()}
-        </div>
-
-        {/* Title + meta */}
-        <div className="absolute bottom-4 left-4 right-4 transform transition-all duration-500 group-hover:-translate-y-2">
-          <h3 className="text-lg font-bold text-white mb-1 group-hover:translate-x-1 transition-transform">
-            {l.title}
-          </h3>
-          <div className="flex items-center gap-4 text-white/90 text-xs">
-            <span className="flex items-center gap-1">
-              <Clock className="h-3 w-3" />
-              {l.duration}
-            </span>
-            <span className="flex items-center gap-1">
-              <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-              {l.rating}
-            </span>
-          </div>
-        </div>
-
-        {/* Play overlay */}
-        <div
-          className={`absolute inset-0 flex items-center justify-center transition-all duration-400 ${hovered ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}
+          className={`relative h-44 bg-gradient-to-br ${cardGradient} overflow-hidden cursor-pointer`}
+          onClick={handlePlayVideo}
         >
-          <div className="bg-white/30 backdrop-blur-sm rounded-full p-3">
-            <PlayCircle className="h-10 w-10 text-white" />
-          </div>
-        </div>
-      </div>
-
-      {/* Card body */}
-      <div className="p-5">
-        <div className="flex items-center justify-between mb-3">
-          <span
-            className={`px-3 py-1 rounded-full text-xs font-medium ${
-              l.level === "Beginner"
-                ? "bg-green-100 text-green-700 border border-green-200"
-                : l.level === "Intermediate"
-                  ? "bg-yellow-100 text-yellow-700 border border-yellow-200"
-                  : "bg-red-100 text-red-700 border border-red-200"
-            }`}
-          >
-            {l.level}
-          </span>
-          <span className="flex items-center text-gray-500 text-xs group-hover:text-indigo-600 transition-colors">
-            <Users className="h-3.5 w-3.5 mr-1" />
-            {/* FIX 3: Handle undefined students value */}
-            {l.students ? l.students.toLocaleString() : "0"}
-          </span>
-        </div>
-
-        <p className="text-gray-500 text-sm mb-4 line-clamp-2 group-hover:text-gray-800 transition-colors">
-          {l.description}
-        </p>
-
-        {/* Hover progress bar */}
-        <div className="mb-4 h-1 bg-gray-100 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-700"
-            style={{ width: hovered ? "100%" : "0%", opacity: hovered ? 1 : 0 }}
+            className={`absolute inset-0 bg-black/20 transition-opacity duration-300 ${hovered ? "opacity-40" : "opacity-0"}`}
           />
+
+          {/* Category badge */}
+          <div className="absolute top-4 right-4">
+            <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs font-medium border border-white/30">
+              {l.category}
+            </span>
+          </div>
+
+          {/* Icon */}
+          <div className="absolute top-4 left-4 text-4xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
+            {getIcon()}
+          </div>
+
+          {/* Video count badge */}
+          {(hasVideos || l.videoLink) && (
+            <VideoCountBadge count={videoCount || 1} />
+          )}
+
+          {/* Title + meta */}
+          <div className="absolute bottom-4 left-4 right-4 transform transition-all duration-500 group-hover:-translate-y-2">
+            <h3 className="text-lg font-bold text-white mb-1 group-hover:translate-x-1 transition-transform">
+              {l.title}
+            </h3>
+            <div className="flex items-center gap-4 text-white/90 text-xs">
+              <span className="flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                {l.duration}
+              </span>
+              <span className="flex items-center gap-1">
+                <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                {l.rating}
+              </span>
+            </div>
+          </div>
+
+          {/* Play overlay */}
+          <div
+            className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${hovered ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}
+          >
+            <div className="bg-white/30 backdrop-blur-sm rounded-full p-3">
+              {videoCount > 1 ? (
+                <Layers className="h-10 w-10 text-white" />
+              ) : (
+                <PlayCircle className="h-10 w-10 text-white" />
+              )}
+            </div>
+          </div>
+
+          {/* Lock overlay for no subscription */}
+          {!isSubscribed && videoCount > FREE_VIDEO_LIMIT && (
+            <div className="absolute bottom-16 right-4">
+              <div className="flex items-center gap-1 bg-amber-500/90 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
+                <Lock className="h-3 w-3" />
+                <span>{videoCount - FREE_VIDEO_LIMIT} locked</span>
+              </div>
+            </div>
+          )}
         </div>
 
-        <button className="w-full bg-gray-50 group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 text-gray-700 group-hover:text-white py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden">
-          <span className="relative z-10">Start Learning</span>
-          <PlayCircle className="h-4 w-4 relative z-10 group-hover:translate-x-1 transition-transform" />
-          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-        </button>
+        {/* Card body */}
+        <div className="p-5">
+          <div className="flex items-center justify-between mb-3">
+            <span
+              className={`px-3 py-1 rounded-full text-xs font-medium ${
+                l.level === "Beginner"
+                  ? "bg-green-100 text-green-700 border border-green-200"
+                  : l.level === "Intermediate"
+                    ? "bg-yellow-100 text-yellow-700 border border-yellow-200"
+                    : "bg-red-100 text-red-700 border border-red-200"
+              }`}
+            >
+              {l.level}
+            </span>
+            <span className="flex items-center text-gray-500 text-xs group-hover:text-indigo-600 transition-colors">
+              <Users className="h-3.5 w-3.5 mr-1" />
+              {l.students ? l.students.toLocaleString() : "0"}
+            </span>
+          </div>
+
+          <p className="text-gray-500 text-sm mb-4 line-clamp-2 group-hover:text-gray-800 transition-colors">
+            {l.description}
+          </p>
+
+          {/* Video playlist preview */}
+          {videoCount > 1 && (
+            <div className="mb-3 space-y-1">
+              <div className="text-xs font-semibold text-gray-400 flex items-center gap-1">
+                <ListVideo className="h-3 w-3" /> Video playlist:
+              </div>
+              <div className="flex flex-wrap gap-1">
+                {l.videos.slice(0, 3).map((v, i) => {
+                  const isLocked = !isSubscribed && i >= FREE_VIDEO_LIMIT;
+                  return (
+                    <span
+                      key={i}
+                      className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${
+                        isLocked
+                          ? "bg-amber-50 text-amber-600 border border-amber-200"
+                          : "bg-gray-100 text-gray-600"
+                      }`}
+                    >
+                      {isLocked && <Lock className="h-2.5 w-2.5" />}
+                      {i + 1}. {v.title.substring(0, 14)}…
+                    </span>
+                  );
+                })}
+                {videoCount > 3 && (
+                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                    +{videoCount - 3} more
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Hover progress bar */}
+          <div className="mb-4 h-1 bg-gray-100 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-700"
+              style={{ width: hovered ? "100%" : "0%", opacity: hovered ? 1 : 0 }}
+            />
+          </div>
+
+          {/* CTA button */}
+          <button
+            onClick={handlePlayVideo}
+            className="w-full bg-gray-50 group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 text-gray-700 group-hover:text-white py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden"
+          >
+            <span className="relative z-10">
+              {videoCount > 1
+                ? `View ${videoCount} Videos`
+                : hasVideos || l.videoLink
+                  ? "Watch Video Lesson"
+                  : "Start Learning"}
+            </span>
+            {videoCount > 1 ? (
+              <Layers className="h-4 w-4 relative z-10 group-hover:translate-x-1 transition-transform" />
+            ) : (
+              <PlayCircle className="h-4 w-4 relative z-10 group-hover:translate-x-1 transition-transform" />
+            )}
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          </button>
+
+          {/* Duration info */}
+          {(videoCount === 1 || singleVideo) && (
+            <div className="mt-2 text-xs text-gray-400 text-center">
+              ⏱️ {(videoCount === 1 ? l.videos[0].duration : l.videoDuration) || 30} minutes
+            </div>
+          )}
+          {videoCount > 1 && (
+            <div className="mt-2 text-xs text-gray-400 text-center">
+              ⏱️ {l.videos.reduce((acc, v) => acc + (v.duration || 30), 0)} total min ·{" "}
+              <span className="text-indigo-500 font-medium">
+                {Math.min(FREE_VIDEO_LIMIT, videoCount)} free
+              </span>{" "}
+              · {Math.max(0, videoCount - FREE_VIDEO_LIMIT)} premium
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+
+      {/* Single Video Modal */}
+      <VideoModal
+        isOpen={isVideoModalOpen}
+        onClose={() => {
+          setIsVideoModalOpen(false);
+          setSelectedVideo(null);
+        }}
+        videoLink={selectedVideo?.link}
+        videoTitle={selectedVideo?.title || l.title}
+      />
+
+      {/* Playlist Modal */}
+      {showPlaylist && (
+        <VideoPlaylistModal
+          isOpen={showPlaylist}
+          onClose={() => setShowPlaylist(false)}
+          videos={l.videos}
+          lessonTitle={l.title}
+          onSelectVideo={handleVideoSelect}
+          isSubscribed={isSubscribed}
+          onSubscribeRequest={onSubscribeRequest}
+        />
+      )}
+    </>
   );
 };
 
@@ -228,26 +465,29 @@ const SemesterSection = ({
   searchTerm,
   selectedCategory,
   selectedLevel,
+  isSubscribed,
+  onSubscribeRequest,
 }) => {
   const [open, setOpen] = useState(true);
   const [visibleCount, setVisibleCount] = useState(6);
   const style = SEMESTER_STYLES[styleIndex % SEMESTER_STYLES.length];
 
   const filtered = items.filter((l) => {
-    const matchSearch = l.title
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchCategory =
-      selectedCategory === "All" || l.category === selectedCategory;
-    const matchLevel =
-      selectedLevel === "All Levels" || l.level === selectedLevel;
+    const matchSearch = l.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchCategory = selectedCategory === "All" || l.category === selectedCategory;
+    const matchLevel = selectedLevel === "All Levels" || l.level === selectedLevel;
     return matchSearch && matchCategory && matchLevel;
   });
 
   if (filtered.length === 0) return null;
 
-  // Parse label for display
-  const [, yearNum, , semNum] = label.split(" "); // "Year 1 Semester 2"
+  const [, yearNum, , semNum] = label.split(" ");
+
+  const totalVideos = filtered.reduce((acc, l) => {
+    if (l.videos) return acc + l.videos.length;
+    if (l.videoLink) return acc + 1;
+    return acc;
+  }, 0);
 
   return (
     <div className="mb-14">
@@ -273,6 +513,11 @@ const SemesterSection = ({
         <div className="flex items-center gap-3">
           <span className="hidden sm:flex items-center gap-1.5 px-3 py-1 bg-white/20 rounded-full text-white text-xs font-semibold border border-white/20">
             <BookOpen className="h-3 w-3" /> {filtered.length} subjects
+            {totalVideos > 0 && (
+              <span className="ml-1 text-red-300 flex items-center gap-1">
+                <Film className="h-3 w-3" /> {totalVideos} videos
+              </span>
+            )}
           </span>
           <div
             className={`w-8 h-8 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-300 ${open ? "rotate-180" : ""}`}
@@ -287,7 +532,14 @@ const SemesterSection = ({
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.slice(0, visibleCount).map((l, i) => (
-              <LessonCard key={l.id} lesson={l} index={i} style={style} />
+              <LessonCard
+                key={l.id}
+                lesson={l}
+                index={i}
+                style={style}
+                isSubscribed={isSubscribed}
+                onSubscribeRequest={onSubscribeRequest}
+              />
             ))}
           </div>
 
@@ -308,25 +560,25 @@ const SemesterSection = ({
   );
 };
 
-/* ─── Main page ─── */
+/* ─── Main LessonsPage ─── */
 const LessonsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedLevel, setSelectedLevel] = useState("All Levels");
   const [scrollProgress, setScrollProgress] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
 
-  const categories = [
-    "All",
-    "Frontend",
-    "Backend",
-    "JavaScript",
-    "Design",
-    "CSS",
-  ];
+  const categories = ["All", ...new Set(lessons.map((l) => l.category))];
   const levels = ["All Levels", "Beginner", "Intermediate", "Advanced"];
 
-  /* ── Scroll + mouse effects ── */
+  const totalVideos = lessons.reduce((acc, l) => {
+    if (l.videos) return acc + l.videos.length;
+    if (l.videoLink) return acc + 1;
+    return acc;
+  }, 0);
+
   useEffect(() => {
     const onScroll = () => {
       const total = document.documentElement.scrollHeight - window.innerHeight;
@@ -345,7 +597,6 @@ const LessonsPage = () => {
     };
   }, []);
 
-  /* ── Scroll reveal ── */
   useEffect(() => {
     const els = document.querySelectorAll("[data-reveal]");
     const obs = new IntersectionObserver(
@@ -356,7 +607,7 @@ const LessonsPage = () => {
             obs.unobserve(e.target);
           }
         }),
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
     );
     els.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
@@ -376,10 +627,12 @@ const LessonsPage = () => {
         .line-clamp-2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
         .animate-pulse-slow { animation: pulse 4s ease-in-out infinite; }
         @keyframes pulse { 0%,100%{opacity:.3;transform:scale(1);} 50%{opacity:.5;transform:scale(1.1);} }
-        .animate-bounce-slow { animation: bounce 2s ease-in-out infinite; }
-        @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+        .animate-bounce-slow { animation: bounce-custom 2s ease-in-out infinite; }
+        @keyframes bounce-custom { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
         .animate-scroll-dot { animation: sdot 1.5s ease-in-out infinite; }
         @keyframes sdot { 0%{transform:translateY(0);opacity:1;} 50%{transform:translateY(8px);opacity:.4;} 100%{transform:translateY(0);opacity:1;} }
+        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin-slow { animation: spin-slow 3s linear infinite; }
       `}</style>
 
       {/* Scroll progress bar */}
@@ -388,17 +641,40 @@ const LessonsPage = () => {
         style={{ width: `${scrollProgress}%` }}
       />
 
-      {/* Back-to-top button */}
+      {/* Back-to-top */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className={`fixed bottom-8 right-8 bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl hover:bg-indigo-700 transition-all duration-300 z-40 ${scrollProgress > 20 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}`}
+        aria-label="Scroll to top"
+        className={`fixed bottom-8 right-8 z-40 w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 ${
+          scrollProgress > 20
+            ? "opacity-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 translate-y-6 pointer-events-none"
+        }`}
       >
-        <ChevronDown className="h-6 w-6 rotate-180" />
+        <span className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 animate-spin-slow opacity-80" />
+        <span className="relative z-10 w-12 h-12 rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center hover:from-indigo-500 hover:to-purple-500 transition-all duration-300 hover:scale-110 group shadow-lg shadow-indigo-500/40">
+          <ChevronDown className="h-5 w-5 text-white rotate-180 group-hover:-translate-y-0.5 transition-transform duration-300" />
+        </span>
       </button>
 
-      {/* ── HERO ── */}
+      {/* Subscription badge (top-right) */}
+      <div className="fixed top-4 right-4 z-40">
+        {isSubscribed ? (
+          <div className="flex items-center gap-2 bg-emerald-600 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg">
+            ✅ Subscribed
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowSubscriptionModal(true)}
+            className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg hover:from-indigo-700 hover:to-violet-700 transition-all"
+          >
+            🔓 Subscribe to Unlock All
+          </button>
+        )}
+      </div>
+
+      {/* HERO */}
       <div className="relative w-full h-[580px] overflow-hidden">
-        {/* FIX: Use the imported image correctly */}
         <img
           src={lessonImage}
           alt="Lesson Banner"
@@ -408,14 +684,10 @@ const LessonsPage = () => {
             transition: "transform 0.3s ease-out",
           }}
         />
-        {/* Overlays */}
         <div className="absolute inset-0 bg-black/60" style={{ zIndex: 1 }} />
 
-        {/* Glow orbs */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ zIndex: 3 }}
-        >
+        {/* Decorative blobs */}
+        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 3 }}>
           <div className="absolute top-20 left-20 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl animate-pulse-slow" />
           <div
             className="absolute bottom-20 right-20 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse-slow"
@@ -423,17 +695,13 @@ const LessonsPage = () => {
           />
         </div>
 
-        {/* FIX: Hero text content with proper z-index */}
         <div className="absolute inset-0 z-10 flex items-center">
           <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10">
-            <div
-              className="max-w-3xl"
-              style={{ animation: "fadeInUp 0.7s ease-out both" }}
-            >
+            <div className="max-w-3xl" style={{ animation: "fadeInUp 0.7s ease-out both" }}>
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-5">
                 <GraduationCap className="h-4 w-4 text-cyan-300" />
                 <span className="text-xs font-semibold text-white uppercase tracking-widest">
-                  ITE Programme
+                  ITE Programme · {totalVideos} Videos Available
                 </span>
               </div>
               <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-4 leading-tight tracking-tight">
@@ -446,14 +714,27 @@ const LessonsPage = () => {
                 className="text-lg text-gray-200 max-w-xl"
                 style={{ animation: "fadeInUp 0.7s 0.2s ease-out both" }}
               >
-                Discover comprehensive lessons crafted by industry experts —
-                organised by year and semester.
+                Comprehensive video lessons crafted by industry experts — organised by year and
+                semester.{" "}
+                <span className="text-amber-300 font-semibold">
+                  First {FREE_VIDEO_LIMIT} videos per course are free.
+                </span>
               </p>
+
+              {/* Hero CTA */}
+              {!isSubscribed && (
+                <button
+                  onClick={() => setShowSubscriptionModal(true)}
+                  className="mt-6 inline-flex items-center gap-2 bg-white text-indigo-700 font-bold px-6 py-3 rounded-2xl hover:bg-indigo-50 transition-all shadow-xl"
+                  style={{ animation: "fadeInUp 0.7s 0.35s ease-out both" }}
+                >
+                  🔓 Unlock All Videos — $9.99/mo
+                </button>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce-slow z-10">
           <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
             <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-scroll-dot" />
@@ -461,8 +742,34 @@ const LessonsPage = () => {
         </div>
       </div>
 
-      {/* ── MAIN CONTENT ── */}
+      {/* MAIN CONTENT */}
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10 py-16">
+
+        {/* Free preview banner */}
+        {!isSubscribed && (
+          <div
+            data-reveal
+            className="mb-8 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">👋</span>
+              <div>
+                <p className="font-semibold text-amber-900 text-sm">Free Preview Mode</p>
+                <p className="text-amber-700 text-xs">
+                  Watch the first {FREE_VIDEO_LIMIT} videos in any course for free. Subscribe to
+                  unlock everything.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowSubscriptionModal(true)}
+              className="shrink-0 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition-colors"
+            >
+              Unlock All →
+            </button>
+          </div>
+        )}
+
         {/* Search */}
         <div data-reveal className="mb-6">
           <div className="flex max-w-2xl mx-auto bg-white shadow-lg rounded-2xl p-1 border border-gray-100 hover:shadow-xl transition-shadow">
@@ -475,6 +782,14 @@ const LessonsPage = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="flex-1 bg-transparent border-none text-gray-900 placeholder-gray-400 px-4 py-3 focus:outline-none"
               />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  ✕
+                </button>
+              )}
             </div>
             <button className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-7 py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all flex items-center gap-2 hover:scale-105">
               <Search className="h-4 w-4" /> Search
@@ -483,10 +798,7 @@ const LessonsPage = () => {
         </div>
 
         {/* Filters */}
-        <div
-          data-reveal
-          className="mb-12 flex flex-wrap items-center justify-between gap-4"
-        >
+        <div data-reveal className="mb-12 flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
@@ -509,14 +821,14 @@ const LessonsPage = () => {
               onChange={(e) => setSelectedLevel(e.target.value)}
               className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
             >
-              {levels.map((l) => (
-                <option key={l}>{l}</option>
+              {levels.map((lv) => (
+                <option key={lv}>{lv}</option>
               ))}
             </select>
           </div>
         </div>
 
-        {/* ── SEMESTER SECTIONS ── */}
+        {/* Semester sections */}
         {semesters.length > 0 ? (
           semesters.map((sem, idx) => (
             <SemesterSection
@@ -527,6 +839,8 @@ const LessonsPage = () => {
               searchTerm={searchTerm}
               selectedCategory={selectedCategory}
               selectedLevel={selectedLevel}
+              isSubscribed={isSubscribed}
+              onSubscribeRequest={() => setShowSubscriptionModal(true)}
             />
           ))
         ) : (
@@ -537,9 +851,22 @@ const LessonsPage = () => {
             searchTerm={searchTerm}
             selectedCategory={selectedCategory}
             selectedLevel={selectedLevel}
+            isSubscribed={isSubscribed}
+            onSubscribeRequest={() => setShowSubscriptionModal(true)}
           />
         )}
       </div>
+
+      {/* Subscription Modal */}
+      {showSubscriptionModal && (
+        <SubscriptionModal
+          onClose={() => setShowSubscriptionModal(false)}
+          onSubscribe={() => {
+            setIsSubscribed(true);
+            setShowSubscriptionModal(false);
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Layers,
   Github,
@@ -7,10 +7,19 @@ import {
   Rocket,
   Sparkles,
   ArrowRight,
+  ArrowUp,
 } from "lucide-react";
 import projectImage from "./../assets/image/projectbanner.jpg"; // Fixed import name
 
 const ProjectsPage = () => {
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const projects = [
     {
       id: 1,
@@ -273,6 +282,23 @@ const ProjectsPage = () => {
         </div>
       </div>
 
+      {/* Scroll To Top Button */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        aria-label="Scroll to top"
+        className={`fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 ${
+          showScrollTop
+            ? "opacity-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 translate-y-6 pointer-events-none"
+        }`}
+      >
+        <span className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500 via-cyan-500 to-indigo-600 animate-spin-slow opacity-80" />
+        <span className="relative z-10 w-12 h-12 rounded-full bg-gradient-to-br from-indigo-600 to-cyan-600 flex items-center justify-center hover:from-indigo-500 hover:to-cyan-500 transition-all duration-300 hover:scale-110 group shadow-lg shadow-indigo-500/40">
+          <ArrowUp className="h-5 w-5 text-white group-hover:-translate-y-0.5 transition-transform duration-300" />
+        </span>
+        <span className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500 to-cyan-500 opacity-0 hover:opacity-30 blur-md transition-opacity duration-300" />
+      </button>
+
       {/* Custom Animations */}
       <style jsx>{`
         @keyframes fadeInUp {
@@ -304,6 +330,14 @@ const ProjectsPage = () => {
 
         .animate-scroll {
           animation: scroll 1.5s infinite;
+        }
+
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+          animation: spin-slow 3s linear infinite;
         }
       `}</style>
     </div>

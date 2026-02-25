@@ -199,76 +199,6 @@ const SemesterCard = ({ semLabel, subjects, style, onSubjectClick }) => {
   );
 };
 
-/* ─── Subject Modal ─── */
-const SubjectModal = ({ subj, onClose, style }) => {
-  if (!subj) return null;
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
-      <div
-        className="relative bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl"
-        style={{ animation: "scaleIn .25s ease both" }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className={`bg-gradient-to-br ${style.grad} p-6`}>
-          <div className="text-4xl mb-3">{subj.icon}</div>
-          <h2 className="text-white text-xl font-extrabold leading-tight">
-            {subj.title}
-          </h2>
-          <p className="text-white/80 text-xs mt-1">{subj.semester}</p>
-        </div>
-
-        {/* Body */}
-        <div className="p-6 space-y-4">
-          <p className="text-gray-600 text-sm leading-relaxed">
-            {subj.description}
-          </p>
-
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              { label: "Credit", value: subj.credit },
-              { label: "Hours", value: subj.hours || "—" },
-              { label: "Level", value: subj.level },
-            ].map(({ label, value }) => (
-              <div
-                key={label}
-                className="bg-gray-50 rounded-xl p-3 text-center border border-gray-200"
-              >
-                <p className="text-gray-500 text-[10px] uppercase tracking-wider mb-1">
-                  {label}
-                </p>
-                <p className={`font-bold text-sm ${style.accent}`}>{value}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <span className="flex items-center gap-1.5">
-              <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-              {subj.rating}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Users className="h-3.5 w-3.5" />
-              {subj.students?.toLocaleString()} students
-            </span>
-          </div>
-
-          <button
-            onClick={onClose}
-            className={`w-full py-3 rounded-2xl bg-gradient-to-r ${style.grad} text-white font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity`}
-          >
-            <PlayCircle className="h-4 w-4" /> Start Learning
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 /* ─── Main Page ─── */
 const CalendarPage = () => {
   const [activeYear, setActiveYear] = useState("Foundation");
@@ -331,6 +261,9 @@ const CalendarPage = () => {
 
         .tab-active { color: white; box-shadow:0 4px 20px rgba(99,102,241,0.35); }
         tr:last-child { border-bottom: none; }
+
+        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin-slow { animation: spin-slow 3s linear infinite; }
       `}</style>
 
       {/* Scroll bar */}
@@ -342,19 +275,15 @@ const CalendarPage = () => {
       {/* Back to top */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className={`fixed bottom-8 right-8 bg-indigo-600 text-white p-3.5 rounded-full shadow-lg hover:bg-indigo-500 transition-all duration-300 z-40 ${scrollProgress > 15 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}`}
+        aria-label="Scroll to top"
+        className={`fixed bottom-8 right-8 z-40 w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 ${scrollProgress > 15 ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-6 pointer-events-none"}`}
       >
-        <ChevronDown className="h-5 w-5 rotate-180" />
+        <span className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500 via-cyan-500 to-indigo-600 animate-spin-slow opacity-80" />
+        <span className="relative z-10 w-12 h-12 rounded-full bg-gradient-to-br from-indigo-600 to-cyan-600 flex items-center justify-center hover:from-indigo-500 hover:to-cyan-500 transition-all duration-300 hover:scale-110 group shadow-lg shadow-indigo-500/40">
+          <ChevronDown className="h-5 w-5 text-white rotate-180 group-hover:-translate-y-0.5 transition-transform duration-300" />
+        </span>
+        <span className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500 to-cyan-500 opacity-0 hover:opacity-30 blur-md transition-opacity duration-300" />
       </button>
-
-      {/* Subject modal */}
-      {selectedSubject && (
-        <SubjectModal
-          subj={selectedSubject}
-          style={style}
-          onClose={() => setSelectedSubject(null)}
-        />
-      )}
 
       {/* ── HERO ── */}
       <div className="relative w-full h-[580px] overflow-hidden">

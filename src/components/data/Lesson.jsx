@@ -1,6 +1,7 @@
-// ITE Programme — Full Curriculum Data
+// ITE Programme — Full Curriculum Data with Videos
 // semester field format: "Year X Semester Y"
 // year field: "Foundation" | "Second Year" | "Third Year" | "Fourth Year"
+// FREE_VIDEO_LIMIT = 2  (first 2 videos free, rest require subscription)
 
 export const lessons = [
 
@@ -22,6 +23,12 @@ export const lessons = [
     color: "from-indigo-500 to-violet-600",
     semester: "Year 1 Semester 1",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "Introduction to Algebra", link: "https://www.youtube.com/embed/NybHckSEQBI", duration: 28, description: "Variables, expressions, and solving equations" },
+      { id: "v2", title: "Functions & Graphs", link: "https://www.youtube.com/embed/52tpYl2tTqk", duration: 35, description: "Understanding functions and their graphical representations" },
+      { id: "v3", title: "Differential Calculus", link: "https://www.youtube.com/embed/WUvTyaaNkzM", duration: 42, description: "Limits, derivatives, and differentiation rules — Premium" },
+      { id: "v4", title: "Applications of Derivatives", link: "https://www.youtube.com/embed/rAof9Ld5sOg", duration: 38, description: "Optimization and rate of change problems — Premium" },
+    ],
   },
   {
     id: 2,
@@ -38,6 +45,12 @@ export const lessons = [
     color: "from-cyan-500 to-indigo-600",
     semester: "Year 1 Semester 1",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "What is a Computer?", link: "https://www.youtube.com/embed/AkFi90lZmXA", duration: 22, description: "Hardware components and how they work together" },
+      { id: "v2", title: "Operating Systems Overview", link: "https://www.youtube.com/embed/RozoeWzT7IM", duration: 30, description: "Windows, Linux, macOS — key differences" },
+      { id: "v3", title: "File Systems & Storage", link: "https://www.youtube.com/embed/KN8YgJnShPM", duration: 25, description: "How data is stored and organized — Premium" },
+      { id: "v4", title: "Binary & Number Systems", link: "https://www.youtube.com/embed/cJNm938NTg4", duration: 32, description: "Binary, hexadecimal, and computer arithmetic — Premium" },
+    ],
   },
   {
     id: 3,
@@ -54,6 +67,12 @@ export const lessons = [
     color: "from-emerald-500 to-teal-600",
     semester: "Year 1 Semester 1",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "Newton's Laws of Motion", link: "https://www.youtube.com/embed/kKKM8Y-u7ds", duration: 34, description: "Forces, acceleration, and Newton's three laws" },
+      { id: "v2", title: "Energy & Work", link: "https://www.youtube.com/embed/2WS1sG9fhOk", duration: 29, description: "Kinetic, potential energy and conservation laws" },
+      { id: "v3", title: "Electricity & Circuits", link: "https://www.youtube.com/embed/mc979OhitAg", duration: 40, description: "Voltage, current, resistance — Premium" },
+      { id: "v4", title: "Waves & Optics", link: "https://www.youtube.com/embed/Iuv6hY6zsd0", duration: 36, description: "Wave properties, reflection, refraction — Premium" },
+    ],
   },
   {
     id: 4,
@@ -70,6 +89,11 @@ export const lessons = [
     color: "from-amber-500 to-orange-600",
     semester: "Year 1 Semester 1",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "Ancient Civilizations", link: "https://www.youtube.com/embed/Ztd8IT-zG9M", duration: 26, description: "Egypt, Mesopotamia, and early human societies" },
+      { id: "v2", title: "The Rise of Science", link: "https://www.youtube.com/embed/YHqLJE-zUL0", duration: 31, description: "How scientific thinking shaped civilization" },
+      { id: "v3", title: "Modern World Order", link: "https://www.youtube.com/embed/wgeC2q6i_V8", duration: 28, description: "Globalization and its effects — Premium" },
+    ],
   },
   {
     id: 5,
@@ -86,6 +110,11 @@ export const lessons = [
     color: "from-rose-500 to-pink-600",
     semester: "Year 1 Semester 1",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "History of Technology", link: "https://www.youtube.com/embed/URmeTqglS58", duration: 24, description: "From stone tools to the digital age" },
+      { id: "v2", title: "Industrial Revolution", link: "https://www.youtube.com/embed/zjFm4R12pBM", duration: 33, description: "How industrialization changed the world" },
+      { id: "v3", title: "The Digital Age", link: "https://www.youtube.com/embed/sSgzM3kDCxo", duration: 28, description: "Internet, AI, and the future — Premium" },
+    ],
   },
   {
     id: 6,
@@ -102,6 +131,12 @@ export const lessons = [
     color: "from-violet-500 to-purple-600",
     semester: "Year 1 Semester 1",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "What is Critical Thinking?", link: "https://www.youtube.com/embed/Cum3k-Wglfw", duration: 20, description: "Core concepts and why it matters" },
+      { id: "v2", title: "Problem Solving Frameworks", link: "https://www.youtube.com/embed/x6yk3kDoFhE", duration: 28, description: "Structured approaches to complex challenges" },
+      { id: "v3", title: "Logical Fallacies", link: "https://www.youtube.com/embed/lfPNiFNHKZk", duration: 35, description: "Common reasoning errors to avoid — Premium" },
+      { id: "v4", title: "Growth Mindset", link: "https://www.youtube.com/embed/_X0mgOOSpLU", duration: 22, description: "Building resilience and lifelong learning — Premium" },
+    ],
   },
   {
     id: 7,
@@ -118,6 +153,12 @@ export const lessons = [
     color: "from-sky-500 to-blue-600",
     semester: "Year 1 Semester 1",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "How to Write Academically", link: "https://www.youtube.com/embed/X7vb-MQqr1U", duration: 22, description: "Structure, tone, and academic conventions" },
+      { id: "v2", title: "Research Methods", link: "https://www.youtube.com/embed/hzqMFQ5-EhE", duration: 30, description: "Finding and evaluating credible sources" },
+      { id: "v3", title: "APA & Citation Styles", link: "https://www.youtube.com/embed/X3R_yFdUPPw", duration: 25, description: "Proper citation and referencing — Premium" },
+      { id: "v4", title: "Presentation Skills", link: "https://www.youtube.com/embed/i8j6BN0Gfl8", duration: 28, description: "Delivering confident academic presentations — Premium" },
+    ],
   },
   {
     id: 8,
@@ -134,6 +175,12 @@ export const lessons = [
     color: "from-fuchsia-500 to-pink-600",
     semester: "Year 1 Semester 1",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "English Grammar Foundations", link: "https://www.youtube.com/embed/YsZsMdSVLfE", duration: 32, description: "Tenses, sentence structure, and common rules" },
+      { id: "v2", title: "Reading Comprehension", link: "https://www.youtube.com/embed/aSJDFm6LVRI", duration: 28, description: "Strategies for understanding academic texts" },
+      { id: "v3", title: "Writing Paragraphs", link: "https://www.youtube.com/embed/qp0HIF3SfI4", duration: 26, description: "Topic sentences, evidence, concluding — Premium" },
+      { id: "v4", title: "Speaking Confidence", link: "https://www.youtube.com/embed/tShavGuo0_E", duration: 30, description: "Pronunciation and spoken communication — Premium" },
+    ],
   },
 
   // ══════════════════════════════════════════
@@ -154,6 +201,12 @@ export const lessons = [
     color: "from-indigo-500 to-violet-600",
     semester: "Year 1 Semester 2",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "Integral Calculus Intro", link: "https://www.youtube.com/embed/rfG8ce4nNh0", duration: 36, description: "Antiderivatives and the integral concept" },
+      { id: "v2", title: "Integration Techniques", link: "https://www.youtube.com/embed/sB0ea5SZs_k", duration: 40, description: "Substitution, by-parts, and partial fractions" },
+      { id: "v3", title: "Differential Equations", link: "https://www.youtube.com/embed/p_di4Zn4wz4", duration: 44, description: "First-order ODEs and applications — Premium" },
+      { id: "v4", title: "Linear Algebra Basics", link: "https://www.youtube.com/embed/fNk_zzaMoSs", duration: 48, description: "Matrices, vectors, and transformations — Premium" },
+    ],
   },
   {
     id: 10,
@@ -170,6 +223,11 @@ export const lessons = [
     color: "from-cyan-500 to-indigo-600",
     semester: "Year 1 Semester 2",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "Lines, Views & Projections", link: "https://www.youtube.com/embed/zj8pV9_vGF0", duration: 30, description: "Orthographic projection and drawing standards" },
+      { id: "v2", title: "Dimensioning & Tolerances", link: "https://www.youtube.com/embed/N-kHd6K28fA", duration: 34, description: "Proper annotation of engineering drawings" },
+      { id: "v3", title: "AutoCAD Fundamentals", link: "https://www.youtube.com/embed/IjHNKRK0tJo", duration: 45, description: "Basic 2D drafting with AutoCAD — Premium" },
+    ],
   },
   {
     id: 11,
@@ -186,6 +244,12 @@ export const lessons = [
     color: "from-emerald-500 to-teal-600",
     semester: "Year 1 Semester 2",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "Your First Program", link: "https://www.youtube.com/embed/rfscVS0vtbw", duration: 28, description: "Hello World and setting up your environment" },
+      { id: "v2", title: "Variables & Data Types", link: "https://www.youtube.com/embed/Z1Yd7upQsXY", duration: 35, description: "Integers, strings, floats, and booleans" },
+      { id: "v3", title: "Loops & Iteration", link: "https://www.youtube.com/embed/OnDr4J2UXSA", duration: 38, description: "for loops, while loops, and iteration patterns — Premium" },
+      { id: "v4", title: "Functions & Scope", link: "https://www.youtube.com/embed/u-OmVr_fT4s", duration: 42, description: "Writing reusable code with functions — Premium" },
+    ],
   },
   {
     id: 12,
@@ -202,6 +266,12 @@ export const lessons = [
     color: "from-amber-500 to-orange-600",
     semester: "Year 1 Semester 2",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "What is Statistics?", link: "https://www.youtube.com/embed/sxQaBpKfDRk", duration: 22, description: "Types of data, variables, and descriptive stats" },
+      { id: "v2", title: "Probability Basics", link: "https://www.youtube.com/embed/uzkc-qNVoOk", duration: 30, description: "Events, sample spaces, and probability rules" },
+      { id: "v3", title: "Normal Distribution", link: "https://www.youtube.com/embed/rzFX5NWojp0", duration: 35, description: "Bell curve, z-scores, and standardization — Premium" },
+      { id: "v4", title: "Hypothesis Testing", link: "https://www.youtube.com/embed/0oc49DyA3hU", duration: 38, description: "Null hypothesis, p-values, and decisions — Premium" },
+    ],
   },
   {
     id: 13,
@@ -218,6 +288,12 @@ export const lessons = [
     color: "from-rose-500 to-pink-600",
     semester: "Year 1 Semester 2",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "Voltage, Current & Resistance", link: "https://www.youtube.com/embed/mc979OhitAg", duration: 28, description: "Ohm's Law and basic circuit concepts" },
+      { id: "v2", title: "Series & Parallel Circuits", link: "https://www.youtube.com/embed/7d3GmJMJWZk", duration: 36, description: "Circuit configurations and their properties" },
+      { id: "v3", title: "Capacitors & Inductors", link: "https://www.youtube.com/embed/X4EUwTwZ110", duration: 40, description: "Reactive components in AC circuits — Premium" },
+      { id: "v4", title: "Circuit Analysis Methods", link: "https://www.youtube.com/embed/OZTiNKEQGGM", duration: 44, description: "Kirchhoff's laws, nodal and mesh analysis — Premium" },
+    ],
   },
   {
     id: 14,
@@ -234,6 +310,11 @@ export const lessons = [
     color: "from-violet-500 to-purple-600",
     semester: "Year 1 Semester 2",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "What is Philosophy?", link: "https://www.youtube.com/embed/YxBShJU_CKs", duration: 20, description: "The big questions and why they matter" },
+      { id: "v2", title: "Ethics & Morality", link: "https://www.youtube.com/embed/FOoffXFpAlU", duration: 28, description: "Consequentialism, deontology, and virtue ethics" },
+      { id: "v3", title: "Philosophy of Technology", link: "https://www.youtube.com/embed/HHqVCIG_KhA", duration: 25, description: "Ethical implications of AI and tech — Premium" },
+    ],
   },
   {
     id: 15,
@@ -250,6 +331,11 @@ export const lessons = [
     color: "from-sky-500 to-blue-600",
     semester: "Year 1 Semester 2",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "Intro to Sociology", link: "https://www.youtube.com/embed/YnCJU6PaCio", duration: 24, description: "The sociological imagination and core concepts" },
+      { id: "v2", title: "Culture & Society", link: "https://www.youtube.com/embed/nrN4k_cqhSY", duration: 30, description: "Norms, values, and cultural differences" },
+      { id: "v3", title: "Social Institutions", link: "https://www.youtube.com/embed/e7S8jWh6AEs", duration: 28, description: "Family, education, and government — Premium" },
+    ],
   },
   {
     id: 16,
@@ -266,6 +352,12 @@ export const lessons = [
     color: "from-fuchsia-500 to-pink-600",
     semester: "Year 1 Semester 2",
     year: "Foundation",
+    videos: [
+      { id: "v1", title: "Academic Vocabulary Building", link: "https://www.youtube.com/embed/2RGT-cHAnqQ", duration: 28, description: "Expanding your academic word bank" },
+      { id: "v2", title: "Essay Writing Structure", link: "https://www.youtube.com/embed/z5Pu1CSRaT0", duration: 34, description: "Introduction, body paragraphs, conclusion" },
+      { id: "v3", title: "Oral Presentations", link: "https://www.youtube.com/embed/i8j6BN0Gfl8", duration: 30, description: "Delivering confident academic talks — Premium" },
+      { id: "v4", title: "Email & Formal Writing", link: "https://www.youtube.com/embed/lqHuZDFJRVc", duration: 26, description: "Professional writing conventions — Premium" },
+    ],
   },
 
   // ══════════════════════════════════════════
@@ -286,6 +378,12 @@ export const lessons = [
     color: "from-indigo-500 to-violet-600",
     semester: "Year 2 Semester 1",
     year: "Second Year",
+    videos: [
+      { id: "v1", title: "OOP Principles", link: "https://www.youtube.com/embed/pTB0EiLXUC8", duration: 40, description: "Classes, inheritance, polymorphism, encapsulation" },
+      { id: "v2", title: "Design Patterns", link: "https://www.youtube.com/embed/v9ejT8FO-7I", duration: 48, description: "Singleton, Factory, Observer patterns" },
+      { id: "v3", title: "Memory Management", link: "https://www.youtube.com/embed/iqXeO59_X6I", duration: 36, description: "Stack vs heap, garbage collection — Premium" },
+      { id: "v4", title: "Exception Handling", link: "https://www.youtube.com/embed/NIWwJbo-9_8", duration: 32, description: "Robust error handling strategies — Premium" },
+    ],
   },
   {
     id: 18,
@@ -302,6 +400,12 @@ export const lessons = [
     color: "from-cyan-500 to-indigo-600",
     semester: "Year 2 Semester 1",
     year: "Second Year",
+    videos: [
+      { id: "v1", title: "Arrays & Linked Lists", link: "https://www.youtube.com/embed/zg9ih6SVACc", duration: 42, description: "Memory layout, traversal, and operations" },
+      { id: "v2", title: "Stacks & Queues", link: "https://www.youtube.com/embed/wjI1WNcIntg", duration: 36, description: "LIFO, FIFO structures and their applications" },
+      { id: "v3", title: "Binary Trees", link: "https://www.youtube.com/embed/oSWTXtMglKE", duration: 50, description: "BST, traversals, and tree operations — Premium" },
+      { id: "v4", title: "Sorting Algorithms", link: "https://www.youtube.com/embed/kgBjXUE_Nwc", duration: 44, description: "Bubble, merge, quick sort compared — Premium" },
+    ],
   },
   {
     id: 19,
@@ -318,6 +422,12 @@ export const lessons = [
     color: "from-emerald-500 to-teal-600",
     semester: "Year 2 Semester 1",
     year: "Second Year",
+    videos: [
+      { id: "v1", title: "The OSI Model", link: "https://www.youtube.com/embed/vv4y_uOneC0", duration: 34, description: "Seven layers and their responsibilities" },
+      { id: "v2", title: "Transmission Media", link: "https://www.youtube.com/embed/KoqnJoRogXk", duration: 30, description: "Wired vs wireless data transmission" },
+      { id: "v3", title: "Network Protocols", link: "https://www.youtube.com/embed/E5bSumTAHZE", duration: 38, description: "HTTP, FTP, DNS, DHCP explained — Premium" },
+      { id: "v4", title: "Error Detection & Correction", link: "https://www.youtube.com/embed/m-dHFf-acsM", duration: 32, description: "Parity bits, checksums, CRC — Premium" },
+    ],
   },
   {
     id: 20,
@@ -334,6 +444,12 @@ export const lessons = [
     color: "from-amber-500 to-orange-600",
     semester: "Year 2 Semester 1",
     year: "Second Year",
+    videos: [
+      { id: "v1", title: "Random Variables", link: "https://www.youtube.com/embed/3v9w79NhsfI", duration: 36, description: "Discrete and continuous distributions" },
+      { id: "v2", title: "Hypothesis Testing", link: "https://www.youtube.com/embed/0oc49DyA3hU", duration: 40, description: "Null hypothesis, p-values, and test statistics" },
+      { id: "v3", title: "Regression Analysis", link: "https://www.youtube.com/embed/zPG4NjIkCjc", duration: 44, description: "Linear regression and correlation — Premium" },
+      { id: "v4", title: "Bayesian Statistics", link: "https://www.youtube.com/embed/HZGCoVF3YvM", duration: 38, description: "Bayes theorem and prior/posterior — Premium" },
+    ],
   },
   {
     id: 21,
@@ -350,6 +466,11 @@ export const lessons = [
     color: "from-rose-500 to-pink-600",
     semester: "Year 2 Semester 1",
     year: "Second Year",
+    videos: [
+      { id: "v1", title: "Multivariable Calculus", link: "https://www.youtube.com/embed/cWZLPv4ZgYE", duration: 44, description: "Partial derivatives and gradient" },
+      { id: "v2", title: "Vector Calculus", link: "https://www.youtube.com/embed/sJVivjuMfWA", duration: 48, description: "Divergence, curl, and line integrals" },
+      { id: "v3", title: "Numerical Methods", link: "https://www.youtube.com/embed/CON_h4AjDsI", duration: 42, description: "Newton-Raphson, Euler's method — Premium" },
+    ],
   },
   {
     id: 22,
@@ -366,6 +487,11 @@ export const lessons = [
     color: "from-violet-500 to-purple-600",
     semester: "Year 2 Semester 1",
     year: "Second Year",
+    videos: [
+      { id: "v1", title: "Technical Report Writing", link: "https://www.youtube.com/embed/N4OGe1A3Jkk", duration: 32, description: "Structure and language for technical reports" },
+      { id: "v2", title: "Presentation Skills", link: "https://www.youtube.com/embed/Unzc731iCUY", duration: 28, description: "Delivery, slides, and audience engagement" },
+      { id: "v3", title: "Professional Email Writing", link: "https://www.youtube.com/embed/lqHuZDFJRVc", duration: 25, description: "Tone, structure, and business etiquette — Premium" },
+    ],
   },
   {
     id: 23,
@@ -382,6 +508,11 @@ export const lessons = [
     color: "from-sky-500 to-blue-600",
     semester: "Year 2 Semester 1",
     year: "Second Year",
+    videos: [
+      { id: "v1", title: "Project Planning & Agile", link: "https://www.youtube.com/embed/502ILHjX9EE", duration: 30, description: "Scrum methodology and sprint planning" },
+      { id: "v2", title: "Git & Version Control", link: "https://www.youtube.com/embed/HVsySz-h9r4", duration: 38, description: "Branching, merging, and collaboration" },
+      { id: "v3", title: "Documentation Best Practices", link: "https://www.youtube.com/embed/L7GwA3A87y4", duration: 26, description: "Writing developer documentation — Premium" },
+    ],
   },
 
   // ══════════════════════════════════════════
@@ -402,6 +533,12 @@ export const lessons = [
     color: "from-indigo-500 to-violet-600",
     semester: "Year 2 Semester 2",
     year: "Second Year",
+    videos: [
+      { id: "v1", title: "Concurrency & Threads", link: "https://www.youtube.com/embed/olYdb0DdGtM", duration: 44, description: "Threading models, race conditions, and locks" },
+      { id: "v2", title: "Functional Programming", link: "https://www.youtube.com/embed/e-5obm1G_FY", duration: 40, description: "Lambdas, higher-order functions, immutability" },
+      { id: "v3", title: "Clean Code Principles", link: "https://www.youtube.com/embed/7EmboKQH8lM", duration: 36, description: "SOLID, DRY, KISS best practices — Premium" },
+      { id: "v4", title: "Software Architecture Patterns", link: "https://www.youtube.com/embed/FLtqAi7WNBY", duration: 42, description: "MVC, MVVM, layered architecture — Premium" },
+    ],
   },
   {
     id: 25,
@@ -418,6 +555,12 @@ export const lessons = [
     color: "from-cyan-500 to-indigo-600",
     semester: "Year 2 Semester 2",
     year: "Second Year",
+    videos: [
+      { id: "v1", title: "Graph Theory & BFS/DFS", link: "https://www.youtube.com/embed/tWVWeAqZ0WU", duration: 46, description: "Adjacency lists, breadth/depth-first search" },
+      { id: "v2", title: "Heaps & Priority Queues", link: "https://www.youtube.com/embed/t0Cq6tVNRBA", duration: 40, description: "Min/max heaps and their applications" },
+      { id: "v3", title: "Dynamic Programming", link: "https://www.youtube.com/embed/oBt53YbR9Kk", duration: 56, description: "Memoization, tabulation, classic DP — Premium" },
+      { id: "v4", title: "Big-O Complexity", link: "https://www.youtube.com/embed/v4cd1O4zkGw", duration: 34, description: "Analyzing time and space complexity — Premium" },
+    ],
   },
   {
     id: 26,
@@ -434,6 +577,12 @@ export const lessons = [
     color: "from-emerald-500 to-teal-600",
     semester: "Year 2 Semester 2",
     year: "Second Year",
+    videos: [
+      { id: "v1", title: "TCP/IP Deep Dive", link: "https://www.youtube.com/embed/PpsEaqJV_A0", duration: 38, description: "Three-way handshake and TCP vs UDP" },
+      { id: "v2", title: "Routing & Switching", link: "https://www.youtube.com/embed/AzXys5kxpAM", duration: 42, description: "Router vs switch, VLANs, and routing tables" },
+      { id: "v3", title: "Wireless Networking", link: "https://www.youtube.com/embed/hePLDVbmikM", duration: 36, description: "WiFi standards, WPA2/3 security — Premium" },
+      { id: "v4", title: "Network Security Basics", link: "https://www.youtube.com/embed/9GZlVOafYTg", duration: 40, description: "Firewalls, IDS, and security zones — Premium" },
+    ],
   },
   {
     id: 27,
@@ -450,6 +599,12 @@ export const lessons = [
     color: "from-amber-500 to-orange-600",
     semester: "Year 2 Semester 2",
     year: "Second Year",
+    videos: [
+      { id: "v1", title: "Relational Model & ER Diagrams", link: "https://www.youtube.com/embed/QpdhBUYk7Kk", duration: 34, description: "Tables, relationships, keys, and ER notation" },
+      { id: "v2", title: "SQL Fundamentals", link: "https://www.youtube.com/embed/HXV3zeQKqGY", duration: 48, description: "SELECT, INSERT, UPDATE, DELETE, and JOINs" },
+      { id: "v3", title: "Database Normalization", link: "https://www.youtube.com/embed/GFQaEYEc8_8", duration: 42, description: "1NF, 2NF, 3NF, and BCNF — Premium" },
+      { id: "v4", title: "Indexes & Performance", link: "https://www.youtube.com/embed/fsG1XaZEa78", duration: 38, description: "Query optimization and indexing strategies — Premium" },
+    ],
   },
   {
     id: 28,
@@ -466,6 +621,12 @@ export const lessons = [
     color: "from-rose-500 to-pink-600",
     semester: "Year 2 Semester 2",
     year: "Second Year",
+    videos: [
+      { id: "v1", title: "Logic & Propositional Calculus", link: "https://www.youtube.com/embed/6K0V3uSYFMI", duration: 36, description: "Truth tables, logical connectives, and proofs" },
+      { id: "v2", title: "Set Theory", link: "https://www.youtube.com/embed/tyDKR4FG3Yw", duration: 32, description: "Sets, subsets, unions, intersections" },
+      { id: "v3", title: "Graph Theory", link: "https://www.youtube.com/embed/LFKZLXVO-Dg", duration: 40, description: "Graphs, trees, Euler and Hamiltonian paths — Premium" },
+      { id: "v4", title: "Combinatorics & Counting", link: "https://www.youtube.com/embed/iKy-d5_erhI", duration: 34, description: "Permutations, combinations, pigeonhole — Premium" },
+    ],
   },
   {
     id: 29,
@@ -482,6 +643,11 @@ export const lessons = [
     color: "from-violet-500 to-purple-600",
     semester: "Year 2 Semester 2",
     year: "Second Year",
+    videos: [
+      { id: "v1", title: "Academic Debate Skills", link: "https://www.youtube.com/embed/MpouXDeV9sE", duration: 30, description: "Structuring arguments and rebuttals" },
+      { id: "v2", title: "Negotiation in English", link: "https://www.youtube.com/embed/YKz3LPM79Mk", duration: 28, description: "Language strategies for effective negotiation" },
+      { id: "v3", title: "Advanced Report Writing", link: "https://www.youtube.com/embed/xZgVFe6d9Xo", duration: 32, description: "Executive summaries and technical reports — Premium" },
+    ],
   },
   {
     id: 30,
@@ -498,6 +664,11 @@ export const lessons = [
     color: "from-sky-500 to-blue-600",
     semester: "Year 2 Semester 2",
     year: "Second Year",
+    videos: [
+      { id: "v1", title: "Full-Stack Mini Project", link: "https://www.youtube.com/embed/ysEN5RaKOlA", duration: 60, description: "Building a small app end-to-end" },
+      { id: "v2", title: "Database-Driven Apps", link: "https://www.youtube.com/embed/YtvrawxGTj0", duration: 48, description: "Connecting frontend to a SQL backend" },
+      { id: "v3", title: "Code Review & Quality", link: "https://www.youtube.com/embed/a9_0UUUNt-Y", duration: 30, description: "Peer review and testing practices — Premium" },
+    ],
   },
 
   // ══════════════════════════════════════════
@@ -518,6 +689,12 @@ export const lessons = [
     color: "from-indigo-500 to-violet-600",
     semester: "Year 3 Semester 1",
     year: "Third Year",
+    videos: [
+      { id: "v1", title: "Subnetting & CIDR", link: "https://www.youtube.com/embed/OqsXzkXfwRw", duration: 44, description: "IP addressing, subnet masks, and CIDR notation" },
+      { id: "v2", title: "Routing Protocols: OSPF & EIGRP", link: "https://www.youtube.com/embed/kfvJ8QVJscc", duration: 50, description: "Dynamic routing protocol fundamentals" },
+      { id: "v3", title: "Enterprise Network Design", link: "https://www.youtube.com/embed/ecCuyq-Wprc", duration: 46, description: "Three-tier architecture and best practices — Premium" },
+      { id: "v4", title: "Network Troubleshooting", link: "https://www.youtube.com/embed/Uz8G4W_I49c", duration: 38, description: "Diagnosing and resolving network issues — Premium" },
+    ],
   },
   {
     id: 32,
@@ -534,6 +711,12 @@ export const lessons = [
     color: "from-cyan-500 to-indigo-600",
     semester: "Year 3 Semester 1",
     year: "Third Year",
+    videos: [
+      { id: "v1", title: "Modern HTML & CSS", link: "https://www.youtube.com/embed/G3e-cpL7ofc", duration: 48, description: "Flexbox, Grid, and semantic HTML5" },
+      { id: "v2", title: "REST API Design", link: "https://www.youtube.com/embed/lsMQRaeKNDk", duration: 42, description: "HTTP methods, status codes, and RESTful principles" },
+      { id: "v3", title: "Intro to AWS", link: "https://www.youtube.com/embed/r4YIdn2eTm4", duration: 56, description: "EC2, S3, IAM, and cloud fundamentals — Premium" },
+      { id: "v4", title: "Serverless Architecture", link: "https://www.youtube.com/embed/vxJobGtqKVM", duration: 40, description: "Lambda functions and event-driven cloud — Premium" },
+    ],
   },
   {
     id: 33,
@@ -550,6 +733,12 @@ export const lessons = [
     color: "from-emerald-500 to-teal-600",
     semester: "Year 3 Semester 1",
     year: "Third Year",
+    videos: [
+      { id: "v1", title: "Stored Procedures & Triggers", link: "https://www.youtube.com/embed/9i3H2x5PV1Y", duration: 40, description: "Server-side SQL logic and automation" },
+      { id: "v2", title: "ACID Transactions", link: "https://www.youtube.com/embed/AcqtAEzuoj0", duration: 36, description: "Atomicity, consistency, isolation, durability" },
+      { id: "v3", title: "NoSQL Databases", link: "https://www.youtube.com/embed/0buKQHokLK8", duration: 44, description: "MongoDB, Redis, and when to use NoSQL — Premium" },
+      { id: "v4", title: "Database Replication & Sharding", link: "https://www.youtube.com/embed/iHNovZUZM3A", duration: 38, description: "Scaling databases horizontally — Premium" },
+    ],
   },
   {
     id: 34,
@@ -566,6 +755,12 @@ export const lessons = [
     color: "from-amber-500 to-orange-600",
     semester: "Year 3 Semester 1",
     year: "Third Year",
+    videos: [
+      { id: "v1", title: "Processes & Threads", link: "https://www.youtube.com/embed/exbKr6fnoUw", duration: 42, description: "Process lifecycle, context switching, and threading" },
+      { id: "v2", title: "CPU Scheduling", link: "https://www.youtube.com/embed/Jkmy2YLUbUY", duration: 38, description: "FCFS, SJF, Round-Robin, and priority scheduling" },
+      { id: "v3", title: "Memory Management & Virtual Memory", link: "https://www.youtube.com/embed/qdkI1X0VMLI", duration: 46, description: "Paging, segmentation, and demand paging — Premium" },
+      { id: "v4", title: "File Systems & I/O", link: "https://www.youtube.com/embed/KN8YgJnShPM", duration: 36, description: "FAT, NTFS, ext4, and I/O management — Premium" },
+    ],
   },
   {
     id: 35,
@@ -582,6 +777,11 @@ export const lessons = [
     color: "from-rose-500 to-pink-600",
     semester: "Year 3 Semester 1",
     year: "Third Year",
+    videos: [
+      { id: "v1", title: "UML Class & Sequence Diagrams", link: "https://www.youtube.com/embed/WnMQ8HlmeXc", duration: 44, description: "Modeling systems with UML notation" },
+      { id: "v2", title: "SOLID Principles", link: "https://www.youtube.com/embed/pTB0EiLXUC8", duration: 48, description: "Five principles of clean object-oriented design" },
+      { id: "v3", title: "Advanced Design Patterns", link: "https://www.youtube.com/embed/v9ejT8FO-7I", duration: 52, description: "MVC, Factory, Strategy, and more — Premium" },
+    ],
   },
   {
     id: 36,
@@ -598,6 +798,11 @@ export const lessons = [
     color: "from-violet-500 to-purple-600",
     semester: "Year 3 Semester 1",
     year: "Third Year",
+    videos: [
+      { id: "v1", title: "Professional Meeting Language", link: "https://www.youtube.com/embed/kG2EPDi_dRs", duration: 28, description: "Chairing meetings and business discussion skills" },
+      { id: "v2", title: "Writing Technical Proposals", link: "https://www.youtube.com/embed/s3hDYRrJMRQ", duration: 34, description: "Grant proposals, project briefs, and SOWs" },
+      { id: "v3", title: "Public Speaking Masterclass", link: "https://www.youtube.com/embed/tShavGuo0_E", duration: 40, description: "Confidence, structure, and delivery — Premium" },
+    ],
   },
   {
     id: 37,
@@ -614,6 +819,11 @@ export const lessons = [
     color: "from-sky-500 to-blue-600",
     semester: "Year 3 Semester 1",
     year: "Third Year",
+    videos: [
+      { id: "v1", title: "System Architecture Planning", link: "https://www.youtube.com/embed/FLtqAi7WNBY", duration: 36, description: "Designing scalable system architectures" },
+      { id: "v2", title: "API Integration & Testing", link: "https://www.youtube.com/embed/GZvSYJDk-us", duration: 42, description: "Integrating services and writing test suites" },
+      { id: "v3", title: "Deployment & DevOps", link: "https://www.youtube.com/embed/j5Zsa_eOXeY", duration: 38, description: "CI/CD and cloud deployment — Premium" },
+    ],
   },
 
   // ══════════════════════════════════════════
@@ -634,6 +844,12 @@ export const lessons = [
     color: "from-indigo-500 to-violet-600",
     semester: "Year 3 Semester 2",
     year: "Third Year",
+    videos: [
+      { id: "v1", title: "VPN & Tunneling Protocols", link: "https://www.youtube.com/embed/CuxyZiSCSfc", duration: 42, description: "IPSec, SSL VPN, and tunneling methods" },
+      { id: "v2", title: "Firewall Design & ACLs", link: "https://www.youtube.com/embed/9GZlVOafYTg", duration: 38, description: "Stateful firewalls, DMZs, and access control" },
+      { id: "v3", title: "Network Monitoring & SNMP", link: "https://www.youtube.com/embed/Uz8G4W_I49c", duration: 36, description: "Tools for enterprise network management — Premium" },
+      { id: "v4", title: "BGP & ISP Routing", link: "https://www.youtube.com/embed/O6tCoD5c_U0", duration: 44, description: "Border Gateway Protocol and internet routing — Premium" },
+    ],
   },
   {
     id: 39,
@@ -650,6 +866,12 @@ export const lessons = [
     color: "from-cyan-500 to-indigo-600",
     semester: "Year 3 Semester 2",
     year: "Third Year",
+    videos: [
+      { id: "v1", title: "Docker & Containerization", link: "https://www.youtube.com/embed/fqMOX6JJhGo", duration: 52, description: "Containers, images, volumes, and networking" },
+      { id: "v2", title: "Kubernetes Fundamentals", link: "https://www.youtube.com/embed/X48VuDVv0do", duration: 60, description: "Pods, deployments, services, and scaling" },
+      { id: "v3", title: "CI/CD Pipelines", link: "https://www.youtube.com/embed/R8_veQiYBjI", duration: 44, description: "GitHub Actions, Jenkins, and delivery — Premium" },
+      { id: "v4", title: "Microservices Architecture", link: "https://www.youtube.com/embed/lTAcCNbJ7KE", duration: 48, description: "Designing loosely coupled services — Premium" },
+    ],
   },
   {
     id: 40,
@@ -666,6 +888,12 @@ export const lessons = [
     color: "from-emerald-500 to-teal-600",
     semester: "Year 3 Semester 2",
     year: "Third Year",
+    videos: [
+      { id: "v1", title: "React Native / Flutter Intro", link: "https://www.youtube.com/embed/VPvVD8t02U8", duration: 46, description: "Cross-platform setup and first app" },
+      { id: "v2", title: "Mobile UI Components", link: "https://www.youtube.com/embed/0-S5a0eXPoc", duration: 40, description: "Navigation, lists, forms, and layouts" },
+      { id: "v3", title: "Connecting to REST APIs", link: "https://www.youtube.com/embed/cuEtnrL9-H0", duration: 38, description: "Fetching data and state management — Premium" },
+      { id: "v4", title: "Publishing to App Stores", link: "https://www.youtube.com/embed/TRDIwauPD2g", duration: 34, description: "App Store Connect and Google Play — Premium" },
+    ],
   },
   {
     id: 41,
@@ -682,6 +910,12 @@ export const lessons = [
     color: "from-amber-500 to-orange-600",
     semester: "Year 3 Semester 2",
     year: "Third Year",
+    videos: [
+      { id: "v1", title: "Agile & Scrum in Practice", link: "https://www.youtube.com/embed/2Vt7Ik8Ublw", duration: 34, description: "Sprints, backlogs, and daily standups" },
+      { id: "v2", title: "Requirements Engineering", link: "https://www.youtube.com/embed/iGkCKbrLEq4", duration: 38, description: "User stories, use cases, and specification" },
+      { id: "v3", title: "Software Testing Strategies", link: "https://www.youtube.com/embed/sO8eGL6SFsA", duration: 42, description: "Unit, integration, and E2E testing — Premium" },
+      { id: "v4", title: "Software Project Management", link: "https://www.youtube.com/embed/D08mPwqZZKg", duration: 36, description: "Risk, cost, and schedule estimation — Premium" },
+    ],
   },
   {
     id: 42,
@@ -698,6 +932,12 @@ export const lessons = [
     color: "from-rose-500 to-pink-600",
     semester: "Year 3 Semester 2",
     year: "Third Year",
+    videos: [
+      { id: "v1", title: "Rasterization & Pixels", link: "https://www.youtube.com/embed/4NshnkzzdYY", duration: 36, description: "How displays work and pixel coordinates" },
+      { id: "v2", title: "3D Transformations", link: "https://www.youtube.com/embed/vQ60rFwh2ig", duration: 44, description: "Translation, rotation, scaling in 3D space" },
+      { id: "v3", title: "OpenGL & Shaders", link: "https://www.youtube.com/embed/W3gAzLwfIP0", duration: 52, description: "GPU pipeline and GLSL shader basics — Premium" },
+      { id: "v4", title: "Ray Tracing Fundamentals", link: "https://www.youtube.com/embed/gsZiJeaMO48", duration: 46, description: "Light simulation and photorealistic rendering — Premium" },
+    ],
   },
   {
     id: 43,
@@ -714,6 +954,11 @@ export const lessons = [
     color: "from-violet-500 to-purple-600",
     semester: "Year 3 Semester 2",
     year: "Third Year",
+    videos: [
+      { id: "v1", title: "Research Paper Writing", link: "https://www.youtube.com/embed/mRmJpNR1fmQ", duration: 36, description: "Abstract, methodology, discussion, conclusions" },
+      { id: "v2", title: "Conference Presentation Skills", link: "https://www.youtube.com/embed/Unzc731iCUY", duration: 32, description: "Delivering papers and Q&A at conferences" },
+      { id: "v3", title: "Cross-Cultural Communication", link: "https://www.youtube.com/embed/pXWNFGVyOl8", duration: 28, description: "Working effectively in global teams — Premium" },
+    ],
   },
   {
     id: 44,
@@ -730,6 +975,11 @@ export const lessons = [
     color: "from-sky-500 to-blue-600",
     semester: "Year 3 Semester 2",
     year: "Third Year",
+    videos: [
+      { id: "v1", title: "Mobile + Cloud Project Setup", link: "https://www.youtube.com/embed/s9pBJPJvRgk", duration: 40, description: "Architecture for mobile-cloud integration" },
+      { id: "v2", title: "User Testing & Iteration", link: "https://www.youtube.com/embed/K_m97Gu5biU", duration: 34, description: "Usability testing and feedback loops" },
+      { id: "v3", title: "Presenting to Stakeholders", link: "https://www.youtube.com/embed/5k-2Jb7pAOs", duration: 30, description: "Demos, decks, and product showcases — Premium" },
+    ],
   },
 
   // ══════════════════════════════════════════
@@ -750,6 +1000,12 @@ export const lessons = [
     color: "from-indigo-500 to-violet-600",
     semester: "Year 4 Semester 1",
     year: "Fourth Year",
+    videos: [
+      { id: "v1", title: "Native Device APIs", link: "https://www.youtube.com/embed/mJ3bGvy0WAY", duration: 44, description: "Camera, GPS, sensors, and notifications" },
+      { id: "v2", title: "Performance Optimization", link: "https://www.youtube.com/embed/5fLW5Q5ODiE", duration: 38, description: "Memory profiling, lazy loading, and caching" },
+      { id: "v3", title: "AR/VR Basics for Mobile", link: "https://www.youtube.com/embed/tShavGuo0_E", duration: 42, description: "ARKit, ARCore, and spatial computing — Premium" },
+      { id: "v4", title: "App Store Optimization", link: "https://www.youtube.com/embed/TRDIwauPD2g", duration: 30, description: "Publishing, ASO, and monetization — Premium" },
+    ],
   },
   {
     id: 46,
@@ -766,6 +1022,12 @@ export const lessons = [
     color: "from-cyan-500 to-indigo-600",
     semester: "Year 4 Semester 1",
     year: "Fourth Year",
+    videos: [
+      { id: "v1", title: "What is an MIS?", link: "https://www.youtube.com/embed/ZNQxWVnzCm8", duration: 28, description: "Types of information systems in business" },
+      { id: "v2", title: "ERP Systems Overview", link: "https://www.youtube.com/embed/2T_7p0PsYbc", duration: 34, description: "SAP, Oracle, and enterprise resource planning" },
+      { id: "v3", title: "IT Governance & ITIL", link: "https://www.youtube.com/embed/tMH5OPmVnpk", duration: 32, description: "Frameworks for managing IT services — Premium" },
+      { id: "v4", title: "Business Intelligence & Dashboards", link: "https://www.youtube.com/embed/ykvAqtGMbHg", duration: 36, description: "KPIs, BI tools, and data visualization — Premium" },
+    ],
   },
   {
     id: 47,
@@ -782,6 +1044,12 @@ export const lessons = [
     color: "from-emerald-500 to-teal-600",
     semester: "Year 4 Semester 1",
     year: "Fourth Year",
+    videos: [
+      { id: "v1", title: "Data Mining Process", link: "https://www.youtube.com/embed/3kIjuBUSfbs", duration: 32, description: "CRISP-DM methodology and data preparation" },
+      { id: "v2", title: "Classification Algorithms", link: "https://www.youtube.com/embed/aircAruvnKk", duration: 48, description: "Decision trees, kNN, and naive Bayes" },
+      { id: "v3", title: "Clustering & Association Rules", link: "https://www.youtube.com/embed/IuRb3y8qKX4", duration: 44, description: "K-means, DBSCAN, Apriori algorithm — Premium" },
+      { id: "v4", title: "Big Data Tools: Hadoop & Spark", link: "https://www.youtube.com/embed/aReuLtY0YMI", duration: 50, description: "Distributed computing for large datasets — Premium" },
+    ],
   },
   {
     id: 48,
@@ -798,6 +1066,12 @@ export const lessons = [
     color: "from-amber-500 to-orange-600",
     semester: "Year 4 Semester 1",
     year: "Fourth Year",
+    videos: [
+      { id: "v1", title: "UX Research Methods", link: "https://www.youtube.com/embed/7_sFVYfatXY", duration: 36, description: "Interviews, surveys, and user journey mapping" },
+      { id: "v2", title: "Wireframing in Figma", link: "https://www.youtube.com/embed/dXQ7IHkTiMM", duration: 44, description: "Lo-fi to hi-fi wireframing workflow" },
+      { id: "v3", title: "Usability Testing", link: "https://www.youtube.com/embed/0YL0xoSmyZI", duration: 32, description: "Test protocols and iteration cycles — Premium" },
+      { id: "v4", title: "Design Systems & Tokens", link: "https://www.youtube.com/embed/EK-pHkc5EL4", duration: 38, description: "Building scalable design systems — Premium" },
+    ],
   },
   {
     id: 49,
@@ -814,6 +1088,12 @@ export const lessons = [
     color: "from-rose-500 to-pink-600",
     semester: "Year 4 Semester 1",
     year: "Fourth Year",
+    videos: [
+      { id: "v1", title: "Cybersecurity Fundamentals", link: "https://www.youtube.com/embed/z5Pu1CSRaT0", duration: 38, description: "CIA triad, threat landscape, and attack vectors" },
+      { id: "v2", title: "Ethical Hacking & Pentesting", link: "https://www.youtube.com/embed/3Kq1MIfTWCE", duration: 52, description: "Reconnaissance, scanning, and exploitation basics" },
+      { id: "v3", title: "Cryptography in Practice", link: "https://www.youtube.com/embed/AQDCe585Lnc", duration: 44, description: "TLS/SSL, PKI, and secure protocols — Premium" },
+      { id: "v4", title: "Compliance: ISO 27001 & GDPR", link: "https://www.youtube.com/embed/j6WWUvDfRso", duration: 36, description: "Security standards and regulatory compliance — Premium" },
+    ],
   },
   {
     id: 50,
@@ -830,6 +1110,12 @@ export const lessons = [
     color: "from-violet-500 to-purple-600",
     semester: "Year 4 Semester 1",
     year: "Fourth Year",
+    videos: [
+      { id: "v1", title: "Business Model Canvas", link: "https://www.youtube.com/embed/IP0cUBWTgpY", duration: 30, description: "Nine building blocks of a business model" },
+      { id: "v2", title: "Startup Pitching", link: "https://www.youtube.com/embed/SB16xgtFmco", duration: 36, description: "Crafting compelling investor pitches" },
+      { id: "v3", title: "Fundraising & Venture Capital", link: "https://www.youtube.com/embed/677ZtSMr4-4", duration: 40, description: "Seed rounds, VCs, and term sheets — Premium" },
+      { id: "v4", title: "Lean Startup Methodology", link: "https://www.youtube.com/embed/RSaIOCHбуд", duration: 34, description: "Build-measure-learn feedback loops — Premium" },
+    ],
   },
   {
     id: 51,
@@ -846,6 +1132,11 @@ export const lessons = [
     color: "from-sky-500 to-blue-600",
     semester: "Year 4 Semester 1",
     year: "Fourth Year",
+    videos: [
+      { id: "v1", title: "Choosing Your Project Topic", link: "https://www.youtube.com/embed/oY0tEiXe3BE", duration: 28, description: "Identifying a meaningful and feasible problem" },
+      { id: "v2", title: "Writing Your Proposal", link: "https://www.youtube.com/embed/MRzPZHNMvDw", duration: 34, description: "Scope, methodology, and timeline planning" },
+      { id: "v3", title: "Literature Review", link: "https://www.youtube.com/embed/zIYC6zG265E", duration: 32, description: "Reviewing and synthesizing existing research — Premium" },
+    ],
   },
 
   // ══════════════════════════════════════════
@@ -867,6 +1158,12 @@ export const lessons = [
     semester: "Year 4 Semester 2",
     year: "Fourth Year",
     option: "Option 1",
+    videos: [
+      { id: "v1", title: "What is FinTech?", link: "https://www.youtube.com/embed/BAlsXbr48Wk", duration: 26, description: "Digital banking, payments, and the ecosystem" },
+      { id: "v2", title: "Blockchain & Crypto", link: "https://www.youtube.com/embed/SSo_EIwHSd4", duration: 44, description: "How blockchain works and DeFi basics" },
+      { id: "v3", title: "Digital Payments & Wallets", link: "https://www.youtube.com/embed/1bEfzGEVKTk", duration: 32, description: "Payment rails, e-wallets, and BNPL — Premium" },
+      { id: "v4", title: "RegTech & Compliance", link: "https://www.youtube.com/embed/5j6DnqlIvz4", duration: 30, description: "Regulatory technology frameworks — Premium" },
+    ],
   },
   {
     id: 53,
@@ -884,6 +1181,12 @@ export const lessons = [
     semester: "Year 4 Semester 2",
     year: "Fourth Year",
     option: "Option 1",
+    videos: [
+      { id: "v1", title: "Machine Learning Fundamentals", link: "https://www.youtube.com/embed/aircAruvnKk", duration: 56, description: "Supervised, unsupervised, and reinforcement learning" },
+      { id: "v2", title: "Neural Networks & Deep Learning", link: "https://www.youtube.com/embed/CqOfi41LfDw", duration: 60, description: "Backpropagation, CNNs, RNNs, and transformers" },
+      { id: "v3", title: "NLP & Large Language Models", link: "https://www.youtube.com/embed/viZrOnJclY0", duration: 52, description: "Attention mechanisms and modern LLMs — Premium" },
+      { id: "v4", title: "AI Ethics & Responsible AI", link: "https://www.youtube.com/embed/HHqVCIG_KhA", duration: 36, description: "Bias, fairness, transparency, and governance — Premium" },
+    ],
   },
   {
     id: 54,
@@ -901,6 +1204,12 @@ export const lessons = [
     semester: "Year 4 Semester 2",
     year: "Fourth Year",
     option: "Option 1",
+    videos: [
+      { id: "v1", title: "Symmetric Encryption", link: "https://www.youtube.com/embed/AQDCe585Lnc", duration: 38, description: "AES, DES, and block cipher modes" },
+      { id: "v2", title: "Public Key Cryptography", link: "https://www.youtube.com/embed/AQDCe585Lnc", duration: 42, description: "RSA, ECC, and key exchange protocols" },
+      { id: "v3", title: "Hashing & Message Authentication", link: "https://www.youtube.com/embed/b4b8ktEV4Bg", duration: 34, description: "SHA-256, HMAC, and data integrity — Premium" },
+      { id: "v4", title: "Digital Signatures & PKI", link: "https://www.youtube.com/embed/JR3OxO4KSBE", duration: 36, description: "Certificates, CAs, and trust chains — Premium" },
+    ],
   },
   {
     id: 55,
@@ -918,6 +1227,12 @@ export const lessons = [
     semester: "Year 4 Semester 2",
     year: "Fourth Year",
     option: "Option 1",
+    videos: [
+      { id: "v1", title: "Professional Ethics in IT", link: "https://www.youtube.com/embed/HHqVCIG_KhA", duration: 28, description: "Professional codes of conduct and ethics" },
+      { id: "v2", title: "Data Privacy & GDPR", link: "https://www.youtube.com/embed/j6WWUvDfRso", duration: 34, description: "Privacy law and compliance requirements" },
+      { id: "v3", title: "Intellectual Property in Tech", link: "https://www.youtube.com/embed/Gu5qL0gqUSg", duration: 30, description: "Patents, copyright, and open-source licensing — Premium" },
+      { id: "v4", title: "Responsible AI & Governance", link: "https://www.youtube.com/embed/59bMh59JQDo", duration: 32, description: "Frameworks for ethical AI deployment — Premium" },
+    ],
   },
   {
     id: 56,
@@ -935,6 +1250,11 @@ export const lessons = [
     semester: "Year 4 Semester 2",
     year: "Fourth Year",
     option: "Option 1",
+    videos: [
+      { id: "v1", title: "Final Report Structure", link: "https://www.youtube.com/embed/oY0tEiXe3BE", duration: 36, description: "Chapters, formatting, and academic standards" },
+      { id: "v2", title: "Thesis Defense Tips", link: "https://www.youtube.com/embed/MRzPZHNMvDw", duration: 30, description: "Preparing for your oral examination" },
+      { id: "v3", title: "Post-Graduation Portfolio", link: "https://www.youtube.com/embed/zIYC6zG265E", duration: 26, description: "Building your professional profile — Premium" },
+    ],
   },
   {
     id: 57,
@@ -952,5 +1272,11 @@ export const lessons = [
     semester: "Year 4 Semester 2",
     year: "Fourth Year",
     option: "Option 2",
+    videos: [
+      { id: "v1", title: "Internship Preparation", link: "https://www.youtube.com/embed/SB16xgtFmco", duration: 28, description: "Resume, interviews, and onboarding tips" },
+      { id: "v2", title: "Thesis Research Methods", link: "https://www.youtube.com/embed/mRmJpNR1fmQ", duration: 40, description: "Qualitative and quantitative research approaches" },
+      { id: "v3", title: "Thesis Writing & Structure", link: "https://www.youtube.com/embed/MRzPZHNMvDw", duration: 44, description: "Full thesis writing from intro to conclusion — Premium" },
+      { id: "v4", title: "Thesis Defense & Viva", link: "https://www.youtube.com/embed/oY0tEiXe3BE", duration: 36, description: "Presentation, Q&A, and committee expectations — Premium" },
+    ],
   },
 ];

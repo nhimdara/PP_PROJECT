@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import banner from "./../assets/image/banner.jpg";
 import {
@@ -10,6 +10,7 @@ import {
   Trophy,
   Play,
   GraduationCap,
+  ArrowUp,
 } from "lucide-react";
 
 /* ─────────────────────────── Particle Canvas ─────────────────────────── */
@@ -182,7 +183,14 @@ const useScrollReveal = () => {
 /* ─────────────────────────── Main Component ─────────────────────────── */
 const HomePage = ({ onAuthModalOpen }) => {
   const heroRef = useRef(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   useScrollReveal();
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   /* Parallax on hero bg image */
   useEffect(() => {
@@ -411,6 +419,9 @@ const HomePage = ({ onAuthModalOpen }) => {
           from { transform: translate(0, 0) scale(1); }
           to   { transform: translate(30px, 20px) scale(1.15); }
         }
+
+        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-spin-slow { animation: spin-slow 3s linear infinite; }
       `}</style>
 
       {/* ══════════════ HERO SECTION ══════════════ */}
@@ -627,6 +638,19 @@ const HomePage = ({ onAuthModalOpen }) => {
           </div>
         </div>
       </section>
+
+      {/* ── Scroll To Top Button ── */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        aria-label="Scroll to top"
+        className={`fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 ${showScrollTop ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-6 pointer-events-none"}`}
+      >
+        <span className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500 via-violet-500 to-purple-600 animate-spin-slow opacity-80" />
+        <span className="relative z-10 w-12 h-12 rounded-full bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 flex items-center justify-center hover:from-indigo-500 hover:to-purple-500 transition-all duration-300 hover:scale-110 group shadow-lg shadow-indigo-500/40">
+          <ArrowUp className="h-5 w-5 text-white group-hover:-translate-y-0.5 transition-transform duration-300" />
+        </span>
+        <span className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 opacity-0 hover:opacity-30 blur-md transition-opacity duration-300" />
+      </button>
     </>
   );
 };
