@@ -6,6 +6,7 @@ import FontStyle from "./components/layout/ui/FontStyle";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import AuthModal from "./components/layout/auth/AuthModal";
+import ScrollToTop from "./components/assets/ScrollToTop"; // Add this import
 
 // Pages
 import HomePage from "./components/pages/HomePage";
@@ -50,6 +51,7 @@ const App = () => {
 
   return (
     <Router>
+      <ScrollToTop /> {/* Add this line */}
       <div className="nav-font">
         <FontStyle />
         <Navbar

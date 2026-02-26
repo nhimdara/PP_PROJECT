@@ -1,3 +1,4 @@
+// pages/HomePage.jsx
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import banner from "./../assets/image/banner.jpg";
