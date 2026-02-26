@@ -24,7 +24,7 @@ export const lessons = [
     semester: "Year 1 Semester 1",
     year: "Foundation",
     videos: [
-      { id: "v1", title: "Introduction to Algebra", link: "https://www.youtube.com/embed/NybHckSEQBI", duration: 28, description: "Variables, expressions, and solving equations" },
+      { id: "v1", title: "Introduction to Algebra", link: "https://www.youtube.com/embed/jY-Mu6XQ3NU?si=IWZXL_O2MkLedACs", duration: 28, description: "Variables, expressions, and solving equations" },
       { id: "v2", title: "Functions & Graphs", link: "https://www.youtube.com/embed/52tpYl2tTqk", duration: 35, description: "Understanding functions and their graphical representations" },
       { id: "v3", title: "Differential Calculus", link: "https://www.youtube.com/embed/WUvTyaaNkzM", duration: 42, description: "Limits, derivatives, and differentiation rules — Premium" },
       { id: "v4", title: "Applications of Derivatives", link: "https://www.youtube.com/embed/rAof9Ld5sOg", duration: 38, description: "Optimization and rate of change problems — Premium" },
@@ -46,7 +46,7 @@ export const lessons = [
     semester: "Year 1 Semester 1",
     year: "Foundation",
     videos: [
-      { id: "v1", title: "What is a Computer?", link: "https://www.youtube.com/embed/AkFi90lZmXA", duration: 22, description: "Hardware components and how they work together" },
+      { id: "v1", title: "What is a Computer?", link: "https://www.youtube.com/embed/zlT-Lg_QFTA?si=y4NoT7elIXOYAz0Z", duration: 22, description: "Hardware components and how they work together" },
       { id: "v2", title: "Operating Systems Overview", link: "https://www.youtube.com/embed/RozoeWzT7IM", duration: 30, description: "Windows, Linux, macOS — key differences" },
       { id: "v3", title: "File Systems & Storage", link: "https://www.youtube.com/embed/KN8YgJnShPM", duration: 25, description: "How data is stored and organized — Premium" },
       { id: "v4", title: "Binary & Number Systems", link: "https://www.youtube.com/embed/cJNm938NTg4", duration: 32, description: "Binary, hexadecimal, and computer arithmetic — Premium" },
@@ -90,7 +90,7 @@ export const lessons = [
     semester: "Year 1 Semester 1",
     year: "Foundation",
     videos: [
-      { id: "v1", title: "Ancient Civilizations", link: "https://www.youtube.com/embed/Ztd8IT-zG9M", duration: 26, description: "Egypt, Mesopotamia, and early human societies" },
+      { id: "v1", title: "Ancient Civilizations", link: "https://www.youtube.com/embed/iQenKwnMHb8?si=R57WTQh15k9BJkCP", duration: 26, description: "Egypt, Mesopotamia, and early human societies" },
       { id: "v2", title: "The Rise of Science", link: "https://www.youtube.com/embed/YHqLJE-zUL0", duration: 31, description: "How scientific thinking shaped civilization" },
       { id: "v3", title: "Modern World Order", link: "https://www.youtube.com/embed/wgeC2q6i_V8", duration: 28, description: "Globalization and its effects — Premium" },
     ],
@@ -176,7 +176,7 @@ export const lessons = [
     semester: "Year 1 Semester 1",
     year: "Foundation",
     videos: [
-      { id: "v1", title: "English Grammar Foundations", link: "https://www.youtube.com/embed/YsZsMdSVLfE", duration: 32, description: "Tenses, sentence structure, and common rules" },
+      { id: "v1", title: "English Grammar Foundations", link: "https://www.youtube.com/embed/chjmnCSPnbw?si=YVrnt4uu0OVCgF8h", duration: 32, description: "Tenses, sentence structure, and common rules" },
       { id: "v2", title: "Reading Comprehension", link: "https://www.youtube.com/embed/aSJDFm6LVRI", duration: 28, description: "Strategies for understanding academic texts" },
       { id: "v3", title: "Writing Paragraphs", link: "https://www.youtube.com/embed/qp0HIF3SfI4", duration: 26, description: "Topic sentences, evidence, concluding — Premium" },
       { id: "v4", title: "Speaking Confidence", link: "https://www.youtube.com/embed/tShavGuo0_E", duration: 30, description: "Pronunciation and spoken communication — Premium" },
@@ -224,7 +224,7 @@ export const lessons = [
     semester: "Year 1 Semester 2",
     year: "Foundation",
     videos: [
-      { id: "v1", title: "Lines, Views & Projections", link: "https://www.youtube.com/embed/zj8pV9_vGF0", duration: 30, description: "Orthographic projection and drawing standards" },
+      { id: "v1", title: "Lines, Views & Projections", link: "https://www.youtube.com/embed/TUey8tDONiI?si=kI_2Id7lufZxa9Pf", duration: 30, description: "Orthographic projection and drawing standards" },
       { id: "v2", title: "Dimensioning & Tolerances", link: "https://www.youtube.com/embed/N-kHd6K28fA", duration: 34, description: "Proper annotation of engineering drawings" },
       { id: "v3", title: "AutoCAD Fundamentals", link: "https://www.youtube.com/embed/IjHNKRK0tJo", duration: 45, description: "Basic 2D drafting with AutoCAD — Premium" },
     ],
@@ -353,7 +353,7 @@ export const lessons = [
     semester: "Year 1 Semester 2",
     year: "Foundation",
     videos: [
-      { id: "v1", title: "Academic Vocabulary Building", link: "https://www.youtube.com/embed/2RGT-cHAnqQ", duration: 28, description: "Expanding your academic word bank" },
+      { id: "v1", title: "Academic Vocabulary Building", link: "https://www.youtube.com/embed/qKdtyu5NTPA?si=VXQqm7gmXEvNdJEx", duration: 28, description: "Expanding your academic word bank" },
       { id: "v2", title: "Essay Writing Structure", link: "https://www.youtube.com/embed/z5Pu1CSRaT0", duration: 34, description: "Introduction, body paragraphs, conclusion" },
       { id: "v3", title: "Oral Presentations", link: "https://www.youtube.com/embed/i8j6BN0Gfl8", duration: 30, description: "Delivering confident academic talks — Premium" },
       { id: "v4", title: "Email & Formal Writing", link: "https://www.youtube.com/embed/lqHuZDFJRVc", duration: 26, description: "Professional writing conventions — Premium" },
@@ -467,7 +467,7 @@ export const lessons = [
     semester: "Year 2 Semester 1",
     year: "Second Year",
     videos: [
-      { id: "v1", title: "Multivariable Calculus", link: "https://www.youtube.com/embed/cWZLPv4ZgYE", duration: 44, description: "Partial derivatives and gradient" },
+      { id: "v1", title: "Multivariable Calculus", link: "https://www.youtube.com/embed/75jCfqeNe-U?si=azYQXP6EOauWXZe0", duration: 44, description: "Partial derivatives and gradient" },
       { id: "v2", title: "Vector Calculus", link: "https://www.youtube.com/embed/sJVivjuMfWA", duration: 48, description: "Divergence, curl, and line integrals" },
       { id: "v3", title: "Numerical Methods", link: "https://www.youtube.com/embed/CON_h4AjDsI", duration: 42, description: "Newton-Raphson, Euler's method — Premium" },
     ],
@@ -488,7 +488,7 @@ export const lessons = [
     semester: "Year 2 Semester 1",
     year: "Second Year",
     videos: [
-      { id: "v1", title: "Technical Report Writing", link: "https://www.youtube.com/embed/N4OGe1A3Jkk", duration: 32, description: "Structure and language for technical reports" },
+      { id: "v1", title: "Technical Report Writing", link: "https://www.youtube.com/embed/ZA6csu1FP_Y?si=FAsoKSTEOs6LW5Aa", duration: 32, description: "Structure and language for technical reports" },
       { id: "v2", title: "Presentation Skills", link: "https://www.youtube.com/embed/Unzc731iCUY", duration: 28, description: "Delivery, slides, and audience engagement" },
       { id: "v3", title: "Professional Email Writing", link: "https://www.youtube.com/embed/lqHuZDFJRVc", duration: 25, description: "Tone, structure, and business etiquette — Premium" },
     ],
