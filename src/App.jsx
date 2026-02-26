@@ -12,6 +12,7 @@ import HomePage from "./components/pages/HomePage";
 import LessonsPage from "./components/pages/LessonsPage";
 import ProjectsPage from "./components/pages/ProjectsPage";
 import CalendarPage from "./components/pages/CalendarPage";
+import AIChat from "./components/service/AIChat";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -51,23 +52,26 @@ const App = () => {
     <Router>
       <div className="nav-font">
         <FontStyle />
-        <Navbar 
+        <Navbar
           isAuthenticated={isAuthenticated}
           user={user}
           onLogout={handleLogout}
           onAuthModalOpen={handleAuthModalOpen}
         />
-        
+
         <Routes>
-          <Route path="/" element={<HomePage onAuthModalOpen={handleAuthModalOpen} />} />
+          <Route
+            path="/"
+            element={<HomePage onAuthModalOpen={handleAuthModalOpen} />}
+          />
           <Route path="/lessons" element={<LessonsPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
         </Routes>
 
         <Footer />
-
-        <AuthModal 
+        <AIChat />
+        <AuthModal
           isOpen={isAuthModalOpen}
           onClose={() => setIsAuthModalOpen(false)}
           isLogin={isLogin}
