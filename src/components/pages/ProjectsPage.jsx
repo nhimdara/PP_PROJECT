@@ -1,4 +1,3 @@
-// pages/ProjectsPage.jsx
 import React, { useState, useEffect } from "react";
 import {
   Layers,
@@ -24,60 +23,33 @@ const ProjectsPage = () => {
   const projects = [
     {
       id: 1,
-      title: "AI-Powered Dashboard",
+      title: "Arduino Project",
       description:
-        "Modern analytics dashboard with real-time data visualization and AI-driven insights using React and D3.js.",
-      tags: ["React", "D3.js", "Node.js", "TensorFlow.js"],
+        "Arduino is a versatile and user-friendly platform perfect for beginners looking to explore the world of electronics and programming. With a little creativity and some basic components, you can create various fun and functional projects. ",
+      tags: ["C", "Physics", "Technical"],
       image:
-        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        "https://content.instructables.com/FD1/94Q9/MKG51UPF/FD194Q9MKG51UPF.jpg?auto=webp&crop=1.2%3A1&frame=1&width=360",
       featured: true,
     },
     {
       id: 2,
-      title: "EcoTrack Mobile App",
+      title: "Basic Programming language",
       description:
-        "Sustainability tracking mobile application helping users reduce their carbon footprint with gamification.",
-      tags: ["React Native", "Firebase", "Redux", "Expo"],
+        "C++ is one of the most popular programming languages widely used in the software industry for projects in different domains like games, operating systems, web browsers, DBMS, etc due to its fast speed, versatility, lower-level memory access, and many more.",
+      tags: ["C", "Math", "Logic"],
       image:
-        "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        "https://files.codingninjas.in/article_images/c-projects-for-beginners-0-1672592014.webp",
       featured: true,
     },
     {
       id: 3,
-      title: "Cloud Portfolio Platform",
+      title: "Math",
       description:
-        "Serverless portfolio platform for creatives with automatic image optimization and CDN integration.",
-      tags: ["Next.js", "AWS", "TailwindCSS", "Vercel"],
+        "Mathematics is the science of quantity, structure, space, and change, evolving from counting and measuring to abstract study via logical deduction",
+      tags: ["Derivative", "Integration", "Matrix"],
       image:
-        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        "https://jessup.edu/wp-content/uploads/2023/12/Does-Computer-Science-Require-Math-NEW.webp",
       featured: true,
-    },
-    {
-      id: 4,
-      title: "Blockchain Voting System",
-      description:
-        "Secure and transparent voting platform built on Ethereum smart contracts with real-time tallying.",
-      tags: ["Solidity", "Web3.js", "React", "Hardhat"],
-      image:
-        "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: 5,
-      title: "HealthAI Assistant",
-      description:
-        "AI-powered health monitoring system with symptom checker and personalized wellness recommendations.",
-      tags: ["Python", "FastAPI", "React", "MongoDB"],
-      image:
-        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: 6,
-      title: "Smart City IoT Platform",
-      description:
-        "IoT platform for smart city management with real-time sensor data and predictive analytics.",
-      tags: ["Node.js", "MQTT", "React", "InfluxDB"],
-      image:
-        "https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     },
   ];
 
@@ -334,8 +306,12 @@ const ProjectsPage = () => {
         }
 
         @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
         }
         .animate-spin-slow {
           animation: spin-slow 3s linear infinite;
