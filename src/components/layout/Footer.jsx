@@ -59,32 +59,8 @@ const Footer = () => {
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse delay-2000" />
       </div>
-
       {/* Main Footer Content */}
       <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-        {/* Newsletter Section */}
-        <div className="relative -mb-16 transform translate-y-[-50%] mt-25">
-          <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 shadow-2xl shadow-indigo-500/30">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-              <div className="text-center lg:text-left">
-                <h3 className="text-2xl font-bold mb-2">Stay Updated with ELearning</h3>
-                <p className="text-indigo-100">Get the latest courses, projects, and learning resources delivered to your inbox.</p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="px-6 py-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 flex-1 min-w-[250px]"
-                />
-                <button className="px-6 py-3 bg-white text-indigo-600 rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 group">
-                  Subscribe
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Footer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 pt-24 pb-12">
           {/* Brand Column */}
@@ -95,7 +71,7 @@ const Footer = () => {
                 <div className="absolute -inset-1 bg-indigo-400/20 rounded-full blur-md group-hover:bg-indigo-400/30 transition-all" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-                EduLearn
+                ELearning
               </span>
             </div>
             

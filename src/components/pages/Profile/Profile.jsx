@@ -22,7 +22,6 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
 
   // Projects state
   const [projects, setProjects] = useState(() => {
-    // Load projects from localStorage
     const savedProjects = localStorage.getItem("user_projects");
     return savedProjects ? JSON.parse(savedProjects) : [
       {
@@ -89,12 +88,10 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
 
   const [editForm, setEditForm] = useState({ ...user });
 
-  // Save projects to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("user_projects", JSON.stringify(projects));
   }, [projects]);
 
-  // Project form state
   const [projectForm, setProjectForm] = useState({
     title: "",
     description: "",
@@ -111,17 +108,11 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
   const handleInput = (e) => setEditForm((p) => ({ ...p, [e.target.name]: e.target.value }));
 
   const handleSave = () => {
-    // Update user state
     setUser(editForm);
-    
-    // Call the parent update function to sync with App.jsx
     if (onUserUpdate) {
       onUserUpdate(editForm);
     }
-    
-    // Save to localStorage
     localStorage.setItem("user", JSON.stringify(editForm));
-    
     setIsEditing(false);
     setSuccessMessage("Profile updated successfully!");
     setShowSuccess(true);
@@ -142,7 +133,6 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
 
   const removeSkill = (s) => setEditForm((p) => ({ ...p, skills: p.skills.filter((x) => x !== s) }));
 
-  // Avatar handlers
   const handleAvatarClick = () => {
     fileInputRef.current.click();
   };
@@ -150,48 +140,33 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Check file size (max 2MB)
       if (file.size > 2 * 1024 * 1024) {
         alert("File size must be less than 2MB");
         return;
       }
-
-      // Check file type
       if (!file.type.startsWith('image/')) {
         alert("Please upload an image file");
         return;
       }
-
       setAvatarFile(file);
-      
-      // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatarPreview(reader.result);
       };
       reader.readAsDataURL(file);
-      
       setShowAvatarModal(true);
     }
   };
 
   const handleAvatarUpload = () => {
     if (avatarPreview) {
-      // Update user with new avatar
       const updatedUser = { ...user, avatar: avatarPreview };
-      
-      // Update local state
       setUser(updatedUser);
       setEditForm({ ...editForm, avatar: avatarPreview });
-      
-      // Update parent (App.jsx)
       if (onUserUpdate) {
         onUserUpdate(updatedUser);
       }
-      
-      // Save to localStorage
       localStorage.setItem("user", JSON.stringify(updatedUser));
-      
       setShowAvatarModal(false);
       setAvatarFile(null);
       setAvatarPreview(null);
@@ -210,7 +185,6 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
     }
   };
 
-  // Project handlers
   const handleOpenProjectModal = (project = null) => {
     if (project) {
       setEditingProject(project);
@@ -265,15 +239,12 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
 
   const handleSaveProject = () => {
     let updatedProjects;
-    
     if (editingProject) {
-      // Update existing project
       updatedProjects = projects.map(p => 
         p.id === editingProject.id ? { ...projectForm, id: p.id } : p
       );
       setSuccessMessage("Project updated successfully!");
     } else {
-      // Add new project
       const newProject = {
         ...projectForm,
         id: projects.length + 1,
@@ -282,10 +253,8 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
       updatedProjects = [...projects, newProject];
       setSuccessMessage("Project added successfully!");
     }
-    
     setProjects(updatedProjects);
     localStorage.setItem("user_projects", JSON.stringify(updatedProjects));
-    
     setShowProjectModal(false);
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 3000);
@@ -313,52 +282,161 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@700;800&display=swap');
-        .prof-root { font-family: 'DM Sans', sans-serif; background: linear-gradient(160deg, #f8f8ff, #f0f0fe); }
-        .prof-heading { font-family: 'Playfair Display', serif; }
-        .prof-card { background: white; border-radius: 24px; border: 1px solid #f0f0f8; box-shadow: 0 2px 20px rgba(0,0,0,0.04); }
+        
+        .prof-root { 
+          font-family: 'DM Sans', sans-serif; 
+          background: linear-gradient(160deg, #f8f8ff, #f0f0fe);
+          min-height: 100vh;
+          padding-top: 96px;
+          padding-bottom: 64px;
+        }
+        
+        .prof-heading { 
+          font-family: 'Playfair Display', serif; 
+        }
+        
+        .prof-card { 
+          background: white; 
+          border-radius: 24px; 
+          border: 1px solid #f0f0f8; 
+          box-shadow: 0 2px 20px rgba(0,0,0,0.04); 
+          height: fit-content;
+        }
+        
         .form-field {
-          width: 100%; padding: 10px 14px; border-radius: 12px; font-size: 14px; outline: none;
-          border: 1.5px solid #e5e7eb; background: #fafafa; transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+          width: 100%; 
+          padding: 10px 14px; 
+          border-radius: 12px; 
+          font-size: 14px; 
+          outline: none;
+          border: 1.5px solid #e5e7eb; 
+          background: #fafafa; 
+          transition: all 0.15s; 
+          font-family: 'DM Sans', sans-serif;
         }
-        .form-field:focus { border-color: #a5b4fc; background: white; box-shadow: 0 0 0 3px rgba(165,180,252,0.2); }
+        
+        .form-field:focus { 
+          border-color: #a5b4fc; 
+          background: white; 
+          box-shadow: 0 0 0 3px rgba(165,180,252,0.2); 
+        }
+        
         .tab-btn {
-          display: flex; align-items: center; gap: 8px; padding: 8px 18px;
-          border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer;
-          border: none; background: transparent; transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+          display: flex; 
+          align-items: center; 
+          gap: 8px; 
+          padding: 8px 18px;
+          border-radius: 12px; 
+          font-size: 14px; 
+          font-weight: 600; 
+          cursor: pointer;
+          border: none; 
+          background: transparent; 
+          transition: all 0.15s; 
+          font-family: 'DM Sans', sans-serif;
         }
-        .tab-btn.active { background: #eef2ff; color: #4f46e5; }
-        .tab-btn:not(.active) { color: #6b7280; }
-        .tab-btn:not(.active):hover { background: #f9fafb; color: #374151; }
-        .info-row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f9fafb; }
-        .info-row:last-child { border-bottom: none; }
+        
+        .tab-btn.active { 
+          background: #eef2ff; 
+          color: #4f46e5; 
+        }
+        
+        .tab-btn:not(.active) { 
+          color: #6b7280; 
+        }
+        
+        .tab-btn:not(.active):hover { 
+          background: #f9fafb; 
+          color: #374151; 
+        }
+        
+        .info-row { 
+          display: flex; 
+          gap: 12px; 
+          padding: 12px 0; 
+          border-bottom: 1px solid #f9fafb; 
+        }
+        
+        .info-row:last-child { 
+          border-bottom: none; 
+        }
+        
         .skill-chip {
-          display: inline-flex; align-items: center; gap: 6px;
-          padding: 5px 14px; border-radius: 99px; font-size: 13px; font-weight: 600;
-          background: #eef2ff; color: #4f46e5; border: 1.5px solid #c7d2fe;
+          display: inline-flex; 
+          align-items: center; 
+          gap: 6px;
+          padding: 5px 14px; 
+          border-radius: 99px; 
+          font-size: 13px; 
+          font-weight: 600;
+          background: #eef2ff; 
+          color: #4f46e5; 
+          border: 1.5px solid #c7d2fe;
           transition: all 0.15s;
         }
-        .skill-chip:hover { background: #e0e7ff; }
+        
+        .skill-chip:hover { 
+          background: #e0e7ff; 
+        }
+        
         .success-toast {
-          position: fixed; top: 80px; right: 20px; z-index: 1000;
-          background: white; border: 1.5px solid #a7f3d0;
-          border-radius: 14px; padding: 12px 20px;
-          display: flex; align-items: center; gap: 10px;
+          position: fixed; 
+          top: 80px; 
+          right: 20px; 
+          z-index: 1000;
+          background: white; 
+          border: 1.5px solid #a7f3d0;
+          border-radius: 14px; 
+          padding: 12px 20px;
+          display: flex; 
+          align-items: center; 
+          gap: 10px;
           box-shadow: 0 8px 32px rgba(16,185,129,0.15);
           animation: slideInRight 0.3s ease;
         }
-        @keyframes slideInRight { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        
+        @keyframes slideInRight { 
+          from { transform: translateX(100px); opacity: 0; } 
+          to { transform: translateX(0); opacity: 1; } 
+        }
+        
         .primary-btn {
-          padding: 10px 20px; border-radius: 14px; font-size: 14px; font-weight: 600;
-          background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none; cursor: pointer;
-          box-shadow: 0 4px 16px rgba(99,102,241,0.3); transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+          padding: 10px 20px; 
+          border-radius: 14px; 
+          font-size: 14px; 
+          font-weight: 600;
+          background: linear-gradient(135deg, #6366f1, #8b5cf6); 
+          color: white; 
+          border: none; 
+          cursor: pointer;
+          box-shadow: 0 4px 16px rgba(99,102,241,0.3); 
+          transition: all 0.2s; 
+          font-family: 'DM Sans', sans-serif;
         }
-        .primary-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        
+        .primary-btn:hover { 
+          opacity: 0.9; 
+          transform: translateY(-1px); 
+        }
+        
         .ghost-btn {
-          padding: 10px 20px; border-radius: 14px; font-size: 14px; font-weight: 600;
-          background: white; color: #374151; border: 1.5px solid #e5e7eb; cursor: pointer;
-          transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+          padding: 10px 20px; 
+          border-radius: 14px; 
+          font-size: 14px; 
+          font-weight: 600;
+          background: white; 
+          color: #374151; 
+          border: 1.5px solid #e5e7eb; 
+          cursor: pointer;
+          transition: all 0.15s; 
+          font-family: 'DM Sans', sans-serif;
         }
-        .ghost-btn:hover { border-color: #a5b4fc; color: #4f46e5; }
+        
+        .ghost-btn:hover { 
+          border-color: #a5b4fc; 
+          color: #4f46e5; 
+        }
+        
         .project-card {
           background: white;
           border-radius: 20px;
@@ -366,10 +444,12 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
           overflow: hidden;
           transition: all 0.3s;
         }
+        
         .project-card:hover {
           transform: translateY(-4px);
           box-shadow: 0 20px 40px rgba(99,102,241,0.12);
         }
+        
         .modal-overlay {
           position: fixed;
           inset: 0;
@@ -380,6 +460,7 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
           justify-content: center;
           padding: 20px;
         }
+        
         .modal-content {
           background: white;
           border-radius: 32px;
@@ -390,10 +471,12 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
           padding: 32px;
           animation: modalFadeIn 0.3s ease;
         }
+        
         @keyframes modalFadeIn {
           from { opacity: 0; transform: scale(0.95); }
           to { opacity: 1; transform: scale(1); }
         }
+        
         .tech-tag {
           display: inline-flex;
           align-items: center;
@@ -405,6 +488,7 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
           font-size: 12px;
           font-weight: 600;
         }
+        
         .avatar-upload-btn {
           position: absolute;
           bottom: -5px;
@@ -420,10 +504,12 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
           transition: all 0.2s;
           border: 3px solid white;
         }
+        
         .avatar-upload-btn:hover {
           transform: scale(1.1);
           box-shadow: 0 4px 12px rgba(99,102,241,0.4);
         }
+        
         .avatar-preview {
           width: 150px;
           height: 150px;
@@ -431,6 +517,118 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
           object-fit: cover;
           border: 4px solid white;
           box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        @media (max-width: 1024px) {
+          .prof-root .lg\\:col-span-1 {
+            margin-bottom: 24px;
+          }
+          
+          .prof-root .sticky {
+            position: relative;
+            top: 0;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .prof-root {
+            padding-top: 80px;
+          }
+          
+          .prof-heading {
+            font-size: 2rem;
+          }
+          
+          .prof-root .flex-col.sm\\:flex-row {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          
+          .tab-btn {
+            padding: 6px 12px;
+            font-size: 13px;
+          }
+          
+          .project-card .md\\:w-48 {
+            width: 100%;
+            height: 200px;
+          }
+          
+          .project-card .md\\:w-48 img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+          
+          .project-card .flex-1.p-6 {
+            padding: 16px;
+          }
+          
+          .modal-content {
+            padding: 24px;
+            margin: 16px;
+          }
+          
+          .grid-cols-1.sm\\:grid-cols-2 {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .prof-root {
+            padding-top: 72px;
+          }
+          
+          .prof-heading {
+            font-size: 1.75rem;
+          }
+          
+          .avatar-upload-btn {
+            width: 32px;
+            height: 32px;
+          }
+          
+          .avatar-upload-btn svg {
+            width: 14px;
+            height: 14px;
+          }
+          
+          .prof-card.p-6 {
+            padding: 16px;
+          }
+          
+          .flex.items-center.gap-3.p-4 {
+            flex-direction: column;
+            text-align: center;
+          }
+          
+          .flex.items-center.gap-3.p-4 button {
+            width: 100%;
+          }
+          
+          .project-card .flex-col.md\\:flex-row {
+            flex-direction: column;
+          }
+          
+          .project-card .flex.gap-4.mt-4 {
+            flex-wrap: wrap;
+          }
+          
+          .project-card .flex.gap-2.mt-4 {
+            flex-wrap: wrap;
+          }
+          
+          .project-card .flex.gap-2.mt-4 button {
+            flex: 1;
+          }
+          
+          .modal-content {
+            padding: 20px;
+          }
+          
+          .modal-content .grid-cols-2 {
+            grid-template-columns: 1fr;
+          }
         }
       `}</style>
 
@@ -587,7 +785,7 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">
                     GitHub URL
@@ -616,7 +814,7 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">
                     Category
@@ -683,7 +881,7 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
         </div>
       )}
 
-      <div className="prof-root min-h-screen pt-24 pb-16">
+      <div className="prof-root">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Header */}
@@ -723,7 +921,7 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Profile Card */}
             <div className="lg:col-span-1">
-              <div className="prof-card overflow-hidden sticky top-24">
+              <div className="prof-card overflow-hidden">
                 {/* Cover */}
                 <div className="h-24 relative" style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #a78bfa)" }}>
                   <div className="absolute inset-0 opacity-20"
@@ -934,7 +1132,7 @@ const Profile = ({ user: initialUser, onUserUpdate }) => {
                             </div>
 
                             {/* Links */}
-                            <div className="flex gap-4 mt-4">
+                            <div className="flex gap-4 mt-4 flex-wrap">
                               {project.github && (
                                 <a
                                   href={project.github}

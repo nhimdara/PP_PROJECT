@@ -38,8 +38,19 @@ const Schedule = () => {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@700&display=swap');
-        .sch-root { font-family: 'DM Sans', sans-serif; background: linear-gradient(160deg, #f8f8ff, #f0f0fe); }
-        .sch-heading { font-family: 'Playfair Display', serif; }
+        
+        .sch-root { 
+          font-family: 'DM Sans', sans-serif; 
+          background: linear-gradient(160deg, #f8f8ff, #f0f0fe);
+          min-height: 100vh;
+          padding-top: 96px;
+          padding-bottom: 64px;
+        }
+        
+        .sch-heading { 
+          font-family: 'Playfair Display', serif; 
+        }
+        
         .cal-day {
           aspect-ratio: 1;
           padding: 6px;
@@ -49,17 +60,41 @@ const Schedule = () => {
           transition: all 0.15s;
           position: relative;
         }
-        .cal-day:hover { background: #f3f4ff; border-color: #c7d2fe; }
-        .cal-day.today { background: #eef2ff; border-color: #6366f1; }
-        .cal-day.selected { background: #6366f1; border-color: #6366f1; }
-        .cal-day.selected .day-num { color: white !important; }
-        .event-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin: 0.5px; }
+        
+        .cal-day:hover { 
+          background: #f3f4ff; 
+          border-color: #c7d2fe; 
+        }
+        
+        .cal-day.today { 
+          background: #eef2ff; 
+          border-color: #6366f1; 
+        }
+        
+        .cal-day.selected { 
+          background: #6366f1; 
+          border-color: #6366f1; 
+        }
+        
+        .cal-day.selected .day-num { 
+          color: white !important; 
+        }
+        
+        .event-dot { 
+          width: 6px; 
+          height: 6px; 
+          border-radius: 50%; 
+          display: inline-block; 
+          margin: 0.5px; 
+        }
+        
         .event-card-styled {
           padding: 16px;
           border-radius: 16px;
           margin-bottom: 8px;
           border: 1px solid transparent;
         }
+        
         .sidebar-event {
           display: flex;
           gap: 10px;
@@ -70,7 +105,11 @@ const Schedule = () => {
           margin-bottom: 6px;
           transition: background 0.15s;
         }
-        .sidebar-event:hover { background: #f0f0fe; }
+        
+        .sidebar-event:hover { 
+          background: #f0f0fe; 
+        }
+        
         .view-btn {
           padding: 8px 18px;
           border-radius: 12px;
@@ -83,10 +122,116 @@ const Schedule = () => {
           transition: all 0.15s;
           font-family: 'DM Sans', sans-serif;
         }
-        .view-btn:hover { border-color: #a5b4fc; color: #4f46e5; }
+        
+        .view-btn:hover { 
+          border-color: #a5b4fc; 
+          color: #4f46e5; 
+        }
+
+        @media (max-width: 1024px) {
+          .sch-root .lg\\:col-span-1 {
+            margin-bottom: 24px;
+          }
+          
+          .sch-root .lg\\:col-span-1 .sticky {
+            position: relative;
+            top: 0;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .sch-root {
+            padding-top: 80px;
+          }
+          
+          .sch-heading {
+            font-size: 2rem;
+          }
+          
+          .cal-day {
+            padding: 4px;
+          }
+          
+          .cal-day .day-num {
+            font-size: 12px;
+          }
+          
+          .flex.flex-col.sm\\:flex-row {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          
+          .flex.gap-3.items-center {
+            width: 100%;
+          }
+          
+          .view-btn {
+            flex: 1;
+          }
+          
+          .bg-white.rounded-3xl.p-5 {
+            padding: 16px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .sch-root {
+            padding-top: 72px;
+          }
+          
+          .sch-heading {
+            font-size: 1.75rem;
+          }
+          
+          .cal-day {
+            padding: 2px;
+          }
+          
+          .cal-day .day-num {
+            font-size: 10px;
+          }
+          
+          .event-dot {
+            width: 4px;
+            height: 4px;
+          }
+          
+          .view-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+          }
+          
+          .event-card-styled {
+            padding: 12px;
+          }
+          
+          .event-card-styled h4 {
+            font-size: 14px;
+          }
+          
+          .sidebar-event {
+            padding: 8px 10px;
+          }
+          
+          .sidebar-event p {
+            font-size: 12px;
+          }
+          
+          .flex.items-start.gap-3 {
+            flex-direction: column;
+          }
+          
+          .flex.items-start.gap-3 .w-8 {
+            margin-bottom: 8px;
+          }
+          
+          .grid.grid-cols-7 {
+            gap: 2px;
+          }
+        }
       `}</style>
 
-      <div className="sch-root min-h-screen pt-24 pb-16">
+      <div className="sch-root">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Header */}

@@ -24,8 +24,19 @@ const Certificates = () => {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@700;800&display=swap');
-        .cert-root { font-family: 'DM Sans', sans-serif; background: linear-gradient(160deg, #f8f8ff, #f0f0fe); }
-        .cert-heading { font-family: 'Playfair Display', serif; }
+        
+        .cert-root { 
+          font-family: 'DM Sans', sans-serif; 
+          background: linear-gradient(160deg, #f8f8ff, #f0f0fe);
+          min-height: 100vh;
+          padding-top: 96px;
+          padding-bottom: 64px;
+        }
+        
+        .cert-heading { 
+          font-family: 'Playfair Display', serif; 
+        }
+        
         .cert-card {
           background: white;
           border-radius: 24px;
@@ -33,8 +44,16 @@ const Certificates = () => {
           overflow: hidden;
           box-shadow: 0 1px 4px rgba(0,0,0,0.04);
           transition: transform 0.25s, box-shadow 0.25s;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
         }
-        .cert-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(99,102,241,0.14); }
+        
+        .cert-card:hover { 
+          transform: translateY(-6px); 
+          box-shadow: 0 16px 48px rgba(99,102,241,0.14); 
+        }
+        
         .stat-box {
           background: white;
           border-radius: 20px;
@@ -45,6 +64,7 @@ const Certificates = () => {
           gap: 16px;
           box-shadow: 0 1px 4px rgba(0,0,0,0.04);
         }
+        
         .skill-tag {
           padding: 4px 12px;
           border-radius: 99px;
@@ -54,22 +74,149 @@ const Certificates = () => {
           color: #6b7280;
           transition: all 0.15s;
         }
-        .skill-tag:hover { background: #e0e7ff; color: #4f46e5; }
+        
+        .skill-tag:hover { 
+          background: #e0e7ff; 
+          color: #4f46e5; 
+        }
+        
         .cert-btn {
-          display: flex; align-items: center; justify-content: center;
-          gap: 6px; padding: 8px 16px; border-radius: 12px;
-          font-size: 13px; font-weight: 600;
-          cursor: pointer; transition: all 0.2s;
+          display: flex; 
+          align-items: center; 
+          justify-content: center;
+          gap: 6px; 
+          padding: 8px 16px; 
+          border-radius: 12px;
+          font-size: 13px; 
+          font-weight: 600;
+          cursor: pointer; 
+          transition: all 0.2s;
           border: none;
         }
-        .cert-btn-primary { color: white; }
-        .cert-btn-outline { background: white; color: #374151; border: 1.5px solid #e5e7eb; }
-        .cert-btn-outline:hover { border-color: #a5b4fc; color: #4f46e5; }
-        .cert-btn-icon { background: white; color: #374151; border: 1.5px solid #e5e7eb; padding: 8px; border-radius: 10px; }
-        .cert-btn-icon:hover { border-color: #a5b4fc; color: #4f46e5; }
+        
+        .cert-btn-primary { 
+          color: white; 
+        }
+        
+        .cert-btn-outline { 
+          background: white; 
+          color: #374151; 
+          border: 1.5px solid #e5e7eb; 
+        }
+        
+        .cert-btn-outline:hover { 
+          border-color: #a5b4fc; 
+          color: #4f46e5; 
+        }
+        
+        .cert-btn-icon { 
+          background: white; 
+          color: #374151; 
+          border: 1.5px solid #e5e7eb; 
+          padding: 8px; 
+          border-radius: 10px; 
+        }
+        
+        .cert-btn-icon:hover { 
+          border-color: #a5b4fc; 
+          color: #4f46e5; 
+        }
+
+        @media (max-width: 768px) {
+          .cert-root {
+            padding-top: 80px;
+          }
+          
+          .cert-heading {
+            font-size: 2rem;
+          }
+          
+          .stat-box {
+            padding: 16px;
+          }
+          
+          .stat-box .w-12 {
+            width: 40px;
+            height: 40px;
+          }
+          
+          .stat-box .text-2xl {
+            font-size: 1.25rem;
+          }
+          
+          .grid.grid-cols-1.md\\:grid-cols-2 {
+            grid-template-columns: 1fr;
+          }
+          
+          .cert-card .h-52 {
+            height: 180px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .cert-root {
+            padding-top: 72px;
+          }
+          
+          .cert-heading {
+            font-size: 1.75rem;
+          }
+          
+          .flex.flex-col.sm\\:flex-row {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          
+          .stat-box {
+            padding: 12px;
+            gap: 12px;
+          }
+          
+          .stat-box .w-12 {
+            width: 36px;
+            height: 36px;
+          }
+          
+          .stat-box .w-12 svg {
+            width: 18px;
+            height: 18px;
+          }
+          
+          .stat-box .text-2xl {
+            font-size: 1.125rem;
+          }
+          
+          .flex.flex-col.sm\\:flex-row.gap-3 {
+            flex-direction: column;
+          }
+          
+          .relative.flex-1 {
+            max-width: 100%;
+          }
+          
+          .cert-card .h-52 {
+            height: 160px;
+          }
+          
+          .cert-card .p-5 {
+            padding: 16px;
+          }
+          
+          .cert-card h3 {
+            font-size: 16px;
+          }
+          
+          .flex.gap-2.pt-4 {
+            flex-wrap: wrap;
+          }
+          
+          .flex.gap-2.pt-4 button {
+            flex: 1;
+          }
+        }
       `}</style>
 
-      <div className="cert-root min-h-screen pt-24 pb-16">
+      <div className="cert-root">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Header */}

@@ -41,8 +41,19 @@ const MyCourses = ({ user }) => {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@700&display=swap');
-        .mc-root { font-family: 'DM Sans', sans-serif; background: linear-gradient(160deg, #f8f8ff 0%, #f0f0fe 100%); }
-        .mc-heading { font-family: 'Playfair Display', serif; }
+        
+        .mc-root { 
+          font-family: 'DM Sans', sans-serif; 
+          background: linear-gradient(160deg, #f8f8ff 0%, #f0f0fe 100%);
+          min-height: 100vh;
+          padding-top: 96px;
+          padding-bottom: 64px;
+        }
+        
+        .mc-heading { 
+          font-family: 'Playfair Display', serif; 
+        }
+        
         .crs-card {
           background: #fff;
           border-radius: 20px;
@@ -50,10 +61,34 @@ const MyCourses = ({ user }) => {
           box-shadow: 0 1px 4px rgba(0,0,0,0.04);
           overflow: hidden;
           transition: transform 0.2s, box-shadow 0.2s;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
         }
-        .crs-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(99,102,241,0.12); }
-        .progress-bar { height: 5px; background: #ede9fe; border-radius: 99px; overflow: hidden; }
-        .progress-bar-fill { height: 100%; border-radius: 99px; }
+        
+        .crs-card:hover { 
+          transform: translateY(-4px); 
+          box-shadow: 0 12px 40px rgba(99,102,241,0.12); 
+        }
+        
+        .crs-card .p-5 {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .progress-bar { 
+          height: 5px; 
+          background: #ede9fe; 
+          border-radius: 99px; 
+          overflow: hidden; 
+        }
+        
+        .progress-bar-fill { 
+          height: 100%; 
+          border-radius: 99px; 
+        }
+        
         .cat-pill {
           padding: 6px 16px;
           border-radius: 99px;
@@ -64,9 +99,24 @@ const MyCourses = ({ user }) => {
           border: 1.5px solid transparent;
           white-space: nowrap;
         }
-        .cat-pill.active { background: #6366f1; color: white; border-color: #6366f1; }
-        .cat-pill:not(.active) { background: white; color: #6b7280; border-color: #e5e7eb; }
-        .cat-pill:not(.active):hover { border-color: #a5b4fc; color: #4f46e5; }
+        
+        .cat-pill.active { 
+          background: #6366f1; 
+          color: white; 
+          border-color: #6366f1; 
+        }
+        
+        .cat-pill:not(.active) { 
+          background: white; 
+          color: #6b7280; 
+          border-color: #e5e7eb; 
+        }
+        
+        .cat-pill:not(.active):hover { 
+          border-color: #a5b4fc; 
+          color: #4f46e5; 
+        }
+        
         .list-row {
           display: flex;
           gap: 16px;
@@ -78,10 +128,104 @@ const MyCourses = ({ user }) => {
           box-shadow: 0 1px 4px rgba(0,0,0,0.03);
           transition: all 0.2s;
         }
-        .list-row:hover { transform: translateX(4px); border-color: #c7d2fe; box-shadow: 0 4px 16px rgba(99,102,241,0.08); }
+        
+        .list-row:hover { 
+          transform: translateX(4px); 
+          border-color: #c7d2fe; 
+          box-shadow: 0 4px 16px rgba(99,102,241,0.08); 
+        }
+
+        @media (max-width: 1024px) {
+          .mc-root .lg\\:col-span-3 {
+            margin-top: 24px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .mc-root {
+            padding-top: 80px;
+          }
+          
+          .mc-heading {
+            font-size: 2rem;
+          }
+          
+          .list-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+          }
+          
+          .list-row .flex-shrink-0 {
+            width: 100%;
+          }
+          
+          .list-row img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+          }
+          
+          .list-row .flex-1 {
+            width: 100%;
+          }
+          
+          .list-row .flex-shrink-0:last-child {
+            width: 100%;
+            display: flex;
+            gap: 8px;
+          }
+          
+          .list-row .flex-shrink-0:last-child button {
+            flex: 1;
+          }
+          
+          .cat-pill {
+            padding: 4px 12px;
+            font-size: 12px;
+          }
+          
+          .crs-card .h-44 {
+            height: 180px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .mc-root {
+            padding-top: 72px;
+          }
+          
+          .mc-heading {
+            font-size: 1.75rem;
+          }
+          
+          .crs-card .h-44 {
+            height: 160px;
+          }
+          
+          .crs-card .p-5 {
+            padding: 16px;
+          }
+          
+          .crs-card h3 {
+            font-size: 15px;
+          }
+          
+          .flex.items-center.gap-3.text-xs {
+            flex-wrap: wrap;
+          }
+          
+          .flex.gap-2 {
+            flex-wrap: wrap;
+          }
+          
+          .flex.gap-2 button {
+            flex: 1;
+          }
+        }
       `}</style>
 
-      <div className="mc-root min-h-screen pt-24 pb-16">
+      <div className="mc-root">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Header */}

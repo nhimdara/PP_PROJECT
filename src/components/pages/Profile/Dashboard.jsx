@@ -58,8 +58,19 @@ const Dashboard = ({ user }) => {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@700;800&display=swap');
-        .dash-root { font-family: 'DM Sans', sans-serif; }
-        .dash-heading { font-family: 'Playfair Display', serif; }
+        
+        .dash-root { 
+          font-family: 'DM Sans', sans-serif; 
+          min-height: 100vh;
+          padding-top: 96px;
+          padding-bottom: 64px;
+          background: linear-gradient(160deg, #f8f8ff 0%, #f0f0fe 100%);
+        }
+        
+        .dash-heading { 
+          font-family: 'Playfair Display', serif; 
+        }
+        
         .stat-card {
           background: #fff;
           border: 1px solid rgba(99,102,241,0.08);
@@ -67,8 +78,14 @@ const Dashboard = ({ user }) => {
           padding: 24px;
           box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(99,102,241,0.04);
           transition: transform 0.2s, box-shadow 0.2s;
+          height: 100%;
         }
-        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(99,102,241,0.12); }
+        
+        .stat-card:hover { 
+          transform: translateY(-2px); 
+          box-shadow: 0 8px 32px rgba(99,102,241,0.12); 
+        }
+        
         .course-card {
           display: flex;
           align-items: center;
@@ -80,9 +97,27 @@ const Dashboard = ({ user }) => {
           transition: all 0.2s;
           cursor: pointer;
         }
-        .course-card:hover { background: #f3f4ff; border-color: rgba(99,102,241,0.2); transform: translateX(4px); }
-        .progress-track { height: 6px; background: #ede9fe; border-radius: 99px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #6366f1, #a78bfa); border-radius: 99px; }
+        
+        .course-card:hover { 
+          background: #f3f4ff; 
+          border-color: rgba(99,102,241,0.2); 
+          transform: translateX(4px); 
+        }
+        
+        .progress-track { 
+          height: 6px; 
+          background: #ede9fe; 
+          border-radius: 99px; 
+          overflow: hidden; 
+          flex: 1;
+        }
+        
+        .progress-fill { 
+          height: 100%; 
+          background: linear-gradient(90deg, #6366f1, #a78bfa); 
+          border-radius: 99px; 
+        }
+        
         .event-item {
           display: flex;
           gap: 12px;
@@ -92,7 +127,11 @@ const Dashboard = ({ user }) => {
           background: #fafafa;
           transition: background 0.2s;
         }
-        .event-item:hover { background: #f3f4ff; }
+        
+        .event-item:hover { 
+          background: #f3f4ff; 
+        }
+        
         .quick-link {
           display: flex;
           align-items: center;
@@ -104,6 +143,7 @@ const Dashboard = ({ user }) => {
           font-weight: 500;
           font-size: 14px;
         }
+        
         .badge-glow {
           background: linear-gradient(135deg, #f59e0b, #ef4444);
           border-radius: 20px;
@@ -112,6 +152,7 @@ const Dashboard = ({ user }) => {
           position: relative;
           overflow: hidden;
         }
+        
         .badge-glow::before {
           content: '';
           position: absolute;
@@ -122,9 +163,88 @@ const Dashboard = ({ user }) => {
           background: rgba(255,255,255,0.08);
           border-radius: 50%;
         }
+
+        @media (max-width: 1024px) {
+          .dash-root .lg\\:col-span-2 {
+            margin-bottom: 24px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .dash-root {
+            padding-top: 80px;
+          }
+          
+          .dash-heading {
+            font-size: 2rem;
+          }
+          
+          .stat-card {
+            padding: 18px;
+          }
+          
+          .course-card {
+            flex-wrap: wrap;
+            position: relative;
+          }
+          
+          .course-card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+          }
+          
+          .course-card .flex-1 {
+            width: 100%;
+          }
+          
+          .course-card .flex-shrink-0:last-child {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+          }
+          
+          .badge-glow {
+            padding: 20px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .dash-root {
+            padding-top: 72px;
+          }
+          
+          .dash-heading {
+            font-size: 1.75rem;
+          }
+          
+          .stat-card {
+            padding: 16px;
+          }
+          
+          .stat-card .text-3xl {
+            font-size: 1.5rem;
+          }
+          
+          .course-card {
+            padding: 12px;
+          }
+          
+          .course-card h3 {
+            font-size: 14px;
+          }
+          
+          .badge-glow {
+            padding: 16px;
+          }
+          
+          .badge-glow .text-2xl {
+            font-size: 1.25rem;
+          }
+        }
       `}</style>
 
-      <div className="dash-root min-h-screen pt-24 pb-16" style={{ background: "linear-gradient(160deg, #f8f8ff 0%, #f0f0fe 100%)" }}>
+      <div className="dash-root">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Welcome Banner */}
@@ -202,7 +322,7 @@ const Dashboard = ({ user }) => {
                         <h3 className="font-semibold text-gray-900 text-sm truncate">{course.title}</h3>
                         <p className="text-xs text-gray-500 mb-2">{course.instructor}</p>
                         <div className="flex items-center gap-3">
-                          <div className="flex-1 progress-track">
+                          <div className="progress-track">
                             <div className="progress-fill" style={{ width: `${course.progress}%` }} />
                           </div>
                           <span className="text-xs font-bold text-indigo-600 whitespace-nowrap">{course.progress}%</span>
