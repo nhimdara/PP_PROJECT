@@ -4,6 +4,58 @@
 import { useEffect } from "react";
 
 const CSS = `
+/* Mobile Menu and Modal Animations */
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+.modal-slide-down {
+  animation: slideDown 0.3s ease-in forwards;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .desktop-only {
+    display: none !important;
+  }
+  
+  .mobile-tablet-only {
+    display: block !important;
+  }
+}
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+/* Touch-friendly tap targets */
+@media (max-width: 768px) {
+  button, 
+  [role="button"],
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
 /* Base font settings */
 html { font-size: var(--app-font-size, 15px) !important; }
 body, button, input, select, textarea {

@@ -1,3 +1,4 @@
+// components/layout/Navbar.jsx (Integrated version)
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "./../assets/image/logo.png";
@@ -25,17 +26,32 @@ import {
   Star,
   Zap,
   ChevronRight,
+  FolderGit2,
+  LayoutDashboard
 } from "lucide-react";
+import ProfileModal from "./ui/ProfileModal";
 
 const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const profileMenuRef = useRef(null);
   const notificationsRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Check if mobile/tablet view
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Scroll effect
   useEffect(() => {
@@ -71,18 +87,41 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Handle logout without refresh
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setIsProfileMenuOpen(false);
+    setShowProfileModal(false);
+  }, [location]);
+
+  // Handle logout
   const handleLogout = (e) => {
     e.preventDefault();
     onLogout();
     setIsProfileMenuOpen(false);
+    setShowProfileModal(false);
     navigate('/');
   };
 
-  // Handle auth modal open without refresh
+  // Handle auth modal open
   const handleAuthModalOpen = (mode, e) => {
     e?.preventDefault();
     onAuthModalOpen(mode);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleProfileClick = () => {
+    if (isMobile) {
+      setShowProfileModal(true);
+    } else {
+      setIsProfileMenuOpen(!isProfileMenuOpen);
+    }
+  };
+
+  const handleNavigation = (path) => {
+    navigate(path);
+    setIsProfileMenuOpen(false);
+    setShowProfileModal(false);
     setIsMobileMenuOpen(false);
   };
 
@@ -133,8 +172,17 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
   const navLinks = [
     { name: "Home", href: "/", icon: Home },
     { name: "My Lessons", href: "/lessons", icon: BookOpen },
-    { name: "Projects", href: "/projects", icon: Layers },
+    { name: "Projects", href: "/projects", icon: FolderGit2 },
     { name: "Calendar", href: "/calendar", icon: Calendar },
+  ];
+
+  const profileLinks = [
+    { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
+    { name: "My Profile", path: "/profile", icon: User },
+    { name: "My Courses", path: "/my-courses", icon: BookOpen },
+    { name: "Certificates", path: "/certificates", icon: Award },
+    { name: "Progress", path: "/progress", icon: TrendingUp },
+    { name: "Settings", path: "/settings", icon: Settings },
   ];
 
   return (
@@ -359,13 +407,13 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
                   {/* Profile Menu */}
                   <div className="relative" ref={profileMenuRef}>
                     <button
-                      onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                      onClick={handleProfileClick}
                       className={`group flex items-center gap-3 rounded-xl pl-2 pr-3 py-1.5 transition-all ${hoverBg} ring-1 ${ringColor}`}
                     >
                       <div className="relative">
                         <img
-                          src={user.avatar}
-                          alt={user.name}
+                          src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'User')}&background=6366f1&color=fff&size=128`}
+                          alt={user?.name}
                           className="h-8 w-8 rounded-lg object-cover ring-2 ring-indigo-400/60"
                         />
                         <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-400 border-2 border-white" />
@@ -373,10 +421,10 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
                       
                       <div className="hidden lg:block text-left">
                         <p className={`text-sm font-semibold leading-tight ${textPrimary}`}>
-                          {user.name.split(" ")[0]}
+                          {user?.name?.split(" ")[0] || 'User'}
                         </p>
                         <p className={`text-xs ${textMuted}`}>
-                          {user.role}
+                          {user?.role || 'Student'}
                         </p>
                       </div>
                       
@@ -385,8 +433,8 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
                       } ${textMuted}`} />
                     </button>
 
-                    {/* Profile Dropdown */}
-                    {isProfileMenuOpen && (
+                    {/* Desktop Profile Dropdown */}
+                    {!isMobile && isProfileMenuOpen && (
                       <div className="absolute right-0 mt-3 w-80 z-50 animate-in slide-in-from-top-2 fade-in duration-200 profile-dropdown-mobile">
                         <div className="rounded-2xl bg-white shadow-2xl shadow-black/10 ring-1 ring-black/5 overflow-hidden">
                           {/* User Header */}
@@ -396,8 +444,8 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
                             <div className="relative flex items-center gap-4">
                               <div className="relative">
                                 <img
-                                  src={user.avatar}
-                                  alt={user.name}
+                                  src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'User')}&background=6366f1&color=fff&size=128`}
+                                  alt={user?.name}
                                   className="h-16 w-16 rounded-xl object-cover ring-4 ring-white/30"
                                 />
                                 <span className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-emerald-400 border-4 border-white" />
@@ -405,15 +453,15 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
                               
                               <div className="flex-1 min-w-0">
                                 <p className="text-lg font-bold text-white truncate">
-                                  {user.name}
+                                  {user?.name}
                                 </p>
                                 <p className="text-sm text-white/80 truncate">
-                                  {user.email}
+                                  {user?.email}
                                 </p>
                                 <div className="flex items-center gap-2 mt-2">
                                   <span className="inline-flex items-center gap-1 text-xs bg-white/20 text-white px-2 py-1 rounded-full">
                                     <Calendar className="h-3 w-3" />
-                                    Joined {new Date(user.joinDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                                    Joined {user?.joinDate ? new Date(user.joinDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Recently'}
                                   </span>
                                 </div>
                               </div>
@@ -422,9 +470,9 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
                             {/* Quick Stats */}
                             <div className="grid grid-cols-3 gap-2 mt-5">
                               {[
-                                { label: "Progress", value: `${user.progress}%`, icon: TrendingUp },
-                                { label: "Courses", value: user.coursesEnrolled, icon: BookOpen },
-                                { label: "Certs", value: user.certificates, icon: Award },
+                                { label: "Progress", value: user?.progress || 0, icon: TrendingUp },
+                                { label: "Courses", value: user?.coursesEnrolled || 0, icon: BookOpen },
+                                { label: "Certs", value: user?.certificates || 0, icon: Award },
                               ].map((stat, i) => {
                                 const Icon = stat.icon;
                                 return (
@@ -442,45 +490,32 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
 
                           {/* Menu Items */}
                           <div className="py-2">
-                            {[
-                              { icon: User, label: "Your Profile", to: "/profile", description: "View and edit your profile" },
-                              { icon: BookMarked, label: "My Courses", to: "/my-courses", count: user.coursesEnrolled, description: "Continue learning" },
-                              { icon: Award, label: "Certificates", to: "/certificates", count: user.certificates, description: "Your achievements" },
-                              { icon: Clock, label: "Schedule", to: "/schedule", description: "Upcoming sessions" },
-                              { icon: TrendingUp, label: "Progress Tracker", to: "/progress", description: "Track your growth" },
-                              { icon: Settings, label: "Settings", to: "/settings", description: "Account preferences" },
-                            ].map((item, i) => (
-                              <Link
-                                key={i}
-                                to={item.to}
-                                className="group flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50/50 transition-all"
-                                onClick={() => setIsProfileMenuOpen(false)}
-                              >
-                                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-indigo-100 flex items-center justify-center transition-colors">
-                                  <item.icon className="h-4 w-4 text-gray-500 group-hover:text-indigo-600 transition-colors" />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-2">
-                                    <span className="font-medium group-hover:text-indigo-700 transition-colors">
-                                      {item.label}
-                                    </span>
-                                    {item.count !== undefined && (
-                                      <span className="text-xs font-semibold bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full">
-                                        {item.count}
-                                      </span>
-                                    )}
+                            {profileLinks.map((item, i) => {
+                              const Icon = item.icon;
+                              return (
+                                <button
+                                  key={i}
+                                  onClick={() => handleNavigation(item.path)}
+                                  className="w-full group flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50/50 transition-all"
+                                >
+                                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-indigo-100 flex items-center justify-center transition-colors">
+                                    <Icon className="h-4 w-4 text-gray-500 group-hover:text-indigo-600 transition-colors" />
                                   </div>
-                                  <p className="text-xs text-gray-400 group-hover:text-gray-500">
-                                    {item.description}
-                                  </p>
-                                </div>
-                                <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-indigo-400 transition-all group-hover:translate-x-0.5" />
-                              </Link>
-                            ))}
+                                  <div className="flex-1 min-w-0 text-left">
+                                    <div className="flex items-center gap-2">
+                                      <span className="font-medium group-hover:text-indigo-700 transition-colors">
+                                        {item.name}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-indigo-400 transition-all group-hover:translate-x-0.5" />
+                                </button>
+                              );
+                            })}
                           </div>
 
                           {/* Achievements */}
-                          {user.achievements && user.achievements.length > 0 && (
+                          {user?.achievements && user.achievements.length > 0 && (
                             <div className="border-t border-gray-100 px-6 py-4">
                               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
                                 Recent Achievements
@@ -621,6 +656,15 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
           </div>
         </div>
       </nav>
+
+      {/* Profile Modal for Mobile/Tablet */}
+      <ProfileModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+        user={user}
+        onLogout={onLogout}
+        profileLinks={profileLinks}
+      />
     </>
   );
 };
