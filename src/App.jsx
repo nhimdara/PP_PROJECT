@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 
 // Components
 import FontStyle from "./components/layout/ui/FontStyle";
+import GlobalStyles from "./components/layout/ui/GlobalStyles";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import AuthModal from "./components/layout/auth/AuthModal";
@@ -23,6 +24,7 @@ import Dashboard from "./components/pages/Profile/Dashboard";
 
 // Services
 import AIChat from "./components/service/AIChat";
+
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -53,6 +55,25 @@ const App = () => {
     loadUser();
   }, []);
 
+  // Apply saved theme on mount
+  useEffect(() => {
+    // Check if there's a saved theme preference
+    const savedSettings = localStorage.getItem("learnflow_settings");
+    if (savedSettings) {
+      try {
+        const settings = JSON.parse(savedSettings);
+        if (settings.theme === 'dark' || 
+            (settings.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark-mode');
+        } else if (settings.theme === 'light') {
+          document.documentElement.classList.remove('dark-mode');
+        }
+      } catch (e) {
+        console.error("Error parsing settings", e);
+      }
+    }
+  }, []);
+
   const handleAuthSuccess = (userData) => {
     // Ensure userData has all required fields
     const enhancedUserData = {
@@ -68,6 +89,9 @@ const App = () => {
     setUser(enhancedUserData);
     setIsAuthenticated(true);
     setIsAuthModalOpen(false);
+    
+    // Save to localStorage
+    localStorage.setItem("user", JSON.stringify(enhancedUserData));
   };
 
   const handleLogout = () => {
@@ -82,11 +106,18 @@ const App = () => {
     setIsAuthModalOpen(true);
   };
 
+  // Add this function to update user data
+  const handleUserUpdate = (updatedUserData) => {
+    setUser(updatedUserData);
+    localStorage.setItem("user", JSON.stringify(updatedUserData));
+  };
+
   return (
     <Router>
       <ScrollToTop />
-      <div className="nav-font min-h-screen flex flex-col bg-gradient-to-br from-gray-50 to-indigo-50/30">
+      <div className="nav-font min-h-screen flex flex-col">
         <FontStyle />
+        <GlobalStyles />
         
         <Navbar
           isAuthenticated={isAuthenticated}
@@ -113,7 +144,10 @@ const App = () => {
             />
             <Route
               path="/profile"
-              element={isAuthenticated ? <Profile user={user} /> : <Navigate to="/" />}
+              element={isAuthenticated ? 
+                <Profile user={user} onUserUpdate={handleUserUpdate} /> : 
+                <Navigate to="/" />
+              }
             />
             <Route
               path="/my-courses"

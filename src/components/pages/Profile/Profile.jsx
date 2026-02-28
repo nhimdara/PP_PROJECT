@@ -1,15 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   User, Mail, Phone, MapPin, Calendar, Briefcase, GraduationCap,
   BookOpen, Award, Globe, Github, Linkedin, Twitter,
-  Camera, Save, X, Edit2, Check, Shield, Star
+  Camera, Save, X, Edit2, Check, Shield, Star,
+  FolderGit2, Plus, Link, ExternalLink, Code2, Trash2,
+  Upload, Image as ImageIcon
 } from "lucide-react";
 
-const Profile = ({ user: initialUser }) => {
+const Profile = ({ user: initialUser, onUserUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const [activeTab, setActiveTab] = useState("profile");
   const [newSkill, setNewSkill] = useState("");
+  const [showProjectModal, setShowProjectModal] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const fileInputRef = useRef(null);
+
+  // Projects state
+  const [projects, setProjects] = useState(() => {
+    // Load projects from localStorage
+    const savedProjects = localStorage.getItem("user_projects");
+    return savedProjects ? JSON.parse(savedProjects) : [
+      {
+        id: 1,
+        title: "Arduino Weather Station",
+        description: "A weather monitoring system using Arduino sensors that displays temperature, humidity, and pressure on an LCD screen.",
+        technologies: ["C++", "Arduino", "Sensors"],
+        image: "https://content.instructables.com/FD1/94Q9/MKG51UPF/FD194Q9MKG51UPF.jpg?auto=webp&crop=1.2%3A1&frame=1&width=360",
+        github: "https://github.com/daracombodia/weather-station",
+        live: "https://weather-station-demo.com",
+        featured: true,
+        completedDate: "2025-12-15",
+        category: "Hardware"
+      },
+      {
+        id: 2,
+        title: "C++ Banking System",
+        description: "A console-based banking application with account management, transactions, and data persistence using file handling.",
+        technologies: ["C++", "File I/O", "OOP"],
+        image: "https://files.codingninjas.in/article_images/c-projects-for-beginners-0-1672592014.webp",
+        github: "https://github.com/daracombodia/banking-system",
+        live: null,
+        featured: true,
+        completedDate: "2026-01-20",
+        category: "Software"
+      },
+      {
+        id: 3,
+        title: "Math Visualization Tool",
+        description: "Interactive tool for visualizing mathematical concepts including derivatives, integrals, and matrix operations.",
+        technologies: ["Python", "NumPy", "Matplotlib"],
+        image: "https://jessup.edu/wp-content/uploads/2023/12/Does-Computer-Science-Require-Math-NEW.webp",
+        github: "https://github.com/daracombodia/math-viz",
+        live: "https://math-viz.streamlit.app",
+        featured: false,
+        completedDate: "2026-02-10",
+        category: "Data Science"
+      }
+    ];
+  });
 
   const [user, setUser] = useState(initialUser || {
     name: "Nhim Dara",
@@ -20,32 +73,65 @@ const Profile = ({ user: initialUser }) => {
     progress: 68,
     coursesEnrolled: 3,
     certificates: 2,
-    achievements: ["New Member", "Fast Learner"],
+    achievements: ["New Member", "Fast Learner", "Project Creator"],
     phone: "+855 12 345 678",
     location: "Phnom Penh, Cambodia",
-    bio: "Passionate learner and aspiring web developer. Currently mastering React and modern web technologies.",
+    bio: "Passionate learner and aspiring web developer. Currently mastering React and modern web technologies. Love building projects that solve real-world problems.",
     occupation: "Student",
     education: "Computer Science",
     website: "daracombodia.dev",
     github: "daracombodia",
     linkedin: "nhim-dara",
     twitter: "@daracombodia",
-    skills: ["React", "JavaScript", "HTML/CSS", "Node.js"],
+    skills: ["React", "JavaScript", "HTML/CSS", "Node.js", "C++", "Python", "Arduino"],
     languages: ["Khmer (Native)", "English (Fluent)"],
   });
 
   const [editForm, setEditForm] = useState({ ...user });
 
+  // Save projects to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("user_projects", JSON.stringify(projects));
+  }, [projects]);
+
+  // Project form state
+  const [projectForm, setProjectForm] = useState({
+    title: "",
+    description: "",
+    technologies: [],
+    image: "",
+    github: "",
+    live: "",
+    featured: false,
+    category: "Software",
+    completedDate: new Date().toISOString().split('T')[0]
+  });
+  const [techInput, setTechInput] = useState("");
+
   const handleInput = (e) => setEditForm((p) => ({ ...p, [e.target.name]: e.target.value }));
 
   const handleSave = () => {
+    // Update user state
     setUser(editForm);
+    
+    // Call the parent update function to sync with App.jsx
+    if (onUserUpdate) {
+      onUserUpdate(editForm);
+    }
+    
+    // Save to localStorage
+    localStorage.setItem("user", JSON.stringify(editForm));
+    
     setIsEditing(false);
+    setSuccessMessage("Profile updated successfully!");
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 3000);
   };
 
-  const handleCancel = () => { setEditForm({ ...user }); setIsEditing(false); };
+  const handleCancel = () => { 
+    setEditForm({ ...user }); 
+    setIsEditing(false); 
+  };
 
   const addSkill = () => {
     if (newSkill.trim() && !editForm.skills.includes(newSkill.trim())) {
@@ -56,8 +142,169 @@ const Profile = ({ user: initialUser }) => {
 
   const removeSkill = (s) => setEditForm((p) => ({ ...p, skills: p.skills.filter((x) => x !== s) }));
 
+  // Avatar handlers
+  const handleAvatarClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Check file size (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        alert("File size must be less than 2MB");
+        return;
+      }
+
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        alert("Please upload an image file");
+        return;
+      }
+
+      setAvatarFile(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+      
+      setShowAvatarModal(true);
+    }
+  };
+
+  const handleAvatarUpload = () => {
+    if (avatarPreview) {
+      // Update user with new avatar
+      const updatedUser = { ...user, avatar: avatarPreview };
+      
+      // Update local state
+      setUser(updatedUser);
+      setEditForm({ ...editForm, avatar: avatarPreview });
+      
+      // Update parent (App.jsx)
+      if (onUserUpdate) {
+        onUserUpdate(updatedUser);
+      }
+      
+      // Save to localStorage
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      
+      setShowAvatarModal(false);
+      setAvatarFile(null);
+      setAvatarPreview(null);
+      setSuccessMessage("Profile picture updated!");
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    }
+  };
+
+  const handleAvatarCancel = () => {
+    setShowAvatarModal(false);
+    setAvatarFile(null);
+    setAvatarPreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  // Project handlers
+  const handleOpenProjectModal = (project = null) => {
+    if (project) {
+      setEditingProject(project);
+      setProjectForm({
+        title: project.title,
+        description: project.description,
+        technologies: [...project.technologies],
+        image: project.image,
+        github: project.github || "",
+        live: project.live || "",
+        featured: project.featured || false,
+        category: project.category || "Software",
+        completedDate: project.completedDate || new Date().toISOString().split('T')[0]
+      });
+    } else {
+      setEditingProject(null);
+      setProjectForm({
+        title: "",
+        description: "",
+        technologies: [],
+        image: "",
+        github: "",
+        live: "",
+        featured: false,
+        category: "Software",
+        completedDate: new Date().toISOString().split('T')[0]
+      });
+    }
+    setShowProjectModal(true);
+  };
+
+  const handleProjectInput = (e) => {
+    setProjectForm({ ...projectForm, [e.target.name]: e.target.value });
+  };
+
+  const addTechnology = () => {
+    if (techInput.trim() && !projectForm.technologies.includes(techInput.trim())) {
+      setProjectForm({
+        ...projectForm,
+        technologies: [...projectForm.technologies, techInput.trim()]
+      });
+      setTechInput("");
+    }
+  };
+
+  const removeTechnology = (tech) => {
+    setProjectForm({
+      ...projectForm,
+      technologies: projectForm.technologies.filter(t => t !== tech)
+    });
+  };
+
+  const handleSaveProject = () => {
+    let updatedProjects;
+    
+    if (editingProject) {
+      // Update existing project
+      updatedProjects = projects.map(p => 
+        p.id === editingProject.id ? { ...projectForm, id: p.id } : p
+      );
+      setSuccessMessage("Project updated successfully!");
+    } else {
+      // Add new project
+      const newProject = {
+        ...projectForm,
+        id: projects.length + 1,
+        image: projectForm.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(projectForm.title)}&background=6366f1&color=fff&size=128`
+      };
+      updatedProjects = [...projects, newProject];
+      setSuccessMessage("Project added successfully!");
+    }
+    
+    setProjects(updatedProjects);
+    localStorage.setItem("user_projects", JSON.stringify(updatedProjects));
+    
+    setShowProjectModal(false);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
+
+  const handleDeleteProject = (projectId) => {
+    if (window.confirm("Are you sure you want to delete this project?")) {
+      const updatedProjects = projects.filter(p => p.id !== projectId);
+      setProjects(updatedProjects);
+      localStorage.setItem("user_projects", JSON.stringify(updatedProjects));
+      setSuccessMessage("Project deleted successfully!");
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    }
+  };
+
   const tabs = [
     { id: "profile", label: "Profile", icon: User },
+    { id: "projects", label: "Projects", icon: FolderGit2 },
     { id: "skills", label: "Skills", icon: Star },
     { id: "security", label: "Security", icon: Shield },
   ];
@@ -112,12 +359,327 @@ const Profile = ({ user: initialUser }) => {
           transition: all 0.15s; font-family: 'DM Sans', sans-serif;
         }
         .ghost-btn:hover { border-color: #a5b4fc; color: #4f46e5; }
+        .project-card {
+          background: white;
+          border-radius: 20px;
+          border: 1px solid #f0f0f8;
+          overflow: hidden;
+          transition: all 0.3s;
+        }
+        .project-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 20px 40px rgba(99,102,241,0.12);
+        }
+        .modal-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.7);
+          z-index: 1000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+        }
+        .modal-content {
+          background: white;
+          border-radius: 32px;
+          max-width: 600px;
+          width: 100%;
+          max-height: 90vh;
+          overflow-y: auto;
+          padding: 32px;
+          animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        .tech-tag {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 6px 12px;
+          background: #eef2ff;
+          color: #4f46e5;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 600;
+        }
+        .avatar-upload-btn {
+          position: absolute;
+          bottom: -5px;
+          right: -5px;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #6366f1, #8b5cf6);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s;
+          border: 3px solid white;
+        }
+        .avatar-upload-btn:hover {
+          transform: scale(1.1);
+          box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+        }
+        .avatar-preview {
+          width: 150px;
+          height: 150px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 4px solid white;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
       `}</style>
+
+      {/* Hidden file input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleAvatarChange}
+        accept="image/*"
+        style={{ display: 'none' }}
+      />
 
       {showSuccess && (
         <div className="success-toast">
           <Check className="h-5 w-5 text-green-500" />
-          <p className="text-sm font-semibold text-green-700">Profile updated successfully!</p>
+          <p className="text-sm font-semibold text-green-700">{successMessage}</p>
+        </div>
+      )}
+
+      {/* Avatar Upload Modal */}
+      {showAvatarModal && (
+        <div className="modal-overlay" onClick={handleAvatarCancel}>
+          <div className="modal-content max-w-md" onClick={e => e.stopPropagation()}>
+            <div className="text-center">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Update Profile Picture</h3>
+              
+              <div className="flex justify-center mb-6">
+                <img
+                  src={avatarPreview}
+                  alt="Avatar preview"
+                  className="avatar-preview"
+                />
+              </div>
+
+              <p className="text-sm text-gray-500 mb-6">
+                Preview your new profile picture. Click Save to confirm.
+              </p>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={handleAvatarUpload}
+                  className="flex-1 primary-btn flex items-center justify-center gap-2"
+                >
+                  <Check className="h-4 w-4" />
+                  Save Avatar
+                </button>
+                <button
+                  onClick={handleAvatarCancel}
+                  className="flex-1 ghost-btn"
+                >
+                  Cancel
+                </button>
+              </div>
+
+              <button
+                onClick={handleAvatarClick}
+                className="mt-3 text-sm text-indigo-600 hover:text-indigo-700 font-semibold"
+              >
+                Choose different image
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Project Modal */}
+      {showProjectModal && (
+        <div className="modal-overlay" onClick={() => setShowProjectModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-gray-900">
+                {editingProject ? "Edit Project" : "Add New Project"}
+              </h3>
+              <button
+                onClick={() => setShowProjectModal(false)}
+                className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+              >
+                <X className="h-5 w-5 text-gray-500" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">
+                  Project Title *
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  value={projectForm.title}
+                  onChange={handleProjectInput}
+                  className="form-field"
+                  placeholder="e.g., Arduino Weather Station"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">
+                  Description *
+                </label>
+                <textarea
+                  name="description"
+                  value={projectForm.description}
+                  onChange={handleProjectInput}
+                  rows={3}
+                  className="form-field resize-none"
+                  placeholder="Describe your project..."
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">
+                  Technologies Used
+                </label>
+                <div className="flex gap-2 mb-2 flex-wrap">
+                  {projectForm.technologies.map(tech => (
+                    <span key={tech} className="tech-tag">
+                      {tech}
+                      <button onClick={() => removeTechnology(tech)}>
+                        <X className="h-3 w-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={techInput}
+                    onChange={(e) => setTechInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && addTechnology()}
+                    className="form-field flex-1"
+                    placeholder="Add technology (e.g., React)"
+                  />
+                  <button
+                    onClick={addTechnology}
+                    className="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">
+                  Project Image URL
+                </label>
+                <input
+                  type="url"
+                  name="image"
+                  value={projectForm.image}
+                  onChange={handleProjectInput}
+                  className="form-field"
+                  placeholder="https://example.com/image.jpg"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">
+                    GitHub URL
+                  </label>
+                  <input
+                    type="url"
+                    name="github"
+                    value={projectForm.github}
+                    onChange={handleProjectInput}
+                    className="form-field"
+                    placeholder="https://github.com/..."
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">
+                    Live Demo URL
+                  </label>
+                  <input
+                    type="url"
+                    name="live"
+                    value={projectForm.live}
+                    onChange={handleProjectInput}
+                    className="form-field"
+                    placeholder="https://..."
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">
+                    Category
+                  </label>
+                  <select
+                    name="category"
+                    value={projectForm.category}
+                    onChange={handleProjectInput}
+                    className="form-field"
+                  >
+                    <option value="Software">Software</option>
+                    <option value="Hardware">Hardware</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="Mobile">Mobile</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">
+                    Completed Date
+                  </label>
+                  <input
+                    type="date"
+                    name="completedDate"
+                    value={projectForm.completedDate}
+                    onChange={handleProjectInput}
+                    className="form-field"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  id="featured"
+                  name="featured"
+                  checked={projectForm.featured}
+                  onChange={(e) => setProjectForm({ ...projectForm, featured: e.target.checked })}
+                  className="w-4 h-4 text-indigo-600"
+                />
+                <label htmlFor="featured" className="text-sm font-medium text-gray-700">
+                  Featured Project
+                </label>
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={handleSaveProject}
+                  className="flex-1 primary-btn"
+                  disabled={!projectForm.title || !projectForm.description}
+                >
+                  {editingProject ? "Update Project" : "Add Project"}
+                </button>
+                <button
+                  onClick={() => setShowProjectModal(false)}
+                  className="flex-1 ghost-btn"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -129,7 +691,7 @@ const Profile = ({ user: initialUser }) => {
             <div>
               <p className="text-sm font-semibold text-indigo-500 uppercase tracking-widest mb-1">Account</p>
               <h1 className="prof-heading text-4xl font-bold text-gray-900">My Profile</h1>
-              <p className="text-gray-500 mt-1">Manage your personal information</p>
+              <p className="text-gray-500 mt-1">Manage your personal information, avatar, and projects</p>
             </div>
             {!isEditing ? (
               <button onClick={() => setIsEditing(true)} className="primary-btn inline-flex items-center gap-2">
@@ -171,16 +733,35 @@ const Profile = ({ user: initialUser }) => {
                 <div className="px-6 pb-6">
                   <div className="flex justify-center">
                     <div className="relative -mt-12">
-                      <img src={user.avatar} alt={user.name}
-                        className="w-24 h-24 rounded-2xl object-cover ring-4 ring-white shadow-xl" />
+                      <img 
+                        src={isEditing ? editForm.avatar : user.avatar} 
+                        alt={user.name}
+                        className="w-24 h-24 rounded-2xl object-cover ring-4 ring-white shadow-xl"
+                      />
                       {!isEditing && (
-                        <button className="absolute -bottom-1 -right-1 p-1.5 rounded-xl text-white"
-                          style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}>
-                          <Camera className="h-3 w-3" />
+                        <button 
+                          onClick={handleAvatarClick}
+                          className="avatar-upload-btn"
+                          title="Change profile picture"
+                        >
+                          <Camera className="h-4 w-4 text-white" />
                         </button>
                       )}
                     </div>
                   </div>
+
+                  {isEditing && (
+                    <div className="mt-3 text-center">
+                      <button
+                        onClick={handleAvatarClick}
+                        className="inline-flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-700 font-semibold"
+                      >
+                        <Upload className="h-4 w-4" />
+                        Change Avatar
+                      </button>
+                      <p className="text-xs text-gray-400 mt-1">JPG, PNG or GIF · Max 2MB</p>
+                    </div>
+                  )}
 
                   <div className="text-center mt-4 mb-5">
                     <h2 className="prof-heading text-xl font-bold text-gray-900">{user.name}</h2>
@@ -196,7 +777,7 @@ const Profile = ({ user: initialUser }) => {
                     {[
                       { label: "Courses", value: user.coursesEnrolled || 0, color: "#6366f1" },
                       { label: "Certificates", value: user.certificates || 0, color: "#10b981" },
-                      { label: "Progress", value: `${user.progress || 0}%`, color: "#f59e0b" },
+                      { label: "Projects", value: projects.length, color: "#f59e0b" },
                     ].map((s) => (
                       <div key={s.label} className="text-center">
                         <p className="text-xl font-bold" style={{ color: s.color }}>{s.value}</p>
@@ -296,6 +877,125 @@ const Profile = ({ user: initialUser }) => {
                         );
                       })}
                     </div>
+                  </div>
+                </>
+              )}
+
+              {activeTab === "projects" && (
+                <>
+                  {/* Projects Header */}
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-bold text-gray-900">My Projects ({projects.length})</h3>
+                    <button
+                      onClick={() => handleOpenProjectModal()}
+                      className="primary-btn inline-flex items-center gap-2"
+                    >
+                      <Plus className="h-4 w-4" />
+                      Add Project
+                    </button>
+                  </div>
+
+                  {/* Projects Grid */}
+                  <div className="grid grid-cols-1 gap-6">
+                    {projects.map((project) => (
+                      <div key={project.id} className="project-card">
+                        <div className="flex flex-col md:flex-row">
+                          {/* Project Image */}
+                          <div className="md:w-48 h-48 md:h-auto">
+                            <img
+                              src={project.image}
+                              alt={project.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+
+                          {/* Project Details */}
+                          <div className="flex-1 p-6">
+                            <div className="flex items-start justify-between mb-2">
+                              <div>
+                                <h4 className="text-lg font-bold text-gray-900">{project.title}</h4>
+                                <p className="text-sm text-gray-500 mt-1">{project.description}</p>
+                              </div>
+                              {project.featured && (
+                                <span className="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">
+                                  ⭐ Featured
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Technologies */}
+                            <div className="flex flex-wrap gap-2 my-3">
+                              {project.technologies.map(tech => (
+                                <span key={tech} className="skill-chip text-xs">
+                                  <Code2 className="h-3 w-3" />
+                                  {tech}
+                                </span>
+                              ))}
+                            </div>
+
+                            {/* Links */}
+                            <div className="flex gap-4 mt-4">
+                              {project.github && (
+                                <a
+                                  href={project.github}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-indigo-600 transition-colors"
+                                >
+                                  <Github className="h-4 w-4" />
+                                  GitHub
+                                </a>
+                              )}
+                              {project.live && (
+                                <a
+                                  href={project.live}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-indigo-600 transition-colors"
+                                >
+                                  <ExternalLink className="h-4 w-4" />
+                                  Live Demo
+                                </a>
+                              )}
+                              <span className="text-sm text-gray-400">
+                                Completed: {new Date(project.completedDate).toLocaleDateString()}
+                              </span>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100">
+                              <button
+                                onClick={() => handleOpenProjectModal(project)}
+                                className="px-4 py-2 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => handleDeleteProject(project.id)}
+                                className="px-4 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                    {projects.length === 0 && (
+                      <div className="text-center py-12 bg-white rounded-2xl border border-gray-100">
+                        <FolderGit2 className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                        <h4 className="text-lg font-semibold text-gray-700 mb-1">No projects yet</h4>
+                        <p className="text-sm text-gray-500 mb-4">Start adding your projects to showcase your work</p>
+                        <button
+                          onClick={() => handleOpenProjectModal()}
+                          className="primary-btn inline-flex items-center gap-2"
+                        >
+                          <Plus className="h-4 w-4" />
+                          Add Your First Project
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </>
               )}

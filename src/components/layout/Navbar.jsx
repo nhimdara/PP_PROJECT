@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import logo from "./../assets/image/logo.png";
 import {
   BookOpen,
   Bell,
@@ -130,7 +131,7 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
   const ringColor = isScrolled ? "ring-gray-200" : "ring-white/30";
 
   const navLinks = [
-    { name: "Dashboard", href: "/", icon: Home },
+    { name: "Home", href: "/", icon: Home },
     { name: "My Lessons", href: "/lessons", icon: BookOpen },
     { name: "Projects", href: "/projects", icon: Layers },
     { name: "Calendar", href: "/calendar", icon: Calendar },
@@ -165,16 +166,16 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
             >
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-xl blur-lg opacity-60 group-hover:opacity-100 transition-opacity" />
-                <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/30 group-hover:shadow-xl group-hover:shadow-indigo-500/40 group-hover:scale-110 transition-all duration-300">
-                  <GraduationCap className="h-5 w-5 text-white" strokeWidth={2.2} />
+                <div className="relative flex items-center justify-center w-10 h-10 rounded-xl   group-hover:shadow-xl group-hover:shadow-indigo-500/40 group-hover:scale-110 transition-all duration-300">
+                  <img src={logo} alt="LearnFlow Logo" className="w-full h-full absolute left-1" />
                 </div>
               </div>
               <span className={`text-xl font-bold tracking-tight whitespace-nowrap transition-colors duration-300 ${
                 isScrolled ? "text-gray-900" : "text-white"
               }`}>
-                Learn
+                E
                 <span className={isScrolled ? "text-indigo-600" : "text-indigo-300"}>
-                  Flow
+                  learning
                 </span>
               </span>
             </Link>

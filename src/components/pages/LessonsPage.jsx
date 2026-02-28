@@ -21,6 +21,22 @@ import { lessons } from "./../data/Lesson";
 import VideoModal from "./video/VideoModal";
 import VideoPlaylistModal from "./video/VideoPlaylistModal";
 
+/* ── Dark mode hook ── */
+const useDarkMode = () => {
+  const [dark, setDark] = React.useState(() =>
+    document.documentElement.classList.contains("dark-mode")
+  );
+  React.useEffect(() => {
+    const obs = new MutationObserver(() =>
+      setDark(document.documentElement.classList.contains("dark-mode"))
+    );
+    obs.observe(document.documentElement, { attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, []);
+  return dark;
+};
+
+
 /* ─── Constants ─── */
 const FREE_VIDEO_LIMIT = 2;
 
@@ -257,7 +273,11 @@ const LessonCard = ({ lesson: l, index, style, isSubscribed, onSubscribeRequest 
   return (
     <>
       <div
-        className="group bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-indigo-100 transform hover:-translate-y-2"
+        className="group rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border transform hover:-translate-y-2"
+        style={{
+          background: document.documentElement.classList.contains("dark-mode") ? "#1a1a35" : "white",
+          borderColor: document.documentElement.classList.contains("dark-mode") ? "#2a2a4a" : "#f3f4f6"
+        }}
         style={{ animation: `fadeInUp 0.5s ease-out ${index * 0.08}s both` }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
@@ -343,13 +363,13 @@ const LessonCard = ({ lesson: l, index, style, isSubscribed, onSubscribeRequest 
             >
               {l.level}
             </span>
-            <span className="flex items-center text-gray-500 text-xs group-hover:text-indigo-600 transition-colors">
+            <span className="flex items-center text-xs group-hover:text-indigo-500 transition-colors" style={{ color: document.documentElement.classList.contains("dark-mode") ? "#7777aa" : "#6b7280" }}>
               <Users className="h-3.5 w-3.5 mr-1" />
               {l.students ? l.students.toLocaleString() : "0"}
             </span>
           </div>
 
-          <p className="text-gray-500 text-sm mb-4 line-clamp-2 group-hover:text-gray-800 transition-colors">
+          <p className="text-sm mb-4 line-clamp-2 transition-colors" style={{ color: document.documentElement.classList.contains("dark-mode") ? "#9999cc" : "#6b7280" }}>
             {l.description}
           </p>
 
@@ -386,7 +406,7 @@ const LessonCard = ({ lesson: l, index, style, isSubscribed, onSubscribeRequest 
           )}
 
           {/* Hover progress bar */}
-          <div className="mb-4 h-1 bg-gray-100 rounded-full overflow-hidden">
+          <div className="mb-4 h-1 rounded-full overflow-hidden" style={{ background: document.documentElement.classList.contains("dark-mode") ? "#2a2a4a" : "#f3f4f6" }}>
             <div
               className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-700"
               style={{ width: hovered ? "100%" : "0%", opacity: hovered ? 1 : 0 }}
@@ -396,7 +416,8 @@ const LessonCard = ({ lesson: l, index, style, isSubscribed, onSubscribeRequest 
           {/* CTA button */}
           <button
             onClick={handlePlayVideo}
-            className="w-full bg-gray-50 group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 text-gray-700 group-hover:text-white py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden"
+            className="w-full group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 group-hover:text-white py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden"
+            style={{ background: document.documentElement.classList.contains("dark-mode") ? "#14142b" : "#f9fafb", color: document.documentElement.classList.contains("dark-mode") ? "#9999cc" : "#374151" }}
           >
             <span className="relative z-10">
               {videoCount > 1
@@ -415,7 +436,7 @@ const LessonCard = ({ lesson: l, index, style, isSubscribed, onSubscribeRequest 
 
           {/* Duration info */}
           {(videoCount === 1 || singleVideo) && (
-            <div className="mt-2 text-xs text-gray-400 text-center">
+            <div className="mt-2 text-xs text-center" style={{ color: document.documentElement.classList.contains("dark-mode") ? "#6666aa" : "#9ca3af" }}>
               ⏱️ {(videoCount === 1 ? l.videos[0].duration : l.videoDuration) || 30} minutes
             </div>
           )}
@@ -634,6 +655,54 @@ const LessonsPage = () => {
         @keyframes sdot { 0%{transform:translateY(0);opacity:1;} 50%{transform:translateY(8px);opacity:.4;} 100%{transform:translateY(0);opacity:1;} }
         @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .animate-spin-slow { animation: spin-slow 3s linear infinite; }
+
+        /* ── Dark Mode ── */
+        html.dark-mode .min-h-screen.bg-gradient-to-b { background: #0d0d1a !important; }
+        html.dark-mode .group.bg-white,
+        html.dark-mode .bg-white { background-color: #1a1a35 !important; }
+        html.dark-mode .bg-gray-50 { background-color: #14142b !important; }
+        html.dark-mode .bg-gray-100 { background-color: #1e1e38 !important; }
+        html.dark-mode .text-gray-900 { color: #e8e8f5 !important; }
+        html.dark-mode .text-gray-800 { color: #d0d0e8 !important; }
+        html.dark-mode .text-gray-700 { color: #b8b8d8 !important; }
+        html.dark-mode .text-gray-600 { color: #9999bb !important; }
+        html.dark-mode .text-gray-500 { color: #7777aa !important; }
+        html.dark-mode .text-gray-400 { color: #6666aa !important; }
+        html.dark-mode .border-gray-100 { border-color: #2a2a4a !important; }
+        html.dark-mode .border-gray-200 { border-color: #2e2e50 !important; }
+        html.dark-mode .shadow-sm { box-shadow: 0 1px 8px rgba(0,0,0,0.4) !important; }
+        html.dark-mode .hover\:shadow-2xl:hover { box-shadow: 0 8px 40px rgba(0,0,0,0.6) !important; }
+        html.dark-mode .hover\:border-indigo-100:hover { border-color: #3a3a6a !important; }
+        /* Search box */
+        html.dark-mode input[type="text"] { background-color: #1a1a35 !important; color: #e8e8f5 !important; }
+        html.dark-mode input::placeholder { color: #6666aa !important; }
+        /* Filter pills */
+        html.dark-mode .bg-white.text-gray-600 { background-color: #1a1a35 !important; color: #9999cc !important; border-color: #2a2a4a !important; }
+        /* Level badges */
+        html.dark-mode .bg-green-100  { background-color: #0e2a1e !important; }
+        html.dark-mode .text-green-700 { color: #4ade80 !important; }
+        html.dark-mode .border-green-200 { border-color: #166534 !important; }
+        html.dark-mode .bg-yellow-100  { background-color: #2a200e !important; }
+        html.dark-mode .text-yellow-700 { color: #fbbf24 !important; }
+        html.dark-mode .border-yellow-200 { border-color: #854d0e !important; }
+        html.dark-mode .bg-red-100  { background-color: #2a0e0e !important; }
+        html.dark-mode .text-red-700 { color: #f87171 !important; }
+        html.dark-mode .border-red-200 { border-color: #991b1b !important; }
+        /* Playlist tags */
+        html.dark-mode .bg-gray-100.text-gray-600 { background-color: #1e1e38 !important; color: #9999cc !important; }
+        html.dark-mode .bg-amber-50 { background-color: #2a200e !important; }
+        html.dark-mode .text-amber-600 { color: #fbbf24 !important; }
+        html.dark-mode .border-amber-200 { border-color: #92400e !important; }
+        /* Free preview banner */
+        html.dark-mode .bg-amber-50.border-amber-200 { background-color: #1e1608 !important; border-color: #78350f !important; }
+        html.dark-mode .text-amber-900 { color: #fde68a !important; }
+        html.dark-mode .text-amber-700 { color: #fcd34d !important; }
+        /* Hover progress bar bg */
+        html.dark-mode .bg-gray-100 { background-color: #1e1e38 !important; }
+        /* CTA button on card */
+        html.dark-mode .bg-gray-50 { background-color: #14142b !important; color: #9999cc !important; }
+        /* Select */
+        html.dark-mode select { background-color: #1a1a35 !important; color: #e8e8f5 !important; border-color: #2a2a4a !important; }
       `}</style>
 
       {/* Scroll progress bar */}
@@ -773,7 +842,8 @@ const LessonsPage = () => {
 
         {/* Search */}
         <div data-reveal className="mb-6">
-          <div className="flex max-w-2xl mx-auto bg-white shadow-lg rounded-2xl p-1 border border-gray-100 hover:shadow-xl transition-shadow">
+          <div className="flex max-w-2xl mx-auto shadow-lg rounded-2xl p-1 border hover:shadow-xl transition-shadow"
+            style={{ background: document.documentElement.classList.contains("dark-mode") ? "#1a1a35" : "white", borderColor: document.documentElement.classList.contains("dark-mode") ? "#2a2a4a" : "#f3f4f6" }}>
             <div className="flex-1 flex items-center px-4">
               <Search className="h-5 w-5 text-gray-400" />
               <input
@@ -808,7 +878,7 @@ const LessonsPage = () => {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all hover:scale-105 ${
                   selectedCategory === cat
                     ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-200"
-                    : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200 hover:border-indigo-200"
+                    : `${document.documentElement.classList.contains("dark-mode") ? "text-gray-300 border-[#2a2a4a] hover:border-indigo-500" : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200 hover:border-indigo-200"}`
                 }`}
               >
                 {cat}
@@ -820,7 +890,8 @@ const LessonsPage = () => {
             <select
               value={selectedLevel}
               onChange={(e) => setSelectedLevel(e.target.value)}
-              className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+              className="rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+              style={{ background: document.documentElement.classList.contains("dark-mode") ? "#1a1a35" : "white", borderColor: document.documentElement.classList.contains("dark-mode") ? "#2a2a4a" : "#e5e7eb", color: document.documentElement.classList.contains("dark-mode") ? "#e8e8f5" : "#4b5563", border: "1.5px solid" }}
             >
               {levels.map((lv) => (
                 <option key={lv}>{lv}</option>

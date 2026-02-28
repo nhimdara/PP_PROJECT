@@ -2,6 +2,27 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import banner from "./../assets/image/banner.jpg";
+
+/* ── Dark mode hook ── */
+const useDarkMode = () => {
+  const [dark, setDark] = React.useState(() =>
+    document.documentElement.classList.contains("dark-mode")
+  );
+  
+  React.useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const isDark = document.documentElement.classList.contains("dark-mode");
+      setDark(isDark);
+    });
+    
+    observer.observe(document.documentElement, { attributeFilter: ["class"] });
+    
+    return () => observer.disconnect();
+  }, []);
+  
+  return dark;
+};
+
 import {
   BookOpen,
   Users,
@@ -147,7 +168,7 @@ const CursorSpotlight = ({ containerRef }) => {
         marginLeft: -250,
         marginTop: -250,
         background:
-          "radial-gradient(circle, rgba(99,120,255,0.10) 0%, rgba(99,120,255,0.04) 40%, transparent 70%)",
+          "radial-gradient(circle, rgba(99,120,255,0.15) 0%, rgba(99,120,255,0.06) 40%, transparent 70%)",
         borderRadius: "50%",
         transition: "opacity 0.3s ease",
       }}
@@ -183,6 +204,7 @@ const useScrollReveal = () => {
 
 /* ─────────────────────────── Main Component ─────────────────────────── */
 const HomePage = ({ onAuthModalOpen }) => {
+  const dark = useDarkMode();
   const heroRef = useRef(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
   useScrollReveal();
@@ -286,7 +308,7 @@ const HomePage = ({ onAuthModalOpen }) => {
           transform: none !important;
         }
 
-        /* ── Hero animations (existing) ── */
+        /* ── Hero animations ── */
         .anim-1 { animation: fadeSlideUp 0.7s 0.1s both; }
         .anim-2 { animation: fadeSlideUp 0.7s 0.25s both; }
         .anim-3 { animation: fadeSlideUp 0.7s 0.4s both; }
@@ -542,7 +564,7 @@ const HomePage = ({ onAuthModalOpen }) => {
       </section>
 
       {/* ══════════════ ABOUT SECTION ══════════════ */}
-      <section id="about" className="bg-white py-20 sm:py-28">
+      <section id="about" className="py-20 sm:py-28" style={{ background: dark ? "#0a0a14" : "white" }}>
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
 
           {/* Section header */}
@@ -557,7 +579,8 @@ const HomePage = ({ onAuthModalOpen }) => {
             <h2
               data-reveal
               data-delay="80"
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-tight mb-4"
+              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-4" 
+              style={{ color: dark ? "#f0f0fa" : "#111827" }}
             >
               Built for the
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">
