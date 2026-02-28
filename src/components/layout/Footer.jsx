@@ -1,26 +1,27 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { 
-  GraduationCap, 
-  Heart, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Facebook, 
-  Twitter, 
-  Linkedin, 
-  Youtube, 
+import logo from "../../components/assets/image/logo.png";
+import {
+  GraduationCap,
+  Heart,
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Youtube,
   Instagram,
   ArrowRight,
   Globe,
   Award,
   BookOpen,
-  Users
+  Users,
 } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
+
   const quickLinks = [
     { name: "Home", path: "/" },
     { name: "Lessons", path: "/lessons" },
@@ -38,15 +39,34 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: Facebook, href: "#", color: "hover:bg-blue-600", label: "Facebook" },
+    {
+      icon: Facebook,
+      href: "#",
+      color: "hover:bg-blue-600",
+      label: "Facebook",
+    },
     { icon: Twitter, href: "#", color: "hover:bg-sky-500", label: "Twitter" },
-    { icon: Linkedin, href: "#", color: "hover:bg-blue-700", label: "LinkedIn" },
+    {
+      icon: Linkedin,
+      href: "#",
+      color: "hover:bg-blue-700",
+      label: "LinkedIn",
+    },
     { icon: Youtube, href: "#", color: "hover:bg-red-600", label: "YouTube" },
-    { icon: Instagram, href: "#", color: "hover:bg-pink-600", label: "Instagram" },
+    {
+      icon: Instagram,
+      href: "#",
+      color: "hover:bg-pink-600",
+      label: "Instagram",
+    },
   ];
 
   const contactInfo = [
-    { icon: Mail, text: "support@edulearn.com", href: "mailto:support@edulearn.com" },
+    {
+      icon: Mail,
+      text: "support@edulearn.com",
+      href: "mailto:support@edulearn.com",
+    },
     { icon: Phone, text: "+855 12 345 678", href: "tel:+85512345678" },
     { icon: MapPin, text: "Phnom Penh, Cambodia", href: "#" },
   ];
@@ -67,17 +87,24 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2 mb-4 group">
               <div className="relative">
-                <GraduationCap className="h-8 w-8 text-indigo-400 transform group-hover:rotate-12 transition-transform duration-300" />
+                <div className="relative flex items-center justify-center w-10 h-10 rounded-xl group-hover:shadow-xl group-hover:shadow-indigo-500/40 group-hover:scale-110 transition-all duration-300">
+                  <img
+                    src={logo}
+                    alt="LearnFlow Logo"
+                    className="w-full h-full absolute left-1"
+                  />
+                </div>
                 <div className="absolute -inset-1 bg-indigo-400/20 rounded-full blur-md group-hover:bg-indigo-400/30 transition-all" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
                 ELearning
               </span>
             </div>
-            
+
             <p className="text-gray-300 mb-6 leading-relaxed">
-              Empowering learners worldwide with quality education, expert-led courses, 
-              and a supportive community. Join us in shaping the future of learning.
+              Empowering learners worldwide with quality education, expert-led
+              courses, and a supportive community. Join us in shaping the future
+              of learning.
             </p>
 
             {/* Contact Info */}
@@ -148,7 +175,7 @@ const Footer = () => {
               Connect With Us
               <span className="absolute -bottom-1 left-0 w-12 h-0.5 bg-indigo-400 rounded-full" />
             </h4>
-            
+
             {/* Social Links */}
             <div className="flex gap-2 mb-6">
               {socialLinks.map((social, index) => {
@@ -168,13 +195,22 @@ const Footer = () => {
 
             {/* Legal Links */}
             <div className="space-y-2">
-              <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors block">
+              <a
+                href="#"
+                className="text-sm text-gray-300 hover:text-white transition-colors block"
+              >
                 Privacy Policy
               </a>
-              <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors block">
+              <a
+                href="#"
+                className="text-sm text-gray-300 hover:text-white transition-colors block"
+              >
                 Terms of Service
               </a>
-              <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors block">
+              <a
+                href="#"
+                className="text-sm text-gray-300 hover:text-white transition-colors block"
+              >
                 Cookie Policy
               </a>
             </div>
@@ -187,13 +223,15 @@ const Footer = () => {
             <p className="text-sm text-gray-400">
               &copy; {currentYear} EduLearn. All rights reserved.
             </p>
-            
+
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-400 flex items-center gap-1">
-                Made with <Heart className="h-3 w-3 text-red-500 fill-red-500 animate-pulse" /> in Cambodia
+                Made with{" "}
+                <Heart className="h-3 w-3 text-red-500 fill-red-500 animate-pulse" />{" "}
+                in Cambodia
               </span>
-              
-              <select 
+
+              <select
                 className="bg-white/5 border border-white/10 rounded-lg px-3 py-1 text-sm text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 defaultValue="en"
               >
