@@ -207,34 +207,45 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
           background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 0h40v40H0z'/%3E%3C/g%3E%3C/svg%3E");
         }
 
-        @media (max-width: 640px) {
-          .profile-dropdown-mobile {
-            width: 100vw !important;
-            right: -16px !important;
-            left: -16px !important;
-          }
-          
-          .notifications-dropdown-mobile {
-            width: 100vw !important;
-            right: -16px !important;
-            left: -16px !important;
+        /* ─── Responsive notification & profile dropdowns ─── */
+
+        /* 
+          On small screens the dropdowns are wider than the viewport.
+          We switch to a fixed full-width panel that is anchored to the
+          navbar rather than trying to position it relative to the button.
+        */
+        .dropdown-panel {
+          position: absolute;
+          right: 0;
+          top: calc(100% + 12px);
+          width: 320px;
+          z-index: 50;
+        }
+
+        @media (max-width: 400px) {
+          /*
+            Extra-small phones: attach the panel to the left edge of the
+            viewport so it never overflows on either side.
+          */
+          .dropdown-panel {
+            /* position relative to the nearest positioned ancestor (the nav) */
+            position: fixed;
+            left: 8px;
+            right: 8px;
+            width: auto;
+            top: 68px; /* navbar height + small gap */
           }
         }
 
-        @media (max-width: 768px) {
-          .nav-links-desktop {
-            display: none;
-          }
-          
-          .mobile-menu {
-            position: fixed;
-            top: 64px;
-            left: 0;
-            right: 0;
-            background: inherit;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            max-height: calc(100vh - 64px);
-            overflow-y: auto;
+        @media (min-width: 401px) and (max-width: 640px) {
+          /*
+            Small phones: keep it attached to the button's right edge but
+            cap the width so it never bleeds past the left edge of the screen.
+            max-width uses a CSS calc that subtracts the right offset from
+            the viewport width.
+          */
+          .dropdown-panel {
+            max-width: calc(100vw - 16px);
           }
         }
       `}</style>
@@ -343,9 +354,9 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
                       )}
                     </button>
 
-                    {/* Notifications Dropdown */}
+                    {/* Notifications Dropdown — responsive via .dropdown-panel */}
                     {isNotificationsOpen && (
-                      <div className="absolute right-0 mt-3 w-80 z-50 animate-in slide-in-from-top-2 fade-in duration-200 notifications-dropdown-mobile">
+                      <div className="dropdown-panel animate-in">
                         <div className="rounded-2xl bg-white shadow-2xl shadow-black/10 ring-1 ring-black/5 overflow-hidden">
                           <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
                             <h3 className="font-semibold text-gray-900">Notifications</h3>
@@ -387,7 +398,7 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
                                     </p>
                                   </div>
                                   {!notification.read && (
-                                    <span className="w-2 h-2 rounded-full bg-indigo-600 mt-2" />
+                                    <span className="w-2 h-2 rounded-full bg-indigo-600 mt-2 flex-shrink-0" />
                                   )}
                                 </div>
                               );
@@ -435,7 +446,7 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
 
                     {/* Desktop Profile Dropdown */}
                     {!isMobile && isProfileMenuOpen && (
-                      <div className="absolute right-0 mt-3 w-80 z-50 animate-in slide-in-from-top-2 fade-in duration-200 profile-dropdown-mobile">
+                      <div className="dropdown-panel animate-in">
                         <div className="rounded-2xl bg-white shadow-2xl shadow-black/10 ring-1 ring-black/5 overflow-hidden">
                           {/* User Header */}
                           <div className="relative px-6 py-6 bg-gradient-to-br from-indigo-600 via-indigo-600 to-purple-700">
