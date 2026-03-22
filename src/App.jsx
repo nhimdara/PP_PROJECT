@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 // Components
 import FontStyle from "./components/layout/ui/FontStyle";
@@ -22,9 +27,12 @@ import ProgressTracker from "./components/pages/Profile/ProgressTracker";
 import Settings from "./components/pages/Profile/Settings";
 import Dashboard from "./components/pages/Profile/Dashboard";
 
+// Auth pages (standalone, no Navbar/Footer)
+import RegisterPage from "./components/pages/Registerpage ";
+import LoginPage from "./components/pages/Loginpage";
+
 // Services
 import AIChat from "./components/service/AIChat";
-
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -32,66 +40,52 @@ const App = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
 
-  // Load user from localStorage on mount
   useEffect(() => {
-    const loadUser = () => {
-      try {
-        const savedUser = localStorage.getItem("user");
-        const savedToken = localStorage.getItem("token");
-        
-        if (savedUser && savedToken) {
-          const parsedUser = JSON.parse(savedUser);
-          setUser(parsedUser);
-          setIsAuthenticated(true);
-        }
-      } catch (error) {
-        console.error("Error loading user from localStorage:", error);
-        // Clear corrupted data
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
+    try {
+      const savedUser = localStorage.getItem("user");
+      const savedToken = localStorage.getItem("token");
+      if (savedUser && savedToken) {
+        setUser(JSON.parse(savedUser));
+        setIsAuthenticated(true);
       }
-    };
-
-    loadUser();
+    } catch {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+    }
   }, []);
 
-  // Apply saved theme on mount
   useEffect(() => {
-    // Check if there's a saved theme preference
     const savedSettings = localStorage.getItem("learnflow_settings");
     if (savedSettings) {
       try {
         const settings = JSON.parse(savedSettings);
-        if (settings.theme === 'dark' || 
-            (settings.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark-mode');
-        } else if (settings.theme === 'light') {
-          document.documentElement.classList.remove('dark-mode');
+        if (
+          settings.theme === "dark" ||
+          (settings.theme === "system" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+          document.documentElement.classList.add("dark-mode");
+        } else if (settings.theme === "light") {
+          document.documentElement.classList.remove("dark-mode");
         }
-      } catch (e) {
-        console.error("Error parsing settings", e);
-      }
+      } catch {}
     }
   }, []);
 
   const handleAuthSuccess = (userData) => {
-    // Ensure userData has all required fields
-    const enhancedUserData = {
+    const enhanced = {
       ...userData,
       progress: userData.progress || 0,
       coursesEnrolled: userData.coursesEnrolled || 0,
       certificates: userData.certificates || 0,
       achievements: userData.achievements || ["New Member"],
-      joinDate: userData.joinDate || new Date().toISOString().split('T')[0],
-      role: userData.role || "Student"
+      joinDate: userData.joinDate || new Date().toISOString().split("T")[0],
+      role: userData.role || "Student",
     };
-
-    setUser(enhancedUserData);
+    setUser(enhanced);
     setIsAuthenticated(true);
     setIsAuthModalOpen(false);
-    
-    // Save to localStorage
-    localStorage.setItem("user", JSON.stringify(enhancedUserData));
+    localStorage.setItem("user", JSON.stringify(enhanced));
   };
 
   const handleLogout = () => {
@@ -102,90 +96,184 @@ const App = () => {
   };
 
   const handleAuthModalOpen = (mode) => {
-    setIsLogin(mode === 'signin');
+    setIsLogin(mode === "signin");
     setIsAuthModalOpen(true);
   };
 
-  // Add this function to update user data
   const handleUserUpdate = (updatedUserData) => {
     setUser(updatedUserData);
     localStorage.setItem("user", JSON.stringify(updatedUserData));
   };
 
+  // Has the user registered before? (even if not currently logged in)
+  const hasRegistered = !!localStorage.getItem("has_registered");
+
   return (
     <Router>
       <ScrollToTop />
-      <div className="nav-font min-h-screen flex flex-col">
-        <FontStyle />
-        <GlobalStyles />
-        
-        <Navbar
-          isAuthenticated={isAuthenticated}
-          user={user}
-          onLogout={handleLogout}
-          onAuthModalOpen={handleAuthModalOpen}
+      <Routes>
+        {/* ── REGISTER (shown first to new visitors) ── */}
+        <Route
+          path="/register"
+          element={
+            isAuthenticated ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <RegisterPage />
+            )
+          }
         />
 
-        <main className="flex-grow">
-          <Routes>
-            {/* Public Routes */}
-            <Route 
-              path="/" 
-              element={<HomePage onAuthModalOpen={handleAuthModalOpen} />} 
-            />
-            <Route path="/lessons" element={<LessonsPage />} />
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/calendar" element={<CalendarPage />} />
-
-            {/* Protected Routes - Require Authentication */}
-            <Route
-              path="/dashboard"
-              element={isAuthenticated ? <Dashboard user={user} /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/profile"
-              element={isAuthenticated ? 
-                <Profile user={user} onUserUpdate={handleUserUpdate} /> : 
-                <Navigate to="/" />
-              }
-            />
-            <Route
-              path="/my-courses"
-              element={isAuthenticated ? <MyCourses user={user} /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/certificates"
-              element={isAuthenticated ? <Certificates user={user} /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/schedule"
-              element={isAuthenticated ? <Schedule user={user} /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/progress"
-              element={isAuthenticated ? <ProgressTracker user={user} /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/settings"
-              element={isAuthenticated ? <Settings user={user} onLogout={handleLogout} /> : <Navigate to="/" />}
-            />
-
-            {/* Catch all route - redirect to home */}
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </main>
-
-        <Footer />
-        <AIChat />
-        
-        <AuthModal
-          isOpen={isAuthModalOpen}
-          onClose={() => setIsAuthModalOpen(false)}
-          isLogin={isLogin}
-          setIsLogin={setIsLogin}
-          onAuthSuccess={handleAuthSuccess}
+        {/* ── LOGIN (after registering) ── */}
+        <Route
+          path="/login"
+          element={
+            isAuthenticated ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <LoginPage onAuthSuccess={handleAuthSuccess} />
+            )
+          }
         />
-      </div>
+
+        {/* ── ALL OTHER ROUTES (with Navbar + Footer) ── */}
+        <Route
+          path="*"
+          element={
+            <div className="nav-font min-h-screen flex flex-col">
+              <FontStyle />
+              <GlobalStyles />
+              <Navbar
+                isAuthenticated={isAuthenticated}
+                user={user}
+                onLogout={handleLogout}
+                onAuthModalOpen={handleAuthModalOpen}
+              />
+              <main className="flex-grow">
+                <Routes>
+                  {/* Public */}
+                  <Route
+                    path="/"
+                    element={<HomePage onAuthModalOpen={handleAuthModalOpen} />}
+                  />
+                  <Route path="/lessons" element={<LessonsPage />} />
+                  <Route path="/projects" element={<ProjectsPage />} />
+                  <Route path="/calendar" element={<CalendarPage />} />
+
+                  {/* Protected — redirect to /register if never registered, /login if registered but not authed */}
+                  <Route
+                    path="/dashboard"
+                    element={
+                      isAuthenticated ? (
+                        <Dashboard user={user} />
+                      ) : hasRegistered ? (
+                        <Navigate to="/login" replace />
+                      ) : (
+                        <Navigate to="/register" replace />
+                      )
+                    }
+                  />
+                  <Route
+                    path="/profile"
+                    element={
+                      isAuthenticated ? (
+                        <Profile user={user} onUserUpdate={handleUserUpdate} />
+                      ) : hasRegistered ? (
+                        <Navigate to="/login" replace />
+                      ) : (
+                        <Navigate to="/register" replace />
+                      )
+                    }
+                  />
+                  <Route
+                    path="/my-courses"
+                    element={
+                      isAuthenticated ? (
+                        <MyCourses user={user} />
+                      ) : hasRegistered ? (
+                        <Navigate to="/login" replace />
+                      ) : (
+                        <Navigate to="/register" replace />
+                      )
+                    }
+                  />
+                  <Route
+                    path="/certificates"
+                    element={
+                      isAuthenticated ? (
+                        <Certificates user={user} />
+                      ) : hasRegistered ? (
+                        <Navigate to="/login" replace />
+                      ) : (
+                        <Navigate to="/register" replace />
+                      )
+                    }
+                  />
+                  <Route
+                    path="/schedule"
+                    element={
+                      isAuthenticated ? (
+                        <Schedule user={user} />
+                      ) : hasRegistered ? (
+                        <Navigate to="/login" replace />
+                      ) : (
+                        <Navigate to="/register" replace />
+                      )
+                    }
+                  />
+                  <Route
+                    path="/progress"
+                    element={
+                      isAuthenticated ? (
+                        <ProgressTracker user={user} />
+                      ) : hasRegistered ? (
+                        <Navigate to="/login" replace />
+                      ) : (
+                        <Navigate to="/register" replace />
+                      )
+                    }
+                  />
+                  <Route
+                    path="/settings"
+                    element={
+                      isAuthenticated ? (
+                        <Settings user={user} onLogout={handleLogout} />
+                      ) : hasRegistered ? (
+                        <Navigate to="/login" replace />
+                      ) : (
+                        <Navigate to="/register" replace />
+                      )
+                    }
+                  />
+
+                  {/* Catch-all */}
+                  <Route
+                    path="*"
+                    element={
+                      isAuthenticated ? (
+                        <Navigate to="/dashboard" replace />
+                      ) : hasRegistered ? (
+                        <Navigate to="/login" replace />
+                      ) : (
+                        <Navigate to="/register" replace />
+                      )
+                    }
+                  />
+                </Routes>
+              </main>
+              <Footer />
+              <AIChat />
+              <AuthModal
+                isOpen={isAuthModalOpen}
+                onClose={() => setIsAuthModalOpen(false)}
+                isLogin={isLogin}
+                setIsLogin={setIsLogin}
+                onAuthSuccess={handleAuthSuccess}
+              />
+            </div>
+          }
+        />
+      </Routes>
     </Router>
   );
 };
