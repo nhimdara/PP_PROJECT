@@ -67,8 +67,6 @@ const AppInner = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
 
-  const hasRegistered = !!localStorage.getItem("has_registered");
-
   useEffect(() => {
     try {
       const savedUser = localStorage.getItem("user");
@@ -116,6 +114,7 @@ const AppInner = () => {
     localStorage.setItem("user", JSON.stringify(enhanced));
   };
 
+  // After logout → home page (NOT register)
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -129,57 +128,58 @@ const AppInner = () => {
     localStorage.setItem("user", JSON.stringify(updated));
   };
 
-  const openAuthModal = (mode) => {
-    setIsLogin(mode === "signin");
-    setIsAuthModalOpen(true);
-  };
-
-  // Shared props for PageLayout
-  const layoutProps = {
-    isAuthenticated,
-    user,
-    onLogout: handleLogout,
-    onAuthModalOpen: openAuthModal,
-  };
+  // Already registered → go to /login. Never registered → go to /register
+  const hasRegistered = !!localStorage.getItem("lf_has_registered");
+  const authRedirect = hasRegistered
+    ? <Navigate to="/login" replace />
+    : <Navigate to="/register" replace />;
 
   return (
     <Routes>
-      {/* ── Register — first page for new visitors ── */}
+
+      {/* Register — first page for new visitors */}
       <Route
-        path="/"
-        element={
-          isAuthenticated ? (
-            <Navigate to="/home" replace />
-          ) : (
-            <div className="min-h-screen flex flex-col">
-              <RegisterPage />
-              <Footer />
-            </div>
-          )
-        }
+        path="/register"
+        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <RegisterPage />}
       />
 
       {/* ── Login ── */}
       <Route
         path="/login"
-        element={
-          isAuthenticated ? (
-            <Navigate to="/home" replace />
-          ) : (
-            <div className="min-h-screen flex flex-col">
-              <LoginPage onAuthSuccess={handleAuthSuccess} />
-              <Footer />
-            </div>
-          )
-        }
+        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage onAuthSuccess={handleAuthSuccess} />}
       />
 
-      {/* ── Home — public ── */}
+      {/* All other pages — with Navbar + Footer */}
       <Route
-        path="/home"
+        path="*"
         element={
-          <PageLayout {...layoutProps}>
-            <HomePage onAuthModalOpen={openAuthModal} />
+          <div className="nav-font min-h-screen flex flex-col">
+            <FontStyle />
+            <GlobalStyles />
+            <Navbar
+              isAuthenticated={isAuthenticated}
+              user={user}
+              onLogout={handleLogout}
+              onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }}
+            />
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/" element={<HomePage onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }} />} />
+                <Route path="/lessons"      element={<LessonsPage />} />
+                <Route path="/projects"     element={<ProjectsPage />} />
+                <Route path="/calendar"     element={<CalendarPage />} />
+                <Route path="/dashboard"    element={isAuthenticated ? <Dashboard user={user} /> : authRedirect} />
+                <Route path="/profile"      element={isAuthenticated ? <Profile user={user} onUserUpdate={handleUserUpdate} /> : authRedirect} />
+                <Route path="/my-courses"   element={isAuthenticated ? <MyCourses user={user} /> : authRedirect} />
+                <Route path="/certificates" element={isAuthenticated ? <Certificates user={user} /> : authRedirect} />
+                <Route path="/schedule"     element={isAuthenticated ? <Schedule user={user} /> : authRedirect} />
+                <Route path="/progress"     element={isAuthenticated ? <ProgressTracker user={user} /> : authRedirect} />
+                <Route path="/settings"     element={isAuthenticated ? <Settings user={user} onLogout={handleLogout} /> : authRedirect} />
+                <Route path="*"             element={authRedirect} />
+              </Routes>
+            </main>
+            <Footer />
+            <AIChat />
             <AuthModal
               isOpen={isAuthModalOpen}
               onClose={() => setIsAuthModalOpen(false)}
@@ -204,113 +204,6 @@ const AppInner = () => {
           )
         }
       />
-
-      <Route
-        path="/profile"
-        element={
-          isAuthenticated ? (
-            <PageLayout {...layoutProps}>
-              <Profile user={user} onUserUpdate={handleUserUpdate} />
-            </PageLayout>
-          ) : (
-            <Navigate to={hasRegistered ? "/login" : "/"} replace />
-          )
-        }
-      />
-
-      <Route
-        path="/my-courses"
-        element={
-          isAuthenticated ? (
-            <PageLayout {...layoutProps}>
-              <MyCourses user={user} />
-            </PageLayout>
-          ) : (
-            <Navigate to={hasRegistered ? "/login" : "/"} replace />
-          )
-        }
-      />
-
-      <Route
-        path="/certificates"
-        element={
-          isAuthenticated ? (
-            <PageLayout {...layoutProps}>
-              <Certificates user={user} />
-            </PageLayout>
-          ) : (
-            <Navigate to={hasRegistered ? "/login" : "/"} replace />
-          )
-        }
-      />
-
-      <Route
-        path="/schedule"
-        element={
-          isAuthenticated ? (
-            <PageLayout {...layoutProps}>
-              <Schedule user={user} />
-            </PageLayout>
-          ) : (
-            <Navigate to={hasRegistered ? "/login" : "/"} replace />
-          )
-        }
-      />
-
-      <Route
-        path="/progress"
-        element={
-          isAuthenticated ? (
-            <PageLayout {...layoutProps}>
-              <ProgressTracker user={user} />
-            </PageLayout>
-          ) : (
-            <Navigate to={hasRegistered ? "/login" : "/"} replace />
-          )
-        }
-      />
-
-      <Route
-        path="/settings"
-        element={
-          isAuthenticated ? (
-            <PageLayout {...layoutProps}>
-              <Settings user={user} onLogout={handleLogout} />
-            </PageLayout>
-          ) : (
-            <Navigate to={hasRegistered ? "/login" : "/"} replace />
-          )
-        }
-      />
-
-      {/* ── Public pages ── */}
-      <Route
-        path="/lessons"
-        element={
-          <PageLayout {...layoutProps}>
-            <LessonsPage />
-          </PageLayout>
-        }
-      />
-      <Route
-        path="/projects"
-        element={
-          <PageLayout {...layoutProps}>
-            <ProjectsPage />
-          </PageLayout>
-        }
-      />
-      <Route
-        path="/calendar"
-        element={
-          <PageLayout {...layoutProps}>
-            <CalendarPage />
-          </PageLayout>
-        }
-      />
-
-      {/* ── Catch-all ── */}
-      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };
