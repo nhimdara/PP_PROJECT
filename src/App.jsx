@@ -37,6 +37,9 @@ const AppInner = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
 
+  // Check if user has ever registered
+  const hasRegistered = !!localStorage.getItem("has_registered");
+
   useEffect(() => {
     try {
       const savedUser = localStorage.getItem("user");
@@ -76,7 +79,7 @@ const AppInner = () => {
     localStorage.setItem("user", JSON.stringify(enhanced));
   };
 
-  // After logout → home page (NOT register)
+  // After logout → redirect to register page
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -90,30 +93,35 @@ const AppInner = () => {
     localStorage.setItem("user", JSON.stringify(updated));
   };
 
-  // Already registered → go to /login. Never registered → go to /register
-  const hasRegistered = !!localStorage.getItem("lf_has_registered");
-  const authRedirect = hasRegistered
-    ? <Navigate to="/login" replace />
-    : <Navigate to="/register" replace />;
-
   return (
     <Routes>
-
       {/* Register — first page for new visitors */}
       <Route
         path="/register"
-        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <RegisterPage />}
+        element={
+          isAuthenticated ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <RegisterPage />
+          )
+        }
       />
 
       {/* Login — after registering */}
       <Route
         path="/login"
-        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage onAuthSuccess={handleAuthSuccess} />}
+        element={
+          isAuthenticated ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <LoginPage onAuthSuccess={handleAuthSuccess} />
+          )
+        }
       />
 
-      {/* All other pages — with Navbar + Footer */}
+      {/* Home page - public route */}
       <Route
-        path="*"
+        path="/"
         element={
           <div className="nav-font min-h-screen flex flex-col">
             <FontStyle />
@@ -125,20 +133,7 @@ const AppInner = () => {
               onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }}
             />
             <main className="flex-grow">
-              <Routes>
-                <Route path="/" element={<HomePage onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }} />} />
-                <Route path="/lessons"      element={<LessonsPage />} />
-                <Route path="/projects"     element={<ProjectsPage />} />
-                <Route path="/calendar"     element={<CalendarPage />} />
-                <Route path="/dashboard"    element={isAuthenticated ? <Dashboard user={user} /> : authRedirect} />
-                <Route path="/profile"      element={isAuthenticated ? <Profile user={user} onUserUpdate={handleUserUpdate} /> : authRedirect} />
-                <Route path="/my-courses"   element={isAuthenticated ? <MyCourses user={user} /> : authRedirect} />
-                <Route path="/certificates" element={isAuthenticated ? <Certificates user={user} /> : authRedirect} />
-                <Route path="/schedule"     element={isAuthenticated ? <Schedule user={user} /> : authRedirect} />
-                <Route path="/progress"     element={isAuthenticated ? <ProgressTracker user={user} /> : authRedirect} />
-                <Route path="/settings"     element={isAuthenticated ? <Settings user={user} onLogout={handleLogout} /> : authRedirect} />
-                <Route path="*"             element={authRedirect} />
-              </Routes>
+              <HomePage onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }} />
             </main>
             <Footer />
             <AIChat />
@@ -151,6 +146,252 @@ const AppInner = () => {
             />
           </div>
         }
+      />
+
+      {/* Protected routes */}
+      <Route
+        path="/dashboard"
+        element={
+          isAuthenticated ? (
+            <div className="nav-font min-h-screen flex flex-col">
+              <FontStyle />
+              <GlobalStyles />
+              <Navbar
+                isAuthenticated={isAuthenticated}
+                user={user}
+                onLogout={handleLogout}
+                onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }}
+              />
+              <main className="flex-grow">
+                <Dashboard user={user} />
+              </main>
+              <Footer />
+              <AIChat />
+            </div>
+          ) : (
+            <Navigate to={hasRegistered ? "/login" : "/register"} replace />
+          )
+        }
+      />
+
+      <Route
+        path="/profile"
+        element={
+          isAuthenticated ? (
+            <div className="nav-font min-h-screen flex flex-col">
+              <FontStyle />
+              <GlobalStyles />
+              <Navbar
+                isAuthenticated={isAuthenticated}
+                user={user}
+                onLogout={handleLogout}
+                onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }}
+              />
+              <main className="flex-grow">
+                <Profile user={user} onUserUpdate={handleUserUpdate} />
+              </main>
+              <Footer />
+              <AIChat />
+            </div>
+          ) : (
+            <Navigate to={hasRegistered ? "/login" : "/register"} replace />
+          )
+        }
+      />
+
+      <Route
+        path="/my-courses"
+        element={
+          isAuthenticated ? (
+            <div className="nav-font min-h-screen flex flex-col">
+              <FontStyle />
+              <GlobalStyles />
+              <Navbar
+                isAuthenticated={isAuthenticated}
+                user={user}
+                onLogout={handleLogout}
+                onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }}
+              />
+              <main className="flex-grow">
+                <MyCourses user={user} />
+              </main>
+              <Footer />
+              <AIChat />
+            </div>
+          ) : (
+            <Navigate to={hasRegistered ? "/login" : "/register"} replace />
+          )
+        }
+      />
+
+      <Route
+        path="/certificates"
+        element={
+          isAuthenticated ? (
+            <div className="nav-font min-h-screen flex flex-col">
+              <FontStyle />
+              <GlobalStyles />
+              <Navbar
+                isAuthenticated={isAuthenticated}
+                user={user}
+                onLogout={handleLogout}
+                onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }}
+              />
+              <main className="flex-grow">
+                <Certificates user={user} />
+              </main>
+              <Footer />
+              <AIChat />
+            </div>
+          ) : (
+            <Navigate to={hasRegistered ? "/login" : "/register"} replace />
+          )
+        }
+      />
+
+      <Route
+        path="/schedule"
+        element={
+          isAuthenticated ? (
+            <div className="nav-font min-h-screen flex flex-col">
+              <FontStyle />
+              <GlobalStyles />
+              <Navbar
+                isAuthenticated={isAuthenticated}
+                user={user}
+                onLogout={handleLogout}
+                onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }}
+              />
+              <main className="flex-grow">
+                <Schedule user={user} />
+              </main>
+              <Footer />
+              <AIChat />
+            </div>
+          ) : (
+            <Navigate to={hasRegistered ? "/login" : "/register"} replace />
+          )
+        }
+      />
+
+      <Route
+        path="/progress"
+        element={
+          isAuthenticated ? (
+            <div className="nav-font min-h-screen flex flex-col">
+              <FontStyle />
+              <GlobalStyles />
+              <Navbar
+                isAuthenticated={isAuthenticated}
+                user={user}
+                onLogout={handleLogout}
+                onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }}
+              />
+              <main className="flex-grow">
+                <ProgressTracker user={user} />
+              </main>
+              <Footer />
+              <AIChat />
+            </div>
+          ) : (
+            <Navigate to={hasRegistered ? "/login" : "/register"} replace />
+          )
+        }
+      />
+
+      <Route
+        path="/settings"
+        element={
+          isAuthenticated ? (
+            <div className="nav-font min-h-screen flex flex-col">
+              <FontStyle />
+              <GlobalStyles />
+              <Navbar
+                isAuthenticated={isAuthenticated}
+                user={user}
+                onLogout={handleLogout}
+                onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }}
+              />
+              <main className="flex-grow">
+                <Settings user={user} onLogout={handleLogout} />
+              </main>
+              <Footer />
+              <AIChat />
+            </div>
+          ) : (
+            <Navigate to={hasRegistered ? "/login" : "/register"} replace />
+          )
+        }
+      />
+
+      {/* Public pages with navbar and footer */}
+      <Route
+        path="/lessons"
+        element={
+          <div className="nav-font min-h-screen flex flex-col">
+            <FontStyle />
+            <GlobalStyles />
+            <Navbar
+              isAuthenticated={isAuthenticated}
+              user={user}
+              onLogout={handleLogout}
+              onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }}
+            />
+            <main className="flex-grow">
+              <LessonsPage />
+            </main>
+            <Footer />
+            <AIChat />
+          </div>
+        }
+      />
+
+      <Route
+        path="/projects"
+        element={
+          <div className="nav-font min-h-screen flex flex-col">
+            <FontStyle />
+            <GlobalStyles />
+            <Navbar
+              isAuthenticated={isAuthenticated}
+              user={user}
+              onLogout={handleLogout}
+              onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }}
+            />
+            <main className="flex-grow">
+              <ProjectsPage />
+            </main>
+            <Footer />
+            <AIChat />
+          </div>
+        }
+      />
+
+      <Route
+        path="/calendar"
+        element={
+          <div className="nav-font min-h-screen flex flex-col">
+            <FontStyle />
+            <GlobalStyles />
+            <Navbar
+              isAuthenticated={isAuthenticated}
+              user={user}
+              onLogout={handleLogout}
+              onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }}
+            />
+            <main className="flex-grow">
+              <CalendarPage />
+            </main>
+            <Footer />
+            <AIChat />
+          </div>
+        }
+      />
+
+      {/* Catch-all redirect */}
+      <Route
+        path="*"
+        element={<Navigate to="/" replace />}
       />
     </Routes>
   );
