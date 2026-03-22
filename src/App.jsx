@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 
 // Layout
 import FontStyle from "./components/layout/ui/FontStyle";
@@ -29,6 +35,30 @@ import LoginPage from "./components/pages/Loginpage";
 // Services
 import AIChat from "./components/service/AIChat";
 
+// ── Reusable layout wrapper for pages that need Navbar + Footer ──
+const PageLayout = ({
+  isAuthenticated,
+  user,
+  onLogout,
+  onAuthModalOpen,
+  children,
+  showAIChat = true,
+}) => (
+  <div className="nav-font min-h-screen flex flex-col">
+    <FontStyle />
+    <GlobalStyles />
+    <Navbar
+      isAuthenticated={isAuthenticated}
+      user={user}
+      onLogout={onLogout}
+      onAuthModalOpen={onAuthModalOpen}
+    />
+    <main className="flex-grow">{children}</main>
+    <Footer />
+    {showAIChat && <AIChat />}
+  </div>
+);
+
 // AppInner uses useNavigate so it must live inside <Router>
 const AppInner = () => {
   const navigate = useNavigate();
@@ -36,6 +66,8 @@ const AppInner = () => {
   const [user, setUser] = useState(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
+
+  const hasRegistered = !!localStorage.getItem("has_registered");
 
   useEffect(() => {
     try {
@@ -53,8 +85,14 @@ const AppInner = () => {
 
   useEffect(() => {
     try {
-      const settings = JSON.parse(localStorage.getItem("learnflow_settings") || "{}");
-      if (settings.theme === "dark" || (settings.theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+      const settings = JSON.parse(
+        localStorage.getItem("learnflow_settings") || "{}",
+      );
+      if (
+        settings.theme === "dark" ||
+        (settings.theme === "system" &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
         document.documentElement.classList.add("dark-mode");
       } else if (settings.theme === "light") {
         document.documentElement.classList.remove("dark-mode");
@@ -64,7 +102,9 @@ const AppInner = () => {
 
   const handleAuthSuccess = (userData) => {
     const enhanced = {
-      progress: 0, coursesEnrolled: 0, certificates: 0,
+      progress: 0,
+      coursesEnrolled: 0,
+      certificates: 0,
       achievements: ["New Member"],
       joinDate: new Date().toISOString().split("T")[0],
       role: "Student",
@@ -76,7 +116,6 @@ const AppInner = () => {
     localStorage.setItem("user", JSON.stringify(enhanced));
   };
 
-  // After logout → home page (NOT register)
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -90,58 +129,57 @@ const AppInner = () => {
     localStorage.setItem("user", JSON.stringify(updated));
   };
 
-  // Already registered → go to /login. Never registered → go to /register
-  const hasRegistered = !!localStorage.getItem("lf_has_registered");
-  const authRedirect = hasRegistered
-    ? <Navigate to="/login" replace />
-    : <Navigate to="/register" replace />;
+  const openAuthModal = (mode) => {
+    setIsLogin(mode === "signin");
+    setIsAuthModalOpen(true);
+  };
+
+  // Shared props for PageLayout
+  const layoutProps = {
+    isAuthenticated,
+    user,
+    onLogout: handleLogout,
+    onAuthModalOpen: openAuthModal,
+  };
 
   return (
     <Routes>
-
-      {/* Register — first page for new visitors */}
+      {/* ── Register — first page for new visitors ── */}
       <Route
-        path="/register"
-        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <RegisterPage />}
+        path="/"
+        element={
+          isAuthenticated ? (
+            <Navigate to="/home" replace />
+          ) : (
+            <div className="min-h-screen flex flex-col">
+              <RegisterPage />
+              <Footer />
+            </div>
+          )
+        }
       />
 
-      {/* Login — after registering */}
+      {/* ── Login ── */}
       <Route
         path="/login"
-        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage onAuthSuccess={handleAuthSuccess} />}
+        element={
+          isAuthenticated ? (
+            <Navigate to="/home" replace />
+          ) : (
+            <div className="min-h-screen flex flex-col">
+              <LoginPage onAuthSuccess={handleAuthSuccess} />
+              <Footer />
+            </div>
+          )
+        }
       />
 
-      {/* All other pages — with Navbar + Footer */}
+      {/* ── Home — public ── */}
       <Route
-        path="*"
+        path="/home"
         element={
-          <div className="nav-font min-h-screen flex flex-col">
-            <FontStyle />
-            <GlobalStyles />
-            <Navbar
-              isAuthenticated={isAuthenticated}
-              user={user}
-              onLogout={handleLogout}
-              onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }}
-            />
-            <main className="flex-grow">
-              <Routes>
-                <Route path="/" element={<HomePage onAuthModalOpen={(mode) => { setIsLogin(mode === "signin"); setIsAuthModalOpen(true); }} />} />
-                <Route path="/lessons"      element={<LessonsPage />} />
-                <Route path="/projects"     element={<ProjectsPage />} />
-                <Route path="/calendar"     element={<CalendarPage />} />
-                <Route path="/dashboard"    element={isAuthenticated ? <Dashboard user={user} /> : authRedirect} />
-                <Route path="/profile"      element={isAuthenticated ? <Profile user={user} onUserUpdate={handleUserUpdate} /> : authRedirect} />
-                <Route path="/my-courses"   element={isAuthenticated ? <MyCourses user={user} /> : authRedirect} />
-                <Route path="/certificates" element={isAuthenticated ? <Certificates user={user} /> : authRedirect} />
-                <Route path="/schedule"     element={isAuthenticated ? <Schedule user={user} /> : authRedirect} />
-                <Route path="/progress"     element={isAuthenticated ? <ProgressTracker user={user} /> : authRedirect} />
-                <Route path="/settings"     element={isAuthenticated ? <Settings user={user} onLogout={handleLogout} /> : authRedirect} />
-                <Route path="*"             element={authRedirect} />
-              </Routes>
-            </main>
-            <Footer />
-            <AIChat />
+          <PageLayout {...layoutProps}>
+            <HomePage onAuthModalOpen={openAuthModal} />
             <AuthModal
               isOpen={isAuthModalOpen}
               onClose={() => setIsAuthModalOpen(false)}
@@ -149,9 +187,130 @@ const AppInner = () => {
               setIsLogin={setIsLogin}
               onAuthSuccess={handleAuthSuccess}
             />
-          </div>
+          </PageLayout>
         }
       />
+
+      {/* ── Protected routes ── */}
+      <Route
+        path="/dashboard"
+        element={
+          isAuthenticated ? (
+            <PageLayout {...layoutProps}>
+              <Dashboard user={user} />
+            </PageLayout>
+          ) : (
+            <Navigate to={hasRegistered ? "/login" : "/"} replace />
+          )
+        }
+      />
+
+      <Route
+        path="/profile"
+        element={
+          isAuthenticated ? (
+            <PageLayout {...layoutProps}>
+              <Profile user={user} onUserUpdate={handleUserUpdate} />
+            </PageLayout>
+          ) : (
+            <Navigate to={hasRegistered ? "/login" : "/"} replace />
+          )
+        }
+      />
+
+      <Route
+        path="/my-courses"
+        element={
+          isAuthenticated ? (
+            <PageLayout {...layoutProps}>
+              <MyCourses user={user} />
+            </PageLayout>
+          ) : (
+            <Navigate to={hasRegistered ? "/login" : "/"} replace />
+          )
+        }
+      />
+
+      <Route
+        path="/certificates"
+        element={
+          isAuthenticated ? (
+            <PageLayout {...layoutProps}>
+              <Certificates user={user} />
+            </PageLayout>
+          ) : (
+            <Navigate to={hasRegistered ? "/login" : "/"} replace />
+          )
+        }
+      />
+
+      <Route
+        path="/schedule"
+        element={
+          isAuthenticated ? (
+            <PageLayout {...layoutProps}>
+              <Schedule user={user} />
+            </PageLayout>
+          ) : (
+            <Navigate to={hasRegistered ? "/login" : "/"} replace />
+          )
+        }
+      />
+
+      <Route
+        path="/progress"
+        element={
+          isAuthenticated ? (
+            <PageLayout {...layoutProps}>
+              <ProgressTracker user={user} />
+            </PageLayout>
+          ) : (
+            <Navigate to={hasRegistered ? "/login" : "/"} replace />
+          )
+        }
+      />
+
+      <Route
+        path="/settings"
+        element={
+          isAuthenticated ? (
+            <PageLayout {...layoutProps}>
+              <Settings user={user} onLogout={handleLogout} />
+            </PageLayout>
+          ) : (
+            <Navigate to={hasRegistered ? "/login" : "/"} replace />
+          )
+        }
+      />
+
+      {/* ── Public pages ── */}
+      <Route
+        path="/lessons"
+        element={
+          <PageLayout {...layoutProps}>
+            <LessonsPage />
+          </PageLayout>
+        }
+      />
+      <Route
+        path="/projects"
+        element={
+          <PageLayout {...layoutProps}>
+            <ProjectsPage />
+          </PageLayout>
+        }
+      />
+      <Route
+        path="/calendar"
+        element={
+          <PageLayout {...layoutProps}>
+            <CalendarPage />
+          </PageLayout>
+        }
+      />
+
+      {/* ── Catch-all ── */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

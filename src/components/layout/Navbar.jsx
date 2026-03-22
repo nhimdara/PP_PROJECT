@@ -170,7 +170,7 @@ const Navbar = ({ isAuthenticated, user, onLogout, onAuthModalOpen }) => {
   const ringColor = isScrolled ? "ring-gray-200" : "ring-white/30";
 
   const navLinks = [
-    { name: "Home", href: "/", icon: Home },
+    { name: "Home", href: "/home", icon: Home },
     { name: "My Lessons", href: "/lessons", icon: BookOpen },
     { name: "Projects", href: "/projects", icon: FolderGit2 },
     { name: "Calendar", href: "/calendar", icon: Calendar },
