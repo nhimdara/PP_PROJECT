@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import logo from "../../components/assets/image/logo.png";
-import banner from "../assets/image/banner.jpg";
+import logo from "../../assets/image/logo.png";
+import banner from "../../assets/image/banner.jpg";
 
 const LoginPage = ({ onAuthSuccess }) => {
   const navigate = useNavigate();
@@ -108,7 +108,11 @@ const LoginPage = ({ onAuthSuccess }) => {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-2xl blur-lg opacity-60" />
               <div className="relative flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-transform duration-300">
-                <img src={logo} alt="Logo" className="w-12 h-auto object-contain" />
+                <img
+                  src={logo}
+                  alt="Logo"
+                  className="w-12 h-auto object-contain"
+                />
               </div>
             </div>
             <span className="text-2xl font-bold tracking-tight text-white group-hover:text-cyan-300 transition-all duration-300">
@@ -140,8 +144,6 @@ const LoginPage = ({ onAuthSuccess }) => {
               Pick up right where you left off. Your courses, progress, and
               certificates are waiting.
             </p>
-
-
 
             {/* Info Card */}
             <div className="relative group">

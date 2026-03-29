@@ -203,7 +203,7 @@ const useScrollReveal = () => {
 };
 
 /* ─────────────────────────── Main Component ─────────────────────────── */
-const HomePage = ({ onAuthModalOpen }) => {
+const HomePage = () => {
   const dark = useDarkMode();
   const heroRef = useRef(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -643,8 +643,8 @@ const HomePage = ({ onAuthModalOpen }) => {
                 EduLearn. First course is completely free.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <button
-                  onClick={() => onAuthModalOpen(false)}
+                <button                 
+                  onClick={() => window.location.href = "/lessons"}
                   className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl bg-white text-indigo-700 font-bold text-sm sm:text-base shadow-xl hover:scale-[1.03] active:scale-[0.98] transition-all"
                 >
                   <Play className="h-4 w-4 fill-indigo-600" />

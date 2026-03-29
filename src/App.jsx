@@ -29,8 +29,8 @@ import Settings from "./components/pages/Profile/Settings";
 import Dashboard from "./components/pages/Profile/Dashboard";
 
 // Auth pages — separate files
-import RegisterPage from "./components/pages/Registerpage ";
-import LoginPage from "./components/pages/Loginpage";
+import RegisterPage from "./components/layout/auth/Registerpage ";
+import LoginPage from "./components/layout/auth/Loginpage";
 
 // Services
 import AIChat from "./components/service/AIChat";

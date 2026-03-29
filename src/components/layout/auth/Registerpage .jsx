@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import logo from "../../components/assets/image/logo.png";
-import banner from "../assets/image/banner.jpg";
+import logo from "../../assets/image/logo.png";
+import banner from "../../assets/image/banner.jpg";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
